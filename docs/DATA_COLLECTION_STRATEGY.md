@@ -190,6 +190,15 @@ T-120 구현 상태:
 - URI 읽기 실패
 - 파일 크기 과대
 
+T-130 구현 상태:
+
+- Inbox shell의 `파일 추가` 버튼이 `ActivityResultContracts.GetMultipleContents`를 엽니다.
+- `SafPickedFileReader`가 URI의 MIME type, 표시 이름, 크기를 읽습니다.
+- `SafImportHandler`가 선택 파일을 `DataItemSource.SAF`로 저장합니다.
+- 이미지 MIME type은 `IMAGE`, 그 외는 `FILE`로 저장합니다.
+- 기존 `sourceUri` 또는 같은 batch 내 중복 URI는 건너뜁니다.
+- 선택 취소는 아무 데이터도 만들지 않습니다.
+
 ## OCR 전략
 
 - 이미지 OCR은 ML Kit 또는 현재 `SourceExtractor`/향후 `OcrProcessor` 구조를 활용합니다.

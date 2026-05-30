@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,11 +22,19 @@ fun HomeShellScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun InboxShellScreen(modifier: Modifier = Modifier) {
+fun InboxShellScreen(
+    modifier: Modifier = Modifier,
+    onPickFilesRequested: () -> Unit = {}
+) {
     ShellScreen(
         title = "Inbox",
         subtitle = "수집한 자료",
-        modifier = modifier
+        modifier = modifier,
+        action = {
+            TextButton(onClick = onPickFilesRequested) {
+                Text("파일 추가")
+            }
+        }
     )
 }
 
@@ -78,7 +87,8 @@ fun TopicAnalysisShellScreen(modifier: Modifier = Modifier) {
 private fun ShellScreen(
     title: String,
     subtitle: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    action: (@Composable () -> Unit)? = null
 ) {
     Column(
         modifier = modifier
@@ -96,5 +106,6 @@ private fun ShellScreen(
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
+        action?.invoke()
     }
 }

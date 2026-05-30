@@ -3,15 +3,18 @@ package com.smartclipboard.ai.presentation.main
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import com.smartclipboard.ai.collection.filepicker.SafImportHandler
+import com.smartclipboard.ai.collection.filepicker.SafImportResult
+import com.smartclipboard.ai.collection.filepicker.SafPickedFileReader
 import com.smartclipboard.ai.collection.media.MediaSyncManager
 import com.smartclipboard.ai.collection.permissions.ImageAccessMode
 import com.smartclipboard.ai.collection.permissions.MediaPermissionPolicy
@@ -26,12 +29,21 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var mediaSyncManager: MediaSyncManager
 
+    @Inject
+    lateinit var safImportHandler: SafImportHandler
+
     private val requestImagePermissions = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { results ->
         if (results.values.any { it }) {
             syncMediaStoreImages()
         }
+    }
+
+    private val pickFiles = registerForActivityResult(
+        ActivityResultContracts.GetMultipleContents()
+    ) { uris ->
+        importPickedFiles(uris)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,7 +54,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    SmartClipboardRoot()
+                    SmartClipboardRoot(
+                        onPickFilesRequested = { pickFiles.launch("*/*") }
+                    )
                 }
             }
         }
@@ -73,5 +87,19 @@ class MainActivity : ComponentActivity() {
 
     private fun hasPermission(permission: String): Boolean {
         return ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun importPickedFiles(uris: List<android.net.Uri>) {
+        if (uris.isEmpty()) {
+            return
+        }
+
+        val files = SafPickedFileReader.read(contentResolver, uris)
+        lifecycleScope.launch {
+            when (safImportHandler.importFiles(files)) {
+                SafImportResult.EmptySelection -> Unit
+                is SafImportResult.Imported -> Unit
+            }
+        }
     }
 }

@@ -22,6 +22,6 @@
 
 ## 현재 Ready 작업
 
-- `T-130-storage-access-framework-picker`: Storage Access Framework 파일 직접 선택
+- `T-140-enrichment-ocr-og-pipeline`: OCR/OG 추출 전처리 파이프라인
 
-`T-100`, `T-110`, `T-120`에서 공유, 클립보드, 앱 실행 시 이미지 자동 수집 경로를 완료했습니다. 이제 사용자가 직접 파일을 선택해 담는 SAF 흐름을 구현합니다.
+`T-100`, `T-110`, `T-120`, `T-130`에서 공유, 클립보드, MediaStore, SAF 입력 경로를 완료했습니다. 이제 입력된 링크와 이미지의 OG/OCR 전처리 흐름을 구현합니다.

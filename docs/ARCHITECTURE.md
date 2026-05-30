@@ -211,6 +211,16 @@ Detail route:
 - 중복 기준: 기존 `mediaStoreId`, 기존 `sourceUri`, 같은 batch 내 후보 중복
 - checkpoint 갱신: 저장 실패가 없을 때만 현재 실행 시각으로 갱신
 
+### SAF File Picker
+
+`T-130`에서 사용자가 직접 파일을 선택해 담는 Storage Access Framework 흐름을 추가했습니다.
+
+- `SafPickedFileReader`: `ContentResolver`와 `OpenableColumns`로 선택 URI metadata 조회
+- `SafImportHandler`: 선택 파일을 `DataItemSource.SAF`로 저장
+- 저장 type: `image/*`는 `IMAGE`, 그 외는 `FILE`
+- 중복 기준: 기존 `sourceUri`, 같은 batch 내 URI 중복
+- UI 진입점: Inbox shell의 작은 `파일 추가` 버튼
+
 ### ShareReceiverActivity
 
 Android Share Sheet에서 SmartClipboard를 선택했을 때 실행됩니다. 링크/텍스트/이미지/파일을 받고 짧은 저장 피드백을 보여준 뒤 종료합니다. 링크는 1~2초만 OG 추출을 기다리고 늦으면 다음 분석 흐름으로 넘깁니다.

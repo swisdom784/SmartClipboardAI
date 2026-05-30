@@ -251,8 +251,8 @@
 ### T-130-storage-access-framework-picker
 
 - 작업명: Storage Access Framework 파일 직접 선택
-- Status: Ready
-- Owner: 미배정
+- Status: Done
+- Owner: Codex
 - 목적: 사용자가 직접 이미지/파일/PDF를 선택해 SmartClipboard에 담을 수 있게 합니다.
 - 담당 브랜치명: `feat/T-130-storage-access-framework-picker`
 - 예상 수정 파일: SAF launcher, Inbox/Home entry point, repository 호출부, tests
@@ -274,13 +274,13 @@
 ### T-140-enrichment-ocr-og-pipeline
 
 - 작업명: OCR/OG 추출 전처리 파이프라인
-- Status: Not Ready
+- Status: Ready
 - Owner: 미배정
 - 목적: 이미지 OCR과 링크 OG 추출을 입력 직후 시도하고, 실패 시 retry 상태로 남깁니다.
 - 담당 브랜치명: `feat/T-140-enrichment-ocr-og-pipeline`
 - 예상 수정 파일: `processing/ocr/`, `processing/web/`, enrichment entity/dao, tests
 - 선행 task: `T-030-data-model-audit`, `T-100-share-target-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`
-- Blocked by: `T-130` 미완료
+- Blocked by: 없음
 - Ready criteria: enrichment 상태 필드와 retry count 저장 방식, 입력 직후 처리할 collection hook이 확정됨
 - 병렬 진행 가능 여부: 제한적 가능
 - Can run in parallel with: `T-150`은 interface 합의 후 가능
@@ -321,8 +321,8 @@
 - 목적: 자동 수집 자료가 용량을 넘으면 안전한 순서로 오래된 데이터를 정리합니다.
 - 담당 브랜치명: `feat/T-160-storage-quota-cleanup`
 - 예상 수정 파일: storage policy, cleanup worker/use case, settings repository, tests
-- 선행 task: `T-030-data-model-audit`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`
-- Blocked by: `T-130` 미완료
+- 선행 task: `T-030-data-model-audit`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`
+- Blocked by: `T-140` 미완료
 - Ready criteria: DataItem 중요 표시, topic 연결, internal copy 여부 필드가 확정됨
 - 병렬 진행 가능 여부: 제한적 가능
 - Can run in parallel with: `T-150`
@@ -387,7 +387,7 @@
 - 담당 브랜치명: `feat/T-210-data-list-filter-selection`
 - 예상 수정 파일: `presentation/inbox/`, Inbox ViewModel tests, UI tests
 - 선행 task: `T-040-navigation-baseline`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-170-repository-integration`
-- Blocked by: `T-130`, `T-170` 미완료
+- Blocked by: `T-170` 미완료
 - Ready criteria: Inbox route, repository query API, DataItem type taxonomy 확정
 - 병렬 진행 가능 여부: 예
 - Can run in parallel with: `T-200`, `T-230`, `T-240`
@@ -407,8 +407,8 @@
 - 목적: Share/Tile 저장 시 앱 전체가 켜진 듯 보이지 않는 짧은 피드백을 제공합니다.
 - 담당 브랜치명: `feat/T-220-save-feedback-bottom-sheet`
 - 예상 수정 파일: `presentation/feedback/`, Share/Clipboard feedback hook, tests
-- 선행 task: `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`
-- Blocked by: `T-130` 미완료
+- 선행 task: `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`
+- Blocked by: `T-140` 미완료
 - Ready criteria: Share/Tile/MediaStore/SAF 저장 결과 이벤트가 View/UI에 전달됨
 - 병렬 진행 가능 여부: 예
 - Can run in parallel with: `T-200`, `T-210`
@@ -640,19 +640,19 @@
 
 ## 지금 가능한 작업
 
-현재 바로 시작 가능한 task는 `T-130-storage-access-framework-picker` 하나입니다.
+현재 바로 시작 가능한 task는 `T-140-enrichment-ocr-og-pipeline` 하나입니다.
 
-`T-010-agents-and-docs-setup`, `T-000-current-code-audit`, `T-020-architecture-baseline`, `T-030-data-model-audit`, `T-050-permission-and-manifest-baseline`, `T-040-navigation-baseline`, `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`는 완료된 상태입니다. 이제 사용자가 직접 파일을 고르는 SAF 저장 흐름을 구현합니다.
+`T-010-agents-and-docs-setup`, `T-000-current-code-audit`, `T-020-architecture-baseline`, `T-030-data-model-audit`, `T-050-permission-and-manifest-baseline`, `T-040-navigation-baseline`, `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`는 완료된 상태입니다. 이제 입력된 링크와 이미지의 OG/OCR 전처리 흐름을 구현합니다.
 
 ## 아직 시작하면 안 되는 작업 예시
 
-- `T-140-enrichment-ocr-og-pipeline`: `T-130`까지 모든 입력 경로가 준비된 뒤 시작 가능
-- `T-160-storage-quota-cleanup`: `T-130`까지 수집 입력 경로가 준비된 뒤 시작 가능
+- `T-160-storage-quota-cleanup`: `T-140` 전처리 상태 흐름이 준비된 뒤 시작 가능
+- `T-220-save-feedback-bottom-sheet`: `T-140` 이후 저장/전처리 상태 메시지 기준을 정리한 뒤 시작 가능
 - `T-200-home-ux-redesign`: Navigation과 Repository API가 확정되지 않았으므로 시작 금지
 - `T-500-calendar-intent-draft`: TopicAction payload와 Manifest queries가 확정되지 않았으므로 시작 금지
 
 ## 추천 다음 작업
 
-1. `T-130-storage-access-framework-picker`
-2. 완료 후 `T-140-enrichment-ocr-og-pipeline`을 Ready 전환합니다.
-3. 그 다음에 OCR/OG 전처리 흐름을 구현합니다.
+1. `T-140-enrichment-ocr-og-pipeline`
+2. 완료 후 `T-150-gemini-topic-recommendation`을 Ready 전환합니다.
+3. 그 다음에 AI 추천과 정리 흐름을 구현합니다.

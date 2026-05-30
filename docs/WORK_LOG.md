@@ -117,3 +117,14 @@
 - 수동 확인: 실제 기기에서 권한 허용 후 스크린샷/갤러리 이미지 추가 시 자동 수집되는지는 아직 확인하지 않았습니다. 현재 검증은 fake datasource/repository 단위 테스트와 debug/release unit test, debug APK 빌드 기준입니다.
 - 남은 이슈: 다음 작업은 `T-130-storage-access-framework-picker`입니다. 이후 실제 기기에서 MediaStore 권한/부분 접근/삼성 갤러리 동작을 QA해야 합니다.
 - PR: 아직 없음. remote가 연결되지 않아 push/PR은 만들지 않았습니다.
+
+### 2026-05-30 / T-130-storage-access-framework-picker / Codex
+
+- Branch: `feat/T-130-storage-access-framework-picker`
+- Status: SAF 파일 직접 선택 저장 흐름 구현 완료
+- 변경 파일: `app/src/main/java/com/smartclipboard/ai/collection/filepicker/**`, `app/src/main/java/com/smartclipboard/ai/presentation/main/MainActivity.kt`, `app/src/main/java/com/smartclipboard/ai/presentation/navigation/SmartClipboardRoot.kt`, `app/src/main/java/com/smartclipboard/ai/presentation/screens/ShellScreens.kt`, `app/src/test/java/com/smartclipboard/ai/collection/filepicker/SafImportHandlerTest.kt`, `docs/ARCHITECTURE.md`, `docs/DATA_COLLECTION_STRATEGY.md`, `docs/IMPLEMENTATION_PLAN.md`, `docs/tasks/T-130-storage-access-framework-picker.md`, `docs/tasks/T-140-enrichment-ocr-og-pipeline.md`, `docs/tasks/T-160-storage-quota-cleanup.md`, `docs/tasks/T-210-data-list-filter-selection.md`, `docs/tasks/T-220-save-feedback-bottom-sheet.md`, `docs/tasks/README.md`, `docs/WORK_LOG.md`
+- 작업 요약: Inbox shell에 `파일 추가` 진입점을 만들고, SAF picker 결과를 `SafPickedFileReader`로 metadata화한 뒤 `SafImportHandler`가 `DataItemSource.SAF`로 저장하게 했습니다. 이미지 MIME type은 `IMAGE`, 그 외 파일은 `FILE`로 분류하고, 기존 URI와 batch 내 중복 URI는 건너뜁니다.
+- 테스트/빌드: TDD RED로 SAF import 클래스 부재 실패를 확인한 뒤 구현했습니다. `.\gradlew.bat testDebugUnitTest` 성공, `.\gradlew.bat assembleDebug test` 성공
+- 수동 확인: 실제 기기에서 system picker로 이미지/PDF 선택 후 DB 저장되는 수동 테스트는 아직 하지 않았습니다.
+- 남은 이슈: 다음 작업은 `T-140-enrichment-ocr-og-pipeline`입니다. SAF/Share/MediaStore로 들어온 링크/이미지에 OCR/OG 전처리 상태를 연결해야 합니다.
+- PR: 아직 없음. remote가 연결되지 않아 push/PR은 만들지 않았습니다.
