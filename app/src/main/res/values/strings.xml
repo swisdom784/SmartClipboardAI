@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SmartClipboard</string>
+    <string name="share_target_label">SmartClipboard에 담기</string>
+    <string name="share_saved_message">SmartClipboard에 담았어요</string>
+    <string name="share_partially_saved_message">일부만 담았어요</string>
+    <string name="share_save_failed_message">저장하지 못했어요</string>
+    <string name="tile_clipboard_label">SmartClipboard</string>
+    <string name="clipboard_saved_message">SmartClipboard에 담았어요</string>
+    <string name="clipboard_empty_message">복사된 텍스트가 없어요</string>
+    <string name="clipboard_save_failed_message">저장하지 못했어요</string>
+</resources>

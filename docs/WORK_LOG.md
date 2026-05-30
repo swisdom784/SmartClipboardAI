@@ -1,0 +1,108 @@
+# Work Log
+
+이 문서는 프로젝트 작업 기록을 남기는 공간입니다. 각 작업자는 자기 task의 변경 요약과 검증 결과를 간단히 기록합니다.
+
+## 기록 형식
+
+```markdown
+## YYYY-MM-DD / T-XXX-task-id / owner
+
+- Branch:
+- Status:
+- 변경 파일:
+- 작업 요약:
+- 테스트/빌드:
+- 수동 확인:
+- 남은 이슈:
+- PR:
+```
+
+## 초기 기록
+
+### 2026-05-27 / T-010-agents-and-docs-setup / Codex
+
+- Branch: 없음
+- Status: 문서 bootstrap 작성
+- 변경 파일: `AGENTS.md`, `docs/*.md`, `docs/tasks/*.md`, `.github/pull_request_template.md`
+- 작업 요약: 새 레포 기준의 협업 문서와 task plan 작성
+- 테스트/빌드: 문서 작업만 수행
+- 수동 확인: 문서 파일 생성 여부 확인 예정
+- 남은 이슈: 실제 Android 코드 감사는 `T-000-current-code-audit`에서 진행
+- PR: 아직 없음
+
+### 2026-05-27 / T-000-current-code-audit / Codex
+
+- Branch: 없음
+- Status: 코드 감사 완료, 앱 코드 수정 없음
+- 변경 파일: `docs/ARCHITECTURE.md`, `docs/WORK_LOG.md`, `docs/tasks/T-000-current-code-audit.md`
+- 작업 요약: 로컬 작업공간이 Git repository가 아니며 Android 앱 코드가 아직 없음을 확인했습니다. 참고 GitHub 초안의 README, Gradle, Manifest, Room, Repository, Share Target, Quick Tile, MediaStore, OCR/OG/Gemini, Main UI, Handoff 관련 파일을 읽고 유지/수정/폐기 대상을 `docs/ARCHITECTURE.md`에 정리했습니다.
+- 테스트/빌드: 현재 로컬에 Android 앱 코드가 없어 빌드 대상 없음
+- 수동 확인: `rg --files`, `Get-ChildItem -Force`, 참고 GitHub file tree, 주요 파일 fetch로 구조 확인
+- 남은 이슈: `T-020-architecture-baseline`에서 새 로컬 Android 프로젝트 baseline을 생성하고 Gradle/패키지/Hilt/Room/Compose 기준을 잡아야 함
+- PR: 아직 없음
+
+### 2026-05-27 / T-020-architecture-baseline / Codex
+
+- Branch: 없음
+- Status: Android baseline 생성 완료
+- 변경 파일: `.gitignore`, `settings.gradle.kts`, `build.gradle.kts`, `gradle.properties`, `local.properties`, `gradle/wrapper/*`, `gradlew`, `gradlew.bat`, `gradle/libs.versions.toml`, `app/build.gradle.kts`, `app/proguard-rules.pro`, `app/src/main/AndroidManifest.xml`, `app/src/main/java/com/smartclipboard/ai/**`, `app/src/main/res/values/**`, `app/src/test/**`, `app/src/androidTest/**`, `docs/ARCHITECTURE.md`, `docs/IMPLEMENTATION_PLAN.md`, `docs/tasks/T-020-architecture-baseline.md`, `docs/tasks/T-030-data-model-audit.md`
+- 작업 요약: 새 로컬 Android 앱 baseline을 만들고 `com.smartclipboard.ai` package, Compose, Hilt, Room, Coroutines/Flow, BuildConfig 기반 Gemini key 주입 기준을 구성했습니다. Manifest는 launcher Activity만 포함한 최소 상태로 두었고 권한/Share/Tile/Samsung queries는 `T-050`에서 순차 처리하도록 남겼습니다.
+- 테스트/빌드: `.\gradlew.bat assembleDebug` 성공, `.\gradlew.bat test` 성공
+- 수동 확인: Gradle wrapper 생성, AndroidX 버전 호환성 조정, build/test 로그 확인
+- 남은 이슈: 다음 작업은 `T-030-data-model-audit`입니다. DataItem/Topic/TopicAnalysis/TopicAction, Room Entity/DAO/Repository 계약을 먼저 확정해야 합니다.
+- PR: 아직 없음. 사용자 승인 전 commit/push/PR 생성 금지
+
+### 2026-05-27 / T-030-data-model-audit / Codex
+
+- Branch: 없음
+- Status: 모델/Room/Repository 계약 정리 완료
+- 변경 파일: `app/src/main/java/com/smartclipboard/ai/domain/model/**`, `app/src/main/java/com/smartclipboard/ai/domain/repository/DataRepository.kt`, `app/src/main/java/com/smartclipboard/ai/data/source/local/**`, `app/src/main/java/com/smartclipboard/ai/data/repository/DataRepositoryImpl.kt`, `app/src/test/java/com/smartclipboard/ai/**`, `docs/ARCHITECTURE.md`, `docs/IMPLEMENTATION_PLAN.md`, `docs/tasks/T-030-data-model-audit.md`, `docs/tasks/T-040-navigation-baseline.md`, `docs/tasks/T-050-permission-and-manifest-baseline.md`, `docs/tasks/README.md`
+- 작업 요약: `DataItem`, `Topic`, `TopicAnalysis`, `TopicAction` domain model과 Room Entity/DAO/Database, `DataRepository` 계약 및 기본 구현을 추가했습니다. Entity는 enum 값을 문자열로 저장하고 mapper에서 domain 모델로 복원합니다.
+- 테스트/빌드: TDD RED로 새 테스트의 컴파일 실패를 확인한 뒤 구현했습니다. `.\gradlew.bat testDebugUnitTest` 성공, `.\gradlew.bat assembleDebug test` 성공
+- 수동 확인: 모델 관계와 task dependency 문서 정리. 다음 Ready task를 `T-050-permission-and-manifest-baseline` 하나로 제한
+- 남은 이슈: `SmartClipboardDatabase`는 version `1`, `exportSchema = false`로 시작합니다. schema export/migration 운영은 Git/CI 기준이 생긴 뒤 별도 승인 필요
+- PR: 아직 없음. 사용자 승인 전 commit/push/PR 생성 금지
+
+### 2026-05-28 / T-050-permission-and-manifest-baseline / Codex
+
+- Branch: 없음
+- Status: 권한/Manifest/component baseline 정리 완료
+- 변경 파일: `app/src/main/AndroidManifest.xml`, `app/src/main/java/com/smartclipboard/ai/collection/permissions/MediaPermissionPolicy.kt`, `app/src/main/java/com/smartclipboard/ai/collection/clipboard/ClipboardCaptureTileService.kt`, `app/src/main/java/com/smartclipboard/ai/presentation/share/ShareReceiverActivity.kt`, `app/src/main/java/com/smartclipboard/ai/presentation/clipboard/ClipboardCaptureActivity.kt`, `app/src/main/res/values/strings.xml`, `app/src/main/res/values/themes.xml`, `app/src/main/res/drawable/ic_qs_smartclipboard.xml`, `app/src/test/java/com/smartclipboard/ai/collection/permissions/MediaPermissionPolicyTest.kt`, `docs/DATA_COLLECTION_STRATEGY.md`, `docs/IMPLEMENTATION_PLAN.md`, `docs/tasks/T-040-navigation-baseline.md`, `docs/tasks/T-050-permission-and-manifest-baseline.md`, `docs/tasks/T-100-share-target-flow.md`, `docs/tasks/T-110-quick-tile-flow.md`, `docs/tasks/T-120-media-store-batch-query.md`, `docs/tasks/README.md`
+- 작업 요약: Share Target, Quick Settings Tile, clipboard focus용 투명 Activity, Samsung app queries, 이미지 권한 baseline을 Manifest에 추가했습니다. 수집 저장 로직은 구현하지 않고 component skeleton만 추가했습니다.
+- 테스트/빌드: TDD RED로 `MediaPermissionPolicy` 부재 실패를 확인한 뒤 구현했습니다. `.\gradlew.bat testDebugUnitTest` 성공, `.\gradlew.bat assembleDebug test` 성공
+- 수동 확인: 정책상 위험한 접근성/화면감시/전체 package query/calendar DB 권한을 추가하지 않았습니다.
+- 남은 이슈: 다음 작업은 `T-040-navigation-baseline`입니다. 수집 기능 구현 task는 Navigation baseline 이후 Ready 전환합니다.
+- PR: 아직 없음. 사용자 승인 전 commit/push/PR 생성 금지
+
+### 2026-05-28 / T-040-navigation-baseline / Codex
+
+- Branch: 없음
+- Status: Navigation baseline 정리 완료
+- 변경 파일: `app/src/main/java/com/smartclipboard/ai/presentation/main/MainActivity.kt`, `app/src/main/java/com/smartclipboard/ai/presentation/navigation/**`, `app/src/main/java/com/smartclipboard/ai/presentation/screens/**`, `app/src/test/java/com/smartclipboard/ai/presentation/navigation/NavigationContractTest.kt`, `docs/ARCHITECTURE.md`, `docs/IMPLEMENTATION_PLAN.md`, `docs/tasks/T-040-navigation-baseline.md`, `docs/tasks/T-100-share-target-flow.md`, `docs/tasks/T-110-quick-tile-flow.md`, `docs/tasks/T-120-media-store-batch-query.md`, `docs/tasks/T-130-storage-access-framework-picker.md`, `docs/tasks/README.md`
+- 작업 요약: `AppRoute`, `TopLevelDestination`, `SmartClipboardRoot`를 추가하고 Home/Inbox/Logs/Settings shell을 MainActivity에 연결했습니다. Topic create/data selection/analysis route 문자열도 후속 task 기준으로 고정했습니다.
+- 테스트/빌드: TDD RED로 navigation 계약 부재 실패를 확인한 뒤 구현했습니다. `.\gradlew.bat testDebugUnitTest` 성공, `.\gradlew.bat assembleDebug test` 성공
+- 수동 확인: Gradle, Manifest, Repository, Data model은 수정하지 않았습니다. 화면은 placeholder shell 수준으로만 유지했습니다.
+- 남은 이슈: 다음 작업은 `T-100-share-target-flow`입니다. Share Target 저장 결과 패턴이 잡힌 뒤 Quick Tile/MediaStore/SAF 흐름을 순차 전환합니다.
+- PR: 아직 없음. 사용자 승인 전 commit/push/PR 생성 금지
+
+### 2026-05-30 / T-100-share-target-flow / Codex
+
+- Branch: 없음
+- Status: Share Target 저장 흐름 구현 완료
+- 변경 파일: `app/src/main/java/com/smartclipboard/ai/collection/share/**`, `app/src/main/java/com/smartclipboard/ai/presentation/share/ShareReceiverActivity.kt`, `app/src/main/java/com/smartclipboard/ai/di/**`, `app/src/main/res/values/strings.xml`, `app/src/test/java/com/smartclipboard/ai/collection/share/ShareContentHandlerTest.kt`, `docs/ARCHITECTURE.md`, `docs/IMPLEMENTATION_PLAN.md`, `docs/tasks/T-100-share-target-flow.md`, `docs/tasks/T-110-quick-tile-flow.md`, `docs/tasks/T-120-media-store-batch-query.md`, `docs/tasks/T-130-storage-access-framework-picker.md`, `docs/tasks/README.md`, `docs/WORK_LOG.md`
+- 작업 요약: Android Share Sheet에서 들어온 텍스트, URL, 이미지 URI, 파일 URI를 `DataItem`으로 저장하는 흐름을 추가했습니다. `SharePayload`/`SharedUri`/`ShareSaveResult`로 공유 입력과 저장 결과를 분리하고, 중복 payload는 부분 성공으로 처리합니다. 실제 앱 저장을 위해 Hilt Database/Repository module을 최소 추가했습니다.
+- 테스트/빌드: TDD RED로 `ShareContentHandler` 부재 컴파일 실패를 확인한 뒤 구현했습니다. `.\gradlew.bat testDebugUnitTest` 성공, `.\gradlew.bat assembleDebug test` 성공
+- 수동 확인: 실제 기기 Share Sheet 수동 테스트는 아직 하지 않았습니다. 현재 검증은 fake repository 단위 테스트와 debug/release unit test, debug APK 빌드 기준입니다.
+- 남은 이슈: 다음 작업은 `T-110-quick-tile-flow`입니다. Tile 클릭 시 투명 Activity로 최신 Primary Clip 1개를 저장하는 흐름을 같은 저장 결과 패턴으로 연결해야 합니다.
+- PR: 아직 없음. 사용자 승인 전 commit/push/PR 생성 금지
+
+### 2026-05-30 / T-110-quick-tile-flow / Codex
+
+- Branch: 없음
+- Status: Quick Settings Tile + TransparentActivity 클립보드 수집 구현 완료
+- 변경 파일: `app/src/main/java/com/smartclipboard/ai/collection/clipboard/**`, `app/src/main/java/com/smartclipboard/ai/presentation/clipboard/ClipboardCaptureActivity.kt`, `app/src/main/res/values/strings.xml`, `app/src/test/java/com/smartclipboard/ai/collection/clipboard/ClipboardCaptureHandlerTest.kt`, `docs/ARCHITECTURE.md`, `docs/IMPLEMENTATION_PLAN.md`, `docs/tasks/T-110-quick-tile-flow.md`, `docs/tasks/T-120-media-store-batch-query.md`, `docs/tasks/README.md`, `docs/WORK_LOG.md`
+- 작업 요약: Quick Settings Tile 클릭 시 투명 `ClipboardCaptureActivity`를 열고, window focus를 얻은 뒤 Primary Clip 1개만 읽어 텍스트/링크를 `DataItemSource.CLIPBOARD_TILE`로 저장하도록 구현했습니다. 빈 클립보드, 미지원 clip, 저장 실패를 별도 결과로 처리하고 Toast 문구를 추가했습니다.
+- 테스트/빌드: TDD RED로 `ClipboardCaptureHandler` 부재 실패와 미지원 clip 처리 부재 실패를 확인한 뒤 구현했습니다. `.\gradlew.bat testDebugUnitTest` 성공, `.\gradlew.bat assembleDebug test` 성공
+- 수동 확인: 실제 기기 Quick Settings Tile 추가/클릭 수동 테스트는 아직 하지 않았습니다. 현재 검증은 fake repository 단위 테스트와 debug/release unit test, debug APK 빌드 기준입니다.
+- 남은 이슈: 다음 작업은 `T-120-media-store-batch-query`입니다. 앱 실행 시 Last Sync Time 이후 새 이미지를 MediaStore에서 batch query해 저장해야 합니다.
+- PR: 아직 없음. 사용자 승인 전 commit/push/PR 생성 금지
