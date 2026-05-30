@@ -22,6 +22,6 @@
 
 ## 현재 Ready 작업
 
-- `T-120-media-store-batch-query`: 앱 실행 시 Last Sync Time 기준 이미지 자동 수집
+- `T-130-storage-access-framework-picker`: Storage Access Framework 파일 직접 선택
 
-`T-100-share-target-flow`와 `T-110-quick-tile-flow`에서 외부 공유/클립보드 저장 경로를 완료했습니다. 이제 사용자가 앱을 열었을 때 새 이미지들을 MediaStore에서 자동 수집하는 핵심 흐름을 구현합니다.
+`T-100`, `T-110`, `T-120`에서 공유, 클립보드, 앱 실행 시 이미지 자동 수집 경로를 완료했습니다. 이제 사용자가 직접 파일을 선택해 담는 SAF 흐름을 구현합니다.

@@ -6,8 +6,8 @@
 
 ## 작업 상태
 
-- Status: Ready
-- Owner: 미배정
+- Status: Done
+- Owner: Codex
 - Branch: `feat/T-120-media-store-batch-query`
 - Depends on: `T-050-permission-and-manifest-baseline`, `T-030-data-model-audit`, `T-040-navigation-baseline`, `T-100-share-target-flow`, `T-110-quick-tile-flow`
 - Blocked by: 없음
@@ -19,6 +19,7 @@
 
 - `app/src/main/java/.../collection/media/`
 - last sync preference 파일
+- `app/src/main/java/.../presentation/main/MainActivity.kt`
 - media import tests
 - `docs/tasks/T-120-media-store-batch-query.md`
 
@@ -39,14 +40,25 @@
 
 ## 체크리스트
 
-- [ ] 코드 읽기
-- [ ] 관련 문서 확인
-- [ ] 선행 task 완료 여부 확인
-- [ ] 구현
-- [ ] 빌드 확인
-- [ ] 테스트/수동 확인
-- [ ] 변경 요약 작성
-- [ ] PR 작성
+- [x] 코드 읽기
+- [x] 관련 문서 확인
+- [x] 선행 task 완료 여부 확인
+- [x] 구현
+- [x] 빌드 확인
+- [x] 테스트/수동 확인
+- [x] 변경 요약 작성
+- [x] PR 작성 내용 정리
+
+## T-120 결과 요약
+
+- `AndroidMediaStoreDataSource`가 Last Sync Time 이후부터 현재 실행 시각까지 추가된 이미지를 MediaStore에서 조회합니다.
+- `SharedPreferencesMediaSyncCheckpointStore`가 마지막 이미지 sync 시각을 저장합니다.
+- `MediaImportHandler`가 MediaStore 후보를 `DataItemSource.MEDIASTORE` 항목으로 저장합니다.
+- 스크린샷/다운로드 이미지는 path와 파일명 기반으로 `SCREENSHOT`, `DOWNLOAD_IMAGE`로 분류합니다.
+- 기존 DB 항목과 같은 `mediaStoreId` 또는 `sourceUri`, 같은 batch 내 중복 후보는 저장하지 않습니다.
+- 저장 실패가 있어도 나머지 후보 import는 계속 진행하고, 실패가 있으면 checkpoint를 전진시키지 않습니다.
+- `MainActivity`는 이미지 권한이 있으면 앱 실행 시 자동 sync를 시작하고, 권한이 없으면 Android runtime permission을 요청합니다.
+- DataItem/Repository 계약과 Manifest 권한 선언은 변경하지 않았습니다.
 
 ## 완료 기준
 

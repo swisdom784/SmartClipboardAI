@@ -194,6 +194,23 @@ Detail route:
 
 앱의 메인 진입점입니다. MediaStore 자동 수집, 권한 요청, 탭 navigation, Settings 진입, 삼성 앱 export launcher를 연결합니다.
 
+`T-120` 기준 구현 상태:
+
+- 앱 실행 시 이미지 접근 권한을 확인합니다.
+- 권한이 있으면 `MediaSyncManager.syncNewImages()`를 호출합니다.
+- 권한이 없으면 Android runtime permission을 요청하고, 허용된 경우 sync를 시작합니다.
+
+### MediaStore Image Sync
+
+`T-120`에서 앱 실행 시 이미지 자동 수집 경로를 추가했습니다.
+
+- `AndroidMediaStoreDataSource`: Last Sync Time 이후부터 현재 실행 시각까지 MediaStore 이미지 조회
+- `SharedPreferencesMediaSyncCheckpointStore`: 마지막 sync 시각 저장
+- `MediaImportHandler`: MediaStore 후보를 `DataItem`으로 저장
+- `MediaSyncManager`: 조회, 저장, checkpoint 갱신을 조율
+- 중복 기준: 기존 `mediaStoreId`, 기존 `sourceUri`, 같은 batch 내 후보 중복
+- checkpoint 갱신: 저장 실패가 없을 때만 현재 실행 시각으로 갱신
+
 ### ShareReceiverActivity
 
 Android Share Sheet에서 SmartClipboard를 선택했을 때 실행됩니다. 링크/텍스트/이미지/파일을 받고 짧은 저장 피드백을 보여준 뒤 종료합니다. 링크는 1~2초만 OG 추출을 기다리고 늦으면 다음 분석 흐름으로 넘깁니다.

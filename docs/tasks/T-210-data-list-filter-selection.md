@@ -10,7 +10,7 @@
 - Owner: 미배정
 - Branch: `feat/T-210-data-list-filter-selection`
 - Depends on: `T-040-navigation-baseline`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-170-repository-integration`
-- Blocked by: `T-040`, `T-120`, `T-130`, `T-170` 미완료
+- Blocked by: `T-130`, `T-170` 미완료
 - Ready criteria: Inbox route, DataItem taxonomy, repository query API가 확정됨
 - Can run in parallel with: `T-200`, `T-230`, `T-240`
 - Cannot run with: `T-040`, repository query 변경 작업

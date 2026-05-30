@@ -6,11 +6,11 @@
 
 ## 작업 상태
 
-- Status: Not Ready
+- Status: Ready
 - Owner: 미배정
 - Branch: `feat/T-130-storage-access-framework-picker`
 - Depends on: `T-040-navigation-baseline`, `T-050-permission-and-manifest-baseline`, `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`
-- Blocked by: `T-120` 미완료
+- Blocked by: 없음
 - Ready criteria: 파일 선택 진입 화면과 DataItem file 계약이 확정됨
 - Can run in parallel with: 없음
 - Cannot run with: `T-040`

@@ -106,3 +106,14 @@
 - 수동 확인: 실제 기기 Quick Settings Tile 추가/클릭 수동 테스트는 아직 하지 않았습니다. 현재 검증은 fake repository 단위 테스트와 debug/release unit test, debug APK 빌드 기준입니다.
 - 남은 이슈: 다음 작업은 `T-120-media-store-batch-query`입니다. 앱 실행 시 Last Sync Time 이후 새 이미지를 MediaStore에서 batch query해 저장해야 합니다.
 - PR: 아직 없음. 사용자 승인 전 commit/push/PR 생성 금지
+
+### 2026-05-30 / T-120-media-store-batch-query / Codex
+
+- Branch: `feat/T-120-media-store-batch-query`
+- Status: 앱 실행 시 Last Sync Time 기준 이미지 자동 수집 구현 완료
+- 변경 파일: `app/src/main/java/com/smartclipboard/ai/collection/media/**`, `app/src/main/java/com/smartclipboard/ai/presentation/main/MainActivity.kt`, `app/src/test/java/com/smartclipboard/ai/collection/media/**`, `docs/ARCHITECTURE.md`, `docs/DATA_COLLECTION_STRATEGY.md`, `docs/IMPLEMENTATION_PLAN.md`, `docs/tasks/T-120-media-store-batch-query.md`, `docs/tasks/T-130-storage-access-framework-picker.md`, `docs/tasks/T-140-enrichment-ocr-og-pipeline.md`, `docs/tasks/T-160-storage-quota-cleanup.md`, `docs/tasks/T-220-save-feedback-bottom-sheet.md`, `docs/tasks/README.md`, `docs/WORK_LOG.md`
+- 작업 요약: MediaStore에서 마지막 sync 이후 추가된 이미지를 조회하고 `DataItemSource.MEDIASTORE`로 저장하는 흐름을 추가했습니다. 스크린샷/다운로드 이미지 분류, batch/DB 중복 방지, 저장 실패 count, checkpoint 안전 갱신을 구현했습니다. 앱 실행 시 권한 확인 후 sync를 시작하는 hook을 `MainActivity`에 추가했습니다.
+- 테스트/빌드: TDD RED로 MediaStore 수집 클래스 부재 실패를 확인한 뒤 구현했습니다. `.\gradlew.bat testDebugUnitTest` 성공, `.\gradlew.bat assembleDebug test` 성공
+- 수동 확인: 실제 기기에서 권한 허용 후 스크린샷/갤러리 이미지 추가 시 자동 수집되는지는 아직 확인하지 않았습니다. 현재 검증은 fake datasource/repository 단위 테스트와 debug/release unit test, debug APK 빌드 기준입니다.
+- 남은 이슈: 다음 작업은 `T-130-storage-access-framework-picker`입니다. 이후 실제 기기에서 MediaStore 권한/부분 접근/삼성 갤러리 동작을 QA해야 합니다.
+- PR: 아직 없음. remote가 연결되지 않아 push/PR은 만들지 않았습니다.

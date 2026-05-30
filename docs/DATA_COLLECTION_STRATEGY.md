@@ -155,6 +155,16 @@ Manifest/권한:
 - 이미지 로딩 실패
 - OCR 실패 시 최대 3회 retry 후 다음 실행에서 재시도
 
+T-120 구현 상태:
+
+- `AndroidMediaStoreDataSource`가 `MediaStore.Images.Media.DATE_ADDED` 기준으로 마지막 sync 이후부터 현재 실행 시각까지 조회합니다.
+- `SharedPreferencesMediaSyncCheckpointStore`가 마지막 sync 시각을 보존합니다.
+- `MediaImportHandler`가 새 이미지 후보를 `DataItemSource.MEDIASTORE`로 저장합니다.
+- `relativePath`와 파일명에 따라 스크린샷과 다운로드 이미지를 구분합니다.
+- 기존 `mediaStoreId` 또는 `sourceUri`가 있거나 같은 batch 안에서 중복된 후보는 건너뜁니다.
+- 저장 실패가 있으면 나머지 후보는 계속 처리하되 last sync checkpoint는 전진시키지 않습니다.
+- `MainActivity`는 이미지 권한이 있으면 앱 실행 시 sync를 시작하고, 권한이 없으면 runtime permission을 요청합니다.
+
 ### 4. Storage Access Framework 직접 파일 선택
 
 사용자 액션:

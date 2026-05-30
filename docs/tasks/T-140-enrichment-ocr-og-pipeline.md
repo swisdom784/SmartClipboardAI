@@ -9,8 +9,8 @@
 - Status: Not Ready
 - Owner: 미배정
 - Branch: `feat/T-140-enrichment-ocr-og-pipeline`
-- Depends on: `T-030-data-model-audit`, `T-100-share-target-flow`, `T-120-media-store-batch-query`
-- Blocked by: `T-120` 미완료
+- Depends on: `T-030-data-model-audit`, `T-100-share-target-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`
+- Blocked by: `T-130` 미완료
 - Ready criteria: enrichment 상태, retry count, DataItem update API, 입력 직후 처리할 collection hook이 확정됨
 - Can run in parallel with: `T-150`은 interface 합의 후 가능
 - Cannot run with: `T-030`, `T-170`
