@@ -22,7 +22,6 @@
 
 ## 현재 Ready 작업
 
-- `T-220-save-feedback-bottom-sheet`: 저장 피드백 Toast/BottomSheet UX
 - `T-230-logs-tab-flow`: 사용자 확인 기록 Logs 탭
 
-`T-240`에서 Settings 수집 기간/용량/권한 UX를 완료했습니다. 이제 feedback과 Logs 화면 작업을 병렬로 진행할 수 있습니다. 단일 작업자는 저장 피드백 흐름인 `T-220`을 우선 추천합니다.
+`T-220`에서 저장 피드백 문구와 Toast hook을 완료했습니다. 이제 남은 Ready 작업은 사용자 확인 기록 Logs 탭인 `T-230`입니다.

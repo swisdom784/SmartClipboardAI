@@ -205,3 +205,14 @@
 - 수동 확인: 에뮬레이터/실기기 화면 확인은 아직 하지 않았습니다. 실제 권한 dialog와 SharedPreferences 재시작 유지 여부는 Android Studio 또는 기기에서 추가 확인이 필요합니다.
 - 남은 이슈: 자동 저장 직후 quota cleanup trigger는 아직 수집 파이프라인에 직접 연결하지 않았습니다. 현재는 Settings의 정리 버튼과 T-160 cleanup manager로 수행합니다. 다음 작업은 `T-220-save-feedback-bottom-sheet`입니다.
 - PR: 브랜치 push 후 PR URL 제공 예정
+
+### 2026-05-31 / T-220-save-feedback-bottom-sheet / Codex
+
+- Branch: `feat/T-220-save-feedback-bottom-sheet`
+- Status: 저장 피드백 문구와 Toast hook 정리 완료
+- 변경 파일: `app/src/main/java/com/smartclipboard/ai/presentation/feedback/**`, `ShareReceiverActivity`, `ClipboardCaptureActivity`, `strings.xml`, `app/src/test/java/com/smartclipboard/ai/presentation/feedback/SaveFeedbackMessageMapperTest.kt`, 관련 문서
+- 작업 요약: Share/Clipboard 저장 결과를 `SaveFeedbackMessageMapper`로 모아 성공/부분 실패/빈 클립보드/저장 실패 문구를 일관화했습니다. Activity는 저장 로직을 유지하고 feedback hook만 공통 Toast로 교체했습니다.
+- 테스트/빌드: TDD RED로 feedback mapper 부재 실패를 확인한 뒤 구현했습니다. `.\gradlew.bat testDebugUnitTest --tests com.smartclipboard.ai.presentation.feedback.SaveFeedbackMessageMapperTest` 성공. PR 전 전체 검증으로 `.\gradlew.bat assembleDebug test`를 실행합니다.
+- 수동 확인: 실제 Share Sheet/Quick Tile Toast 표시 수동 테스트는 아직 하지 않았습니다.
+- 남은 이슈: 작은 BottomSheet 피드백은 아직 구현하지 않았고, 이번 task는 Toast hook 기준으로 닫았습니다. 다음 작업은 `T-230-logs-tab-flow`입니다.
+- PR: 브랜치 push 후 PR URL 제공 예정

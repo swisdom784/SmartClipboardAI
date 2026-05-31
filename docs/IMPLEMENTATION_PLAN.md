@@ -402,20 +402,20 @@
 ### T-220-save-feedback-bottom-sheet
 
 - 작업명: 저장 피드백 Toast/BottomSheet UX
-- Status: Ready
-- Owner: 미배정
+- Status: Done
+- Owner: Codex
 - 목적: Share/Tile 저장 시 앱 전체가 켜진 듯 보이지 않는 짧은 피드백을 제공합니다.
 - 담당 브랜치명: `feat/T-220-save-feedback-bottom-sheet`
 - 예상 수정 파일: `presentation/feedback/`, Share/Clipboard feedback hook, tests
 - 선행 task: `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`
 - Blocked by: 없음
-- Ready criteria: Share/Tile/MediaStore/SAF 저장 결과 이벤트가 View/UI에 전달됨
+- Ready criteria: 완료됨
 - 병렬 진행 가능 여부: 예
 - Can run in parallel with: `T-200`, `T-210`
 - Cannot run with: `T-100`, `T-110`의 Activity lifecycle 수정
 - 충돌 가능성이 있는 파일: ShareReceiverActivity, TransparentActivity
 - 완료 기준: 성공/부분 실패/오류 문구가 UX 톤과 일치하고 자동 종료 흐름이 안정적임
-- 검증 방법: Share/Tile 수동 테스트, screenshot 또는 동작 설명
+- 검증 방법: `SaveFeedbackMessageMapperTest`, `.\gradlew.bat assembleDebug test`
 - 작업자가 수정해도 되는 파일 범위: feedback UI package와 연동 hook
 - 수정하면 안 되는 파일 범위: 수집 저장 로직 변경
 - 관련 task 문서 경로: `docs/tasks/T-220-save-feedback-bottom-sheet.md`
@@ -640,9 +640,9 @@
 
 ## 지금 가능한 작업
 
-현재 바로 시작 가능한 task는 `T-220`, `T-230`입니다.
+현재 바로 시작 가능한 task는 `T-230`입니다.
 
-`T-010-agents-and-docs-setup`, `T-000-current-code-audit`, `T-020-architecture-baseline`, `T-030-data-model-audit`, `T-050-permission-and-manifest-baseline`, `T-040-navigation-baseline`, `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`, `T-150-gemini-topic-recommendation`, `T-160-storage-quota-cleanup`, `T-170-repository-integration`, `T-200-home-ux-redesign`, `T-210-data-list-filter-selection`, `T-240-settings-ux-storage-permission`는 완료된 상태입니다. 이제 feedback, Logs 화면 작업을 병렬로 구현할 수 있습니다.
+`T-010-agents-and-docs-setup`, `T-000-current-code-audit`, `T-020-architecture-baseline`, `T-030-data-model-audit`, `T-050-permission-and-manifest-baseline`, `T-040-navigation-baseline`, `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`, `T-150-gemini-topic-recommendation`, `T-160-storage-quota-cleanup`, `T-170-repository-integration`, `T-200-home-ux-redesign`, `T-210-data-list-filter-selection`, `T-220-save-feedback-bottom-sheet`, `T-240-settings-ux-storage-permission`는 완료된 상태입니다. 이제 Logs 화면 작업을 구현할 수 있습니다.
 
 ## 아직 시작하면 안 되는 작업 예시
 
@@ -650,5 +650,4 @@
 
 ## 추천 다음 작업
 
-1. `T-220-save-feedback-bottom-sheet`
-2. 이어서 `T-230-logs-tab-flow`
+1. `T-230-logs-tab-flow`

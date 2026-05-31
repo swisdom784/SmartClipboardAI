@@ -3,14 +3,12 @@ package com.smartclipboard.ai.presentation.clipboard
 import android.content.ClipboardManager
 import android.os.Build
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
-import com.smartclipboard.ai.R
 import com.smartclipboard.ai.collection.clipboard.ClipboardCaptureHandler
-import com.smartclipboard.ai.collection.clipboard.ClipboardCaptureResult
-import com.smartclipboard.ai.collection.clipboard.ClipboardFailureReason
 import com.smartclipboard.ai.collection.clipboard.ClipboardReader
+import com.smartclipboard.ai.presentation.feedback.SaveFeedbackMessageMapper
+import com.smartclipboard.ai.presentation.feedback.SaveFeedbackToast
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlinx.coroutines.launch
@@ -49,23 +47,11 @@ class ClipboardCaptureActivity : ComponentActivity() {
 
         lifecycleScope.launch {
             val result = clipboardCaptureHandler.save(payload)
-            Toast.makeText(
-                this@ClipboardCaptureActivity,
-                result.toMessageResId(),
-                Toast.LENGTH_SHORT
-            ).show()
+            SaveFeedbackToast.show(
+                context = this@ClipboardCaptureActivity,
+                message = SaveFeedbackMessageMapper.fromClipboardResult(result)
+            )
             finish()
-        }
-    }
-
-    private fun ClipboardCaptureResult.toMessageResId(): Int {
-        return when (this) {
-            is ClipboardCaptureResult.Success -> R.string.clipboard_saved_message
-            is ClipboardCaptureResult.Failure -> when (reason) {
-                ClipboardFailureReason.EmptyClipboard,
-                ClipboardFailureReason.UnsupportedContent -> R.string.clipboard_empty_message
-                ClipboardFailureReason.SaveFailed -> R.string.clipboard_save_failed_message
-            }
         }
     }
 }
