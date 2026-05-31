@@ -139,3 +139,14 @@
 - 수동 확인: 실제 기기에서 ML Kit OCR, 실제 URL OG, Share Sheet/Tile transparent flow 수동 확인은 아직 하지 않았습니다.
 - 남은 이슈: 다음 작업은 `T-150-gemini-topic-recommendation`입니다. Gemini API key는 `local.properties -> BuildConfig.GEMINI_API_KEY` 경로를 유지해야 합니다.
 - PR: 브랜치 push 후 PR 작성 예정
+
+### 2026-05-31 / T-150-gemini-topic-recommendation / Codex
+
+- Branch: `feat/T-150-gemini-topic-recommendation`
+- Status: Gemini 기반 이번 실행 추천 세션 구현 완료
+- 변경 파일: `app/src/main/java/com/smartclipboard/ai/processing/gemini/recommendation/**`, `app/src/main/java/com/smartclipboard/ai/di/ProcessingModule.kt`, 관련 테스트, 관련 문서
+- 작업 요약: Gemini API key를 `BuildConfig.GEMINI_API_KEY`로 주입하고, `gemini-2.5-flash:generateContent` REST 호출 구조를 추가했습니다. 추천 후보는 `InMemoryRecommendationSessionStore`의 현재 세션으로만 보관하며, 새로 refresh하면 이전 추천을 교체합니다. key가 없거나 네트워크 실패가 있어도 예외를 UI로 던지지 않고 `SKIPPED`/`FAILED` 세션으로 처리합니다.
+- 테스트/빌드: TDD RED로 추천 parser/generator/manager/client parser 부재 실패를 확인한 뒤 구현했습니다. `.\gradlew.bat testDebugUnitTest` 성공, `.\gradlew.bat assembleDebug test` 성공.
+- 수동 확인: 현재 `local.properties`의 `gemini.api.key`가 비어 있어 실제 Gemini 네트워크 smoke test는 수행하지 않았습니다. key 없음 fallback은 단위 테스트로 확인했습니다.
+- 남은 이슈: 다음 작업은 `T-160-storage-quota-cleanup`입니다.
+- PR: 브랜치 push 후 PR URL 제공 예정

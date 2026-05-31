@@ -6,11 +6,11 @@
 
 ## 작업 상태
 
-- Status: Not Ready
+- Status: Ready
 - Owner: 미배정
 - Branch: `feat/T-160-storage-quota-cleanup`
-- Depends on: `T-030-data-model-audit`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`
-- Blocked by: `T-140` 미완료
+- Depends on: `T-030-data-model-audit`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`, `T-150-gemini-topic-recommendation`
+- Blocked by: 없음
 - Ready criteria: 중요 표시, Topic 연결, internal copy 여부, storage size 계산 방식이 확정됨
 - Can run in parallel with: `T-150`
 - Cannot run with: `T-030`, `T-170`, `T-240`

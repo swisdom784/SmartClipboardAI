@@ -22,6 +22,6 @@
 
 ## 현재 Ready 작업
 
-- `T-150-gemini-topic-recommendation`: Gemini 기반 이번 실행 Topic 추천
+- `T-160-storage-quota-cleanup`: 저장 용량 한도와 자동 삭제 정책
 
-`T-140`에서 링크/이미지의 OG/OCR 전처리와 저장 직후 짧은 enrichment trigger를 완료했습니다. 다음은 새로 들어온 자료를 바탕으로 이번 실행에서만 보여줄 AI 추천 후보를 생성하는 흐름입니다.
+`T-150`에서 이번 실행 추천 세션과 Gemini 호출 구조를 완료했습니다. 다음은 자동 수집 자료가 늘어났을 때 오래된 데이터를 안전하게 정리하고 Settings가 표시할 사용량 기준을 만드는 작업입니다.

@@ -295,20 +295,20 @@
 ### T-150-gemini-topic-recommendation
 
 - 작업명: Gemini 기반 이번 실행 Topic 추천
-- Status: Ready
-- Owner: 미배정
+- Status: Done
+- Owner: Codex
 - 목적: 새로 수집/분석된 자료에서 이번 실행의 추천 후보만 생성합니다.
 - 담당 브랜치명: `feat/T-150-gemini-topic-recommendation`
 - 예상 수정 파일: `processing/gemini/`, recommendation repository, settings key access, tests
 - 선행 task: `T-140-enrichment-ocr-og-pipeline`
 - Blocked by: 없음
-- Ready criteria: `T-140` 완료, Gemini key는 `local.properties -> BuildConfig.GEMINI_API_KEY`로 주입, 이번 실행 추천은 사용자 수락 전 영구 저장하지 않는 정책 확정
+- Ready criteria: 완료됨
 - 병렬 진행 가능 여부: 제한적 가능
 - Can run in parallel with: `T-160` 중 파일 충돌이 없는 경우
 - Cannot run with: `T-030`, `T-170`
-- 충돌 가능성이 있는 파일: Gemini manager, repository, settings
-- 완료 기준: 하드코딩 key 없이 BuildConfig/local.properties 기반 호출 구조와 fake 테스트가 존재
-- 검증 방법: fake Gemini 테스트, 실제 key가 있는 로컬에서 수동 smoke test
+- 충돌 가능성이 있는 파일: Gemini recommendation package, DI module
+- 완료 기준: 하드코딩 key 없이 BuildConfig/local.properties 기반 호출 구조와 fake 테스트가 존재, 추천 후보는 사용자 수락 전 영구 저장하지 않음
+- 검증 방법: fake Gemini 테스트, key 없음 fallback 테스트, parser 테스트, 실제 key가 있는 로컬에서 수동 smoke test
 - 작업자가 수정해도 되는 파일 범위: Gemini/recommendation package, tests
 - 수정하면 안 되는 파일 범위: UI 완성 화면, 외부 앱 export
 - 관련 task 문서 경로: `docs/tasks/T-150-gemini-topic-recommendation.md`
@@ -316,16 +316,16 @@
 ### T-160-storage-quota-cleanup
 
 - 작업명: 저장 용량 한도와 자동 삭제 정책
-- Status: Not Ready
+- Status: Ready
 - Owner: 미배정
 - 목적: 자동 수집 자료가 용량을 넘으면 안전한 순서로 오래된 데이터를 정리합니다.
 - 담당 브랜치명: `feat/T-160-storage-quota-cleanup`
 - 예상 수정 파일: storage policy, cleanup worker/use case, settings repository, tests
-- 선행 task: `T-030-data-model-audit`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`
-- Blocked by: `T-140` 미완료
+- 선행 task: `T-030-data-model-audit`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`, `T-150-gemini-topic-recommendation`
+- Blocked by: 없음
 - Ready criteria: DataItem 중요 표시, topic 연결, internal copy 여부 필드가 확정됨
 - 병렬 진행 가능 여부: 제한적 가능
-- Can run in parallel with: `T-150`
+- Can run in parallel with: 없음
 - Cannot run with: `T-030`, `T-170`, `T-240`
 - 충돌 가능성이 있는 파일: settings repository, DataItem flags, cleanup DAO
 - 완료 기준: cache/internal copy/unused DataItem 정리 순서가 테스트로 고정됨
@@ -640,19 +640,18 @@
 
 ## 지금 가능한 작업
 
-현재 바로 시작 가능한 task는 `T-150-gemini-topic-recommendation` 하나입니다.
+현재 바로 시작 가능한 task는 `T-160-storage-quota-cleanup` 하나입니다.
 
-`T-010-agents-and-docs-setup`, `T-000-current-code-audit`, `T-020-architecture-baseline`, `T-030-data-model-audit`, `T-050-permission-and-manifest-baseline`, `T-040-navigation-baseline`, `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`는 완료된 상태입니다. 이제 새로 수집/보강된 자료를 바탕으로 이번 실행의 AI 추천 후보를 생성합니다.
+`T-010-agents-and-docs-setup`, `T-000-current-code-audit`, `T-020-architecture-baseline`, `T-030-data-model-audit`, `T-050-permission-and-manifest-baseline`, `T-040-navigation-baseline`, `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`, `T-150-gemini-topic-recommendation`는 완료된 상태입니다. 이제 자동 수집 자료의 저장 용량 계산과 안전한 자동 삭제 정책을 구현합니다.
 
 ## 아직 시작하면 안 되는 작업 예시
 
-- `T-160-storage-quota-cleanup`: `T-150`에서 추천 세션/자료 보존 기준을 먼저 확인한 뒤 시작
 - `T-220-save-feedback-bottom-sheet`: 저장 직후 상태 메시지와 AI 추천 상태 표시 기준을 `T-150` 이후 정리한 뒤 시작
 - `T-200-home-ux-redesign`: Navigation과 Repository API가 확정되지 않았으므로 시작 금지
 - `T-500-calendar-intent-draft`: TopicAction payload와 Manifest queries가 확정되지 않았으므로 시작 금지
 
 ## 추천 다음 작업
 
-1. `T-150-gemini-topic-recommendation`
-2. 완료 후 `T-160-storage-quota-cleanup` 또는 `T-170-repository-integration` 준비 상태를 재검토합니다.
+1. `T-160-storage-quota-cleanup`
+2. 완료 후 `T-170-repository-integration`을 Ready 전환합니다.
 3. 그 다음에 Home/Inbox UX가 사용할 repository API를 정리합니다.
