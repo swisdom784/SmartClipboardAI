@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.smartclipboard.ai.presentation.home.HomeRoute
 import com.smartclipboard.ai.presentation.inbox.InboxRoute
+import com.smartclipboard.ai.presentation.settings.SettingsRoute
 
 @Composable
 fun HomeShellScreen(modifier: Modifier = Modifier) {
@@ -39,11 +40,13 @@ fun LogsShellScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun SettingsShellScreen(modifier: Modifier = Modifier) {
-    ShellScreen(
-        title = "Settings",
-        subtitle = "권한과 저장 설정",
-        modifier = modifier
+fun SettingsShellScreen(
+    modifier: Modifier = Modifier,
+    onRequestImagePermission: () -> Unit = {}
+) {
+    SettingsRoute(
+        modifier = modifier,
+        onRequestImagePermission = onRequestImagePermission
     )
 }
 

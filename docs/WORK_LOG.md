@@ -194,3 +194,14 @@
 - 수동 확인: 에뮬레이터/실기기 화면 확인은 아직 하지 않았습니다. 실제 삭제/중요 표시 UX는 Android Studio 또는 기기에서 추가 확인이 필요합니다.
 - 남은 이슈: Topic 추가 버튼은 진입점만 있으며 실제 Topic 연결은 `T-300`, `T-310` 범위입니다. 다음 작업은 용량/권한 UX인 `T-240-settings-ux-storage-permission`을 우선 추천합니다.
 - PR: 브랜치 push 후 PR URL 제공 예정
+
+### 2026-05-31 / T-240-settings-ux-storage-permission / Codex
+
+- Branch: `feat/T-240-settings-ux-storage-permission`
+- Status: Settings 수집 기간/용량/권한 UX 구현 완료
+- 변경 파일: `app/src/main/java/com/smartclipboard/ai/presentation/settings/**`, `app/src/main/java/com/smartclipboard/ai/presentation/main/MainActivity.kt`, `app/src/main/java/com/smartclipboard/ai/presentation/navigation/SmartClipboardRoot.kt`, `app/src/main/java/com/smartclipboard/ai/presentation/screens/ShellScreens.kt`, `app/src/test/java/com/smartclipboard/ai/presentation/settings/SettingsUiStateMapperTest.kt`, 관련 문서
+- 작업 요약: Settings 전용 UI 상태/SharedPreferences store/ViewModel/Compose 화면을 추가했습니다. 수집 기간 preset/custom은 설정 저장 후 MediaStore checkpoint를 조정해 다음 수집 범위에 반영합니다. 저장 용량은 `DataRepository.getStorageUsage()`로 표시하고, 정리 버튼은 `cleanupStorage()`를 호출합니다. 권한 버튼은 MainActivity의 이미지 권한 launcher와 연결했습니다.
+- 테스트/빌드: TDD RED로 Settings 상태/정책 클래스 부재 실패를 확인한 뒤 구현했습니다. `.\gradlew.bat testDebugUnitTest --tests com.smartclipboard.ai.presentation.settings.SettingsUiStateMapperTest` 성공. PR 전 전체 검증으로 `.\gradlew.bat assembleDebug test`를 실행합니다.
+- 수동 확인: 에뮬레이터/실기기 화면 확인은 아직 하지 않았습니다. 실제 권한 dialog와 SharedPreferences 재시작 유지 여부는 Android Studio 또는 기기에서 추가 확인이 필요합니다.
+- 남은 이슈: 자동 저장 직후 quota cleanup trigger는 아직 수집 파이프라인에 직접 연결하지 않았습니다. 현재는 Settings의 정리 버튼과 T-160 cleanup manager로 수행합니다. 다음 작업은 `T-220-save-feedback-bottom-sheet`입니다.
+- PR: 브랜치 push 후 PR URL 제공 예정

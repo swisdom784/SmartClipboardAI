@@ -444,20 +444,20 @@
 ### T-240-settings-ux-storage-permission
 
 - 작업명: Settings 수집 기간, 용량, 권한 UX
-- Status: Ready
-- Owner: 미배정
+- Status: Done
+- Owner: Codex
 - 목적: 자동 수집 기간과 저장 용량/자동 삭제 정책을 사용자가 조정할 수 있게 합니다.
 - 담당 브랜치명: `feat/T-240-settings-ux-storage-permission`
 - 예상 수정 파일: `presentation/settings/`, settings repository, tests
 - 선행 task: `T-040-navigation-baseline`, `T-160-storage-quota-cleanup`, `T-170-repository-integration`
 - Blocked by: 없음
-- Ready criteria: settings storage model과 quota policy 확정
+- Ready criteria: 완료됨
 - 병렬 진행 가능 여부: 예
 - Can run in parallel with: `T-200`, `T-210`, `T-230`
 - Cannot run with: `T-160` policy 변경 작업
 - 충돌 가능성이 있는 파일: settings repository, Settings route
 - 완료 기준: 수집 기간 preset/custom, 용량 표시, 자동 삭제 설명, 권한 상태가 표시됨
-- 검증 방법: settings state test, 수동 변경/재시작 확인
+- 검증 방법: `SettingsUiStateMapperTest`, Compose compile, `.\gradlew.bat assembleDebug test`
 - 작업자가 수정해도 되는 파일 범위: Settings package와 tests
 - 수정하면 안 되는 파일 범위: storage policy 핵심 알고리즘 변경
 - 관련 task 문서 경로: `docs/tasks/T-240-settings-ux-storage-permission.md`
@@ -640,9 +640,9 @@
 
 ## 지금 가능한 작업
 
-현재 바로 시작 가능한 task는 `T-220`, `T-230`, `T-240`입니다.
+현재 바로 시작 가능한 task는 `T-220`, `T-230`입니다.
 
-`T-010-agents-and-docs-setup`, `T-000-current-code-audit`, `T-020-architecture-baseline`, `T-030-data-model-audit`, `T-050-permission-and-manifest-baseline`, `T-040-navigation-baseline`, `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`, `T-150-gemini-topic-recommendation`, `T-160-storage-quota-cleanup`, `T-170-repository-integration`, `T-200-home-ux-redesign`, `T-210-data-list-filter-selection`는 완료된 상태입니다. 이제 feedback, Logs, Settings 화면 작업을 병렬로 구현할 수 있습니다.
+`T-010-agents-and-docs-setup`, `T-000-current-code-audit`, `T-020-architecture-baseline`, `T-030-data-model-audit`, `T-050-permission-and-manifest-baseline`, `T-040-navigation-baseline`, `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`, `T-150-gemini-topic-recommendation`, `T-160-storage-quota-cleanup`, `T-170-repository-integration`, `T-200-home-ux-redesign`, `T-210-data-list-filter-selection`, `T-240-settings-ux-storage-permission`는 완료된 상태입니다. 이제 feedback, Logs 화면 작업을 병렬로 구현할 수 있습니다.
 
 ## 아직 시작하면 안 되는 작업 예시
 
@@ -650,6 +650,5 @@
 
 ## 추천 다음 작업
 
-1. `T-240-settings-ux-storage-permission`
-2. 이어서 `T-220-save-feedback-bottom-sheet`
-3. 그 다음에 `T-230-logs-tab-flow`
+1. `T-220-save-feedback-bottom-sheet`
+2. 이어서 `T-230-logs-tab-flow`
