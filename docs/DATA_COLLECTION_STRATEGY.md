@@ -227,6 +227,13 @@ T-130 구현 상태:
 
 확정 Topic, 중요 표시, 사용자가 보존한 항목은 자동 삭제 대상에서 제외합니다.
 
+T-160 구현 상태:
+
+- `StorageQuotaPolicy`가 active DataItem의 사용량과 초과량을 계산합니다.
+- `StorageCleanupManager`는 MediaStore 원본을 삭제하지 않고 앱 DB의 DataItem만 soft-delete합니다.
+- 자동 삭제 제외 대상은 중요 표시, 사용자 보존, Topic 연결 항목입니다.
+- Settings UI는 후속 task에서 `StorageUsageSummary`를 사용해 용량 정보를 표시합니다.
+
 ## T-050 Manifest 기준
 
 `T-050` 기준 Manifest에는 아래만 선언합니다.

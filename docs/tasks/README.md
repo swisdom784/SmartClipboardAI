@@ -22,6 +22,6 @@
 
 ## 현재 Ready 작업
 
-- `T-160-storage-quota-cleanup`: 저장 용량 한도와 자동 삭제 정책
+- `T-170-repository-integration`: DataRepository 통합 정리
 
-`T-150`에서 이번 실행 추천 세션과 Gemini 호출 구조를 완료했습니다. 다음은 자동 수집 자료가 늘어났을 때 오래된 데이터를 안전하게 정리하고 Settings가 표시할 사용량 기준을 만드는 작업입니다.
+`T-160`에서 저장 용량 계산과 안전한 soft-delete 정책을 완료했습니다. 다음은 수집, 전처리, 추천, 저장 정리 흐름을 ViewModel이 쓰기 쉬운 Repository API로 묶는 순차 작업입니다.

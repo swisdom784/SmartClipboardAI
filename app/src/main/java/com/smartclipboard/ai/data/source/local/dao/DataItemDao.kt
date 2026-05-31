@@ -53,4 +53,26 @@ interface DataItemDao {
         maxRetries: Int,
         limit: Int
     ): List<DataItemEntity>
+
+    @Query(
+        """
+        SELECT * FROM data_items
+        WHERE deletedAtMillis IS NULL
+        ORDER BY capturedAtMillis ASC, id ASC
+        """
+    )
+    suspend fun getActiveItemsForStorageCleanup(): List<DataItemEntity>
+
+    @Query(
+        """
+        UPDATE data_items
+        SET deletedAtMillis = :deletedAtMillis,
+            updatedAtMillis = :deletedAtMillis
+        WHERE id IN (:ids) AND deletedAtMillis IS NULL
+        """
+    )
+    suspend fun softDeleteByIds(
+        ids: List<Long>,
+        deletedAtMillis: Long
+    ): Int
 }

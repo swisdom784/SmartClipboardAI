@@ -6,11 +6,11 @@
 
 ## 작업 상태
 
-- Status: Not Ready
+- Status: Ready
 - Owner: 미배정
 - Branch: `chore/T-170-repository-integration`
 - Depends on: `T-100`, `T-110`, `T-120`, `T-130`, `T-140`, `T-150`, `T-160`
-- Blocked by: Phase 2/3 개별 구현 미완료
+- Blocked by: 없음
 - Ready criteria: 수집/전처리/추천/정리 기능의 인터페이스가 모두 구현됨
 - Can run in parallel with: 없음
 - Cannot run with: repository를 만지는 모든 task

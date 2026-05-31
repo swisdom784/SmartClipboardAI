@@ -150,3 +150,14 @@
 - 수동 확인: 현재 `local.properties`의 `gemini.api.key`가 비어 있어 실제 Gemini 네트워크 smoke test는 수행하지 않았습니다. key 없음 fallback은 단위 테스트로 확인했습니다.
 - 남은 이슈: 다음 작업은 `T-160-storage-quota-cleanup`입니다.
 - PR: 브랜치 push 후 PR URL 제공 예정
+
+### 2026-05-31 / T-160-storage-quota-cleanup / Codex
+
+- Branch: `feat/T-160-storage-quota-cleanup`
+- Status: 저장 용량 계산과 안전한 자동 삭제 정책 구현 완료
+- 변경 파일: `app/src/main/java/com/smartclipboard/ai/storage/**`, `app/src/main/java/com/smartclipboard/ai/di/StorageModule.kt`, `DataItemDao`, `TopicDao`, 관련 테스트, 관련 문서
+- 작업 요약: active DataItem 사용량과 quota 초과량을 계산하고, 중요 표시/보존/Topic 연결 항목을 제외한 cleanup 후보를 선택하는 정책을 추가했습니다. 자동 정리는 MediaStore 원본을 삭제하지 않고 앱 DB의 DataItem만 soft-delete합니다. 내부 복사본이 있는 항목을 먼저 정리 후보로 보고, 이후 오래된 미연결 DataItem을 선택합니다.
+- 테스트/빌드: TDD RED로 storage 정책/manager/store 부재 실패를 확인한 뒤 구현했습니다. `.\gradlew.bat testDebugUnitTest` 성공, `.\gradlew.bat assembleDebug test` 성공.
+- 수동 확인: 실제 Settings UI가 아직 없어 화면 수동 확인은 하지 않았습니다.
+- 남은 이슈: 다음 작업은 `T-170-repository-integration`입니다.
+- PR: 브랜치 push 후 PR URL 제공 예정

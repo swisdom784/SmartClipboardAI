@@ -316,34 +316,34 @@
 ### T-160-storage-quota-cleanup
 
 - 작업명: 저장 용량 한도와 자동 삭제 정책
-- Status: Ready
-- Owner: 미배정
+- Status: Done
+- Owner: Codex
 - 목적: 자동 수집 자료가 용량을 넘으면 안전한 순서로 오래된 데이터를 정리합니다.
 - 담당 브랜치명: `feat/T-160-storage-quota-cleanup`
 - 예상 수정 파일: storage policy, cleanup worker/use case, settings repository, tests
 - 선행 task: `T-030-data-model-audit`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`, `T-150-gemini-topic-recommendation`
 - Blocked by: 없음
-- Ready criteria: DataItem 중요 표시, topic 연결, internal copy 여부 필드가 확정됨
+- Ready criteria: 완료됨
 - 병렬 진행 가능 여부: 제한적 가능
 - Can run in parallel with: 없음
 - Cannot run with: `T-030`, `T-170`, `T-240`
 - 충돌 가능성이 있는 파일: settings repository, DataItem flags, cleanup DAO
-- 완료 기준: cache/internal copy/unused DataItem 정리 순서가 테스트로 고정됨
-- 검증 방법: quota 계산 단위 테스트, 삭제 제외 대상 테스트
-- 작업자가 수정해도 되는 파일 범위: storage policy package, cleanup tests
+- 완료 기준: 사용량/초과량 계산, 내부 복사본 우선, 중요/보존/Topic 연결 제외, 오래된 DataItem soft-delete 순서가 테스트로 고정됨
+- 검증 방법: quota 계산 단위 테스트, 삭제 제외 대상 테스트, manager soft-delete 테스트, `.\gradlew.bat testDebugUnitTest`, `.\gradlew.bat assembleDebug test`
+- 작업자가 수정해도 되는 파일 범위: storage policy package, cleanup tests, cleanup DAO query
 - 수정하면 안 되는 파일 범위: Inbox UI, Topic UI
 - 관련 task 문서 경로: `docs/tasks/T-160-storage-quota-cleanup.md`
 
 ### T-170-repository-integration
 
 - 작업명: DataRepository 통합 정리
-- Status: Not Ready
+- Status: Ready
 - Owner: 미배정
 - 목적: 수집, enrichment, 추천, 저장 정책을 ViewModel이 쓰기 쉬운 API로 통합합니다.
 - 담당 브랜치명: `chore/T-170-repository-integration`
 - 예상 수정 파일: `domain/repository/`, `data/repository/`, integration tests
 - 선행 task: `T-100`, `T-110`, `T-120`, `T-130`, `T-140`, `T-150`, `T-160`
-- Blocked by: Phase 2/3 개별 구현 미완료
+- Blocked by: 없음
 - Ready criteria: 수집/전처리/추천/정리 기능의 인터페이스가 모두 구현됨
 - 병렬 진행 가능 여부: 아니오
 - Can run in parallel with: 없음
@@ -640,9 +640,9 @@
 
 ## 지금 가능한 작업
 
-현재 바로 시작 가능한 task는 `T-160-storage-quota-cleanup` 하나입니다.
+현재 바로 시작 가능한 task는 `T-170-repository-integration` 하나입니다.
 
-`T-010-agents-and-docs-setup`, `T-000-current-code-audit`, `T-020-architecture-baseline`, `T-030-data-model-audit`, `T-050-permission-and-manifest-baseline`, `T-040-navigation-baseline`, `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`, `T-150-gemini-topic-recommendation`는 완료된 상태입니다. 이제 자동 수집 자료의 저장 용량 계산과 안전한 자동 삭제 정책을 구현합니다.
+`T-010-agents-and-docs-setup`, `T-000-current-code-audit`, `T-020-architecture-baseline`, `T-030-data-model-audit`, `T-050-permission-and-manifest-baseline`, `T-040-navigation-baseline`, `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`, `T-150-gemini-topic-recommendation`, `T-160-storage-quota-cleanup`는 완료된 상태입니다. 이제 Home/Inbox/Settings/ViewModel이 쓸 공통 Repository API를 정리합니다.
 
 ## 아직 시작하면 안 되는 작업 예시
 
@@ -652,6 +652,6 @@
 
 ## 추천 다음 작업
 
-1. `T-160-storage-quota-cleanup`
-2. 완료 후 `T-170-repository-integration`을 Ready 전환합니다.
-3. 그 다음에 Home/Inbox UX가 사용할 repository API를 정리합니다.
+1. `T-170-repository-integration`
+2. 완료 후 `T-200`, `T-210`, `T-230`, `T-240` 화면 작업의 Ready 상태를 재검토합니다.
+3. 그 다음에 Home/Inbox UX 구현으로 넘어갑니다.
