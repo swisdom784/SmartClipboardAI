@@ -337,20 +337,20 @@
 ### T-170-repository-integration
 
 - 작업명: DataRepository 통합 정리
-- Status: Ready
-- Owner: 미배정
+- Status: Done
+- Owner: Codex
 - 목적: 수집, enrichment, 추천, 저장 정책을 ViewModel이 쓰기 쉬운 API로 통합합니다.
 - 담당 브랜치명: `chore/T-170-repository-integration`
 - 예상 수정 파일: `domain/repository/`, `data/repository/`, integration tests
 - 선행 task: `T-100`, `T-110`, `T-120`, `T-130`, `T-140`, `T-150`, `T-160`
 - Blocked by: 없음
-- Ready criteria: 수집/전처리/추천/정리 기능의 인터페이스가 모두 구현됨
+- Ready criteria: 완료됨
 - 병렬 진행 가능 여부: 아니오
 - Can run in parallel with: 없음
 - Cannot run with: repository를 만지는 모든 task
 - 충돌 가능성이 있는 파일: DataRepository 전체
-- 완료 기준: Home/Inbox/Topic/Analysis ViewModel이 사용할 API가 안정화됨
-- 검증 방법: repository integration test, fake datasource test
+- 완료 기준: Home/Inbox/Settings ViewModel이 사용할 Repository API가 안정화되고 순환 의존성이 제거됨
+- 검증 방법: repository integration test, fake datasource test, `.\gradlew.bat testDebugUnitTest`, `.\gradlew.bat assembleDebug test`
 - 작업자가 수정해도 되는 파일 범위: repository 계약/구현/테스트
 - 수정하면 안 되는 파일 범위: 화면 UI 완성 작업
 - 관련 task 문서 경로: `docs/tasks/T-170-repository-integration.md`
@@ -360,13 +360,13 @@
 ### T-200-home-ux-redesign
 
 - 작업명: ChatGPT/Codex 스타일 Home UX 재설계
-- Status: Not Ready
+- Status: Ready
 - Owner: 미배정
 - 목적: 새 작업 입력, 이전 작업, 이번 AI 추천, 자동 분석 상태를 단순하게 보여줍니다.
 - 담당 브랜치명: `feat/T-200-home-ux-redesign`
 - 예상 수정 파일: `presentation/home/`, Home ViewModel tests, UI tests
 - 선행 task: `T-040-navigation-baseline`, `T-170-repository-integration`
-- Blocked by: `T-040`, `T-170` 미완료
+- Blocked by: 없음
 - Ready criteria: navigation route와 Home용 repository API 확정
 - 병렬 진행 가능 여부: 예
 - Can run in parallel with: `T-210`, `T-230`, `T-240`
@@ -381,13 +381,13 @@
 ### T-210-data-list-filter-selection
 
 - 작업명: Inbox 자료 모음, 필터, 선택 UX
-- Status: Not Ready
+- Status: Ready
 - Owner: 미배정
 - 목적: 이미지/링크/텍스트/파일 카테고리와 리스트/그리드 전환을 제공합니다.
 - 담당 브랜치명: `feat/T-210-data-list-filter-selection`
 - 예상 수정 파일: `presentation/inbox/`, Inbox ViewModel tests, UI tests
 - 선행 task: `T-040-navigation-baseline`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-170-repository-integration`
-- Blocked by: `T-170` 미완료
+- Blocked by: 없음
 - Ready criteria: Inbox route, repository query API, DataItem type taxonomy 확정
 - 병렬 진행 가능 여부: 예
 - Can run in parallel with: `T-200`, `T-230`, `T-240`
@@ -402,13 +402,13 @@
 ### T-220-save-feedback-bottom-sheet
 
 - 작업명: 저장 피드백 Toast/BottomSheet UX
-- Status: Not Ready
+- Status: Ready
 - Owner: 미배정
 - 목적: Share/Tile 저장 시 앱 전체가 켜진 듯 보이지 않는 짧은 피드백을 제공합니다.
 - 담당 브랜치명: `feat/T-220-save-feedback-bottom-sheet`
 - 예상 수정 파일: `presentation/feedback/`, Share/Clipboard feedback hook, tests
 - 선행 task: `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`
-- Blocked by: `T-140` 미완료
+- Blocked by: 없음
 - Ready criteria: Share/Tile/MediaStore/SAF 저장 결과 이벤트가 View/UI에 전달됨
 - 병렬 진행 가능 여부: 예
 - Can run in parallel with: `T-200`, `T-210`
@@ -423,13 +423,13 @@
 ### T-230-logs-tab-flow
 
 - 작업명: 사용자 확인 기록 Logs 탭
-- Status: Not Ready
+- Status: Ready
 - Owner: 미배정
 - 목적: 사용자가 확인한 작업, 추천 수락, 전송, 완료/미완료 기록을 badge로 필터링합니다.
 - 담당 브랜치명: `feat/T-230-logs-tab-flow`
 - 예상 수정 파일: `presentation/logs/`, log model/query, tests
 - 선행 task: `T-040-navigation-baseline`, `T-170-repository-integration`
-- Blocked by: `T-040`, `T-170` 미완료
+- Blocked by: 없음
 - Ready criteria: 사용자-visible log 저장 기준과 route 확정
 - 병렬 진행 가능 여부: 예
 - Can run in parallel with: `T-200`, `T-210`, `T-240`
@@ -444,13 +444,13 @@
 ### T-240-settings-ux-storage-permission
 
 - 작업명: Settings 수집 기간, 용량, 권한 UX
-- Status: Not Ready
+- Status: Ready
 - Owner: 미배정
 - 목적: 자동 수집 기간과 저장 용량/자동 삭제 정책을 사용자가 조정할 수 있게 합니다.
 - 담당 브랜치명: `feat/T-240-settings-ux-storage-permission`
 - 예상 수정 파일: `presentation/settings/`, settings repository, tests
 - 선행 task: `T-040-navigation-baseline`, `T-160-storage-quota-cleanup`, `T-170-repository-integration`
-- Blocked by: `T-040`, `T-160`, `T-170` 미완료
+- Blocked by: 없음
 - Ready criteria: settings storage model과 quota policy 확정
 - 병렬 진행 가능 여부: 예
 - Can run in parallel with: `T-200`, `T-210`, `T-230`
@@ -640,18 +640,16 @@
 
 ## 지금 가능한 작업
 
-현재 바로 시작 가능한 task는 `T-170-repository-integration` 하나입니다.
+현재 바로 시작 가능한 task는 `T-200`, `T-210`, `T-220`, `T-230`, `T-240`입니다.
 
-`T-010-agents-and-docs-setup`, `T-000-current-code-audit`, `T-020-architecture-baseline`, `T-030-data-model-audit`, `T-050-permission-and-manifest-baseline`, `T-040-navigation-baseline`, `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`, `T-150-gemini-topic-recommendation`, `T-160-storage-quota-cleanup`는 완료된 상태입니다. 이제 Home/Inbox/Settings/ViewModel이 쓸 공통 Repository API를 정리합니다.
+`T-010-agents-and-docs-setup`, `T-000-current-code-audit`, `T-020-architecture-baseline`, `T-030-data-model-audit`, `T-050-permission-and-manifest-baseline`, `T-040-navigation-baseline`, `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`, `T-150-gemini-topic-recommendation`, `T-160-storage-quota-cleanup`, `T-170-repository-integration`는 완료된 상태입니다. 이제 사용자-facing 화면을 병렬로 구현할 수 있습니다.
 
 ## 아직 시작하면 안 되는 작업 예시
 
-- `T-220-save-feedback-bottom-sheet`: 저장 직후 상태 메시지와 AI 추천 상태 표시 기준을 `T-150` 이후 정리한 뒤 시작
-- `T-200-home-ux-redesign`: Navigation과 Repository API가 확정되지 않았으므로 시작 금지
 - `T-500-calendar-intent-draft`: TopicAction payload와 Manifest queries가 확정되지 않았으므로 시작 금지
 
 ## 추천 다음 작업
 
-1. `T-170-repository-integration`
-2. 완료 후 `T-200`, `T-210`, `T-230`, `T-240` 화면 작업의 Ready 상태를 재검토합니다.
-3. 그 다음에 Home/Inbox UX 구현으로 넘어갑니다.
+1. `T-200-home-ux-redesign`
+2. 이어서 `T-210-data-list-filter-selection`
+3. 그 다음에 `T-240-settings-ux-storage-permission` 또는 `T-220-save-feedback-bottom-sheet`

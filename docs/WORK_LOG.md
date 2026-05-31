@@ -161,3 +161,14 @@
 - 수동 확인: 실제 Settings UI가 아직 없어 화면 수동 확인은 하지 않았습니다.
 - 남은 이슈: 다음 작업은 `T-170-repository-integration`입니다.
 - PR: 브랜치 push 후 PR URL 제공 예정
+
+### 2026-05-31 / T-170-repository-integration / Codex
+
+- Branch: `chore/T-170-repository-integration`
+- Status: ViewModel용 Repository facade 통합 완료
+- 변경 파일: `app/src/main/java/com/smartclipboard/ai/domain/repository/**`, `app/src/main/java/com/smartclipboard/ai/data/repository/DataRepositoryImpl.kt`, `RecommendationDataSource`, 관련 테스트, 관련 문서
+- 작업 요약: `HomeRepositoryState`, `InboxFilter`와 Home/Inbox/추천/저장 사용량/cleanup API를 `DataRepository`에 추가했습니다. `DataRepositoryImpl`은 추천 세션과 저장 cleanup manager를 facade로 노출합니다. 추천 data source가 `DataRepository`를 다시 주입받던 구조를 `DataItemDao` 기반으로 바꿔 순환 의존성을 피했습니다.
+- 테스트/빌드: TDD RED로 repository facade API 부재 실패를 확인한 뒤 구현했습니다. `.\gradlew.bat testDebugUnitTest` 성공, `.\gradlew.bat assembleDebug test` 성공.
+- 수동 확인: 화면 UI가 아직 없어 수동 UX 확인은 하지 않았습니다.
+- 남은 이슈: 다음 작업은 사용자-facing 첫 화면인 `T-200-home-ux-redesign`을 우선 추천합니다.
+- PR: 브랜치 push 후 PR URL 제공 예정

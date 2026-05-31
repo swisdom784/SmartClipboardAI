@@ -6,11 +6,11 @@
 
 ## 작업 상태
 
-- Status: Not Ready
+- Status: Ready
 - Owner: 미배정
 - Branch: `feat/T-230-logs-tab-flow`
 - Depends on: `T-040-navigation-baseline`, `T-170-repository-integration`
-- Blocked by: `T-040`, `T-170` 미완료
+- Blocked by: 없음
 - Ready criteria: 사용자-visible log 저장 기준과 route가 확정됨
 - Can run in parallel with: `T-200`, `T-210`, `T-240`
 - Cannot run with: repository log 계약 변경 작업

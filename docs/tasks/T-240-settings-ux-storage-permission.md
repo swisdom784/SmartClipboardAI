@@ -6,11 +6,11 @@
 
 ## 작업 상태
 
-- Status: Not Ready
+- Status: Ready
 - Owner: 미배정
 - Branch: `feat/T-240-settings-ux-storage-permission`
 - Depends on: `T-040-navigation-baseline`, `T-160-storage-quota-cleanup`, `T-170-repository-integration`
-- Blocked by: `T-040`, `T-160`, `T-170` 미완료
+- Blocked by: 없음
 - Ready criteria: settings storage model과 quota policy가 확정됨
 - Can run in parallel with: `T-200`, `T-210`, `T-230`
 - Cannot run with: `T-160` policy 변경 작업

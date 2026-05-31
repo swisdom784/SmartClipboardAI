@@ -169,6 +169,16 @@ Repository 계약:
 - `StorageCleanupManager`: 후보 DataItem을 DB에서 soft-delete하고 Settings가 쓸 사용량 요약을 반환
 - `RoomStorageCleanupStore`: DataItem active 목록, Topic 연결 ID, soft-delete DAO query 연결
 
+`T-170` 기준 Repository facade는 후속 ViewModel이 내부 collaborator를 직접 몰라도 되도록 아래 API를 제공합니다.
+
+- `observeHomeState()`: 최근 DataItem, active Topic, 현재 추천 세션을 결합
+- `observeInboxItems(filter)`: 타입, 중요 표시, 미분석 상태 기준 Inbox 자료 조회
+- `observeCurrentRecommendationSession()`: 이번 실행 추천 세션 구독
+- `refreshTopicRecommendations(limit)`: Gemini 추천 refresh
+- `getStorageUsage(quotaBytes)`: Settings 용량 표시용 사용량 계산
+- `cleanupStorage(quotaBytes)`: 저장 한도 초과 시 soft-delete 실행
+- `RepositoryRecommendationDataSource`는 순환 의존성을 피하기 위해 `DataRepository`가 아니라 `DataItemDao`를 직접 사용합니다.
+
 ## Coroutines 역할
 
 - Room, MediaStore, 파일 복사, Jsoup OG 추출, OCR, Gemini 호출은 IO dispatcher에서 실행

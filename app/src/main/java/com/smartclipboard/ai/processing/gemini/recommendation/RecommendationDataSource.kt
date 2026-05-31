@@ -1,8 +1,9 @@
 package com.smartclipboard.ai.processing.gemini.recommendation
 
+import com.smartclipboard.ai.data.source.local.dao.DataItemDao
+import com.smartclipboard.ai.data.source.local.mapper.toDomain
 import com.smartclipboard.ai.domain.model.DataItem
 import com.smartclipboard.ai.domain.model.DataItemType
-import com.smartclipboard.ai.domain.repository.DataRepository
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -13,11 +14,12 @@ interface RecommendationDataSource {
 
 @Singleton
 class RepositoryRecommendationDataSource @Inject constructor(
-    private val repository: DataRepository
+    private val dataItemDao: DataItemDao
 ) : RecommendationDataSource {
     override suspend fun getRecommendationInputItems(limit: Int): List<DataItem> {
-        return repository.observeDataItems()
+        return dataItemDao.observeAll()
             .first()
+            .map { it.toDomain() }
             .filter { it.hasRecommendationSignal() }
             .take(limit)
     }

@@ -6,12 +6,12 @@
 
 ## 작업 상태
 
-- Status: Ready
-- Owner: 미배정
+- Status: Done
+- Owner: Codex
 - Branch: `chore/T-170-repository-integration`
 - Depends on: `T-100`, `T-110`, `T-120`, `T-130`, `T-140`, `T-150`, `T-160`
 - Blocked by: 없음
-- Ready criteria: 수집/전처리/추천/정리 기능의 인터페이스가 모두 구현됨
+- Ready criteria: 완료됨
 - Can run in parallel with: 없음
 - Cannot run with: repository를 만지는 모든 task
 
@@ -37,15 +37,23 @@
 - 수집/분석/삭제/추천 상태를 일관된 모델로 반환합니다.
 - 후속 UI task가 repository 내부 구현을 알 필요 없게 만듭니다.
 
+T-170 구현 결과:
+
+- `HomeRepositoryState`와 `InboxFilter`를 추가했습니다.
+- `DataRepository`가 Home 상태, Inbox 필터, 현재 추천 세션, 추천 refresh, 저장 사용량, 저장 cleanup API를 제공합니다.
+- `DataRepositoryImpl`이 추천 세션과 저장 cleanup manager를 ViewModel용 facade로 노출합니다.
+- `RepositoryRecommendationDataSource`는 `DataRepository` 대신 `DataItemDao`를 사용해 순환 의존성을 피합니다.
+- `DataRepositoryImplIntegrationTest`가 Home state combine, Inbox filter, 추천 refresh, storage usage API를 검증합니다.
+
 ## 체크리스트
 
-- [ ] 코드 읽기
-- [ ] 관련 문서 확인
-- [ ] 선행 task 완료 여부 확인
-- [ ] 구현
-- [ ] 빌드 확인
-- [ ] 테스트/수동 확인
-- [ ] 변경 요약 작성
+- [x] 코드 읽기
+- [x] 관련 문서 확인
+- [x] 선행 task 완료 여부 확인
+- [x] 구현
+- [x] 빌드 확인
+- [x] 테스트/수동 확인
+- [x] 변경 요약 작성
 - [ ] PR 작성
 
 ## 완료 기준
