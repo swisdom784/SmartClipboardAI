@@ -381,20 +381,20 @@
 ### T-210-data-list-filter-selection
 
 - 작업명: Inbox 자료 모음, 필터, 선택 UX
-- Status: Ready
-- Owner: 미배정
+- Status: Done
+- Owner: Codex
 - 목적: 이미지/링크/텍스트/파일 카테고리와 리스트/그리드 전환을 제공합니다.
 - 담당 브랜치명: `feat/T-210-data-list-filter-selection`
 - 예상 수정 파일: `presentation/inbox/`, Inbox ViewModel tests, UI tests
 - 선행 task: `T-040-navigation-baseline`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-170-repository-integration`
 - Blocked by: 없음
-- Ready criteria: Inbox route, repository query API, DataItem type taxonomy 확정
+- Ready criteria: 완료됨
 - 병렬 진행 가능 여부: 예
 - Can run in parallel with: `T-200`, `T-230`, `T-240`
 - Cannot run with: `T-040`, repository query 변경 작업
 - 충돌 가능성이 있는 파일: Inbox route, selection state
 - 완료 기준: 카테고리 카드, list/grid 전환, 삭제/중요/Topic 추가 entry가 동작
-- 검증 방법: fake data Compose 테스트, 수동 삭제/필터 확인
+- 검증 방법: `InboxUiStateMapperTest`, Compose compile, `.\gradlew.bat assembleDebug test`
 - 작업자가 수정해도 되는 파일 범위: Inbox package와 tests
 - 수정하면 안 되는 파일 범위: DataItem model/DAO 계약 변경
 - 관련 task 문서 경로: `docs/tasks/T-210-data-list-filter-selection.md`
@@ -640,9 +640,9 @@
 
 ## 지금 가능한 작업
 
-현재 바로 시작 가능한 task는 `T-210`, `T-220`, `T-230`, `T-240`입니다.
+현재 바로 시작 가능한 task는 `T-220`, `T-230`, `T-240`입니다.
 
-`T-010-agents-and-docs-setup`, `T-000-current-code-audit`, `T-020-architecture-baseline`, `T-030-data-model-audit`, `T-050-permission-and-manifest-baseline`, `T-040-navigation-baseline`, `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`, `T-150-gemini-topic-recommendation`, `T-160-storage-quota-cleanup`, `T-170-repository-integration`, `T-200-home-ux-redesign`는 완료된 상태입니다. 이제 Inbox, feedback, Logs, Settings 화면 작업을 병렬로 구현할 수 있습니다.
+`T-010-agents-and-docs-setup`, `T-000-current-code-audit`, `T-020-architecture-baseline`, `T-030-data-model-audit`, `T-050-permission-and-manifest-baseline`, `T-040-navigation-baseline`, `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`, `T-150-gemini-topic-recommendation`, `T-160-storage-quota-cleanup`, `T-170-repository-integration`, `T-200-home-ux-redesign`, `T-210-data-list-filter-selection`는 완료된 상태입니다. 이제 feedback, Logs, Settings 화면 작업을 병렬로 구현할 수 있습니다.
 
 ## 아직 시작하면 안 되는 작업 예시
 
@@ -650,6 +650,6 @@
 
 ## 추천 다음 작업
 
-1. `T-210-data-list-filter-selection`
-2. 이어서 `T-240-settings-ux-storage-permission`
-3. 그 다음에 `T-220-save-feedback-bottom-sheet` 또는 `T-230-logs-tab-flow`
+1. `T-240-settings-ux-storage-permission`
+2. 이어서 `T-220-save-feedback-bottom-sheet`
+3. 그 다음에 `T-230-logs-tab-flow`

@@ -183,3 +183,14 @@
 - 수동 확인: 에뮬레이터/실기기 화면 확인은 아직 하지 않았습니다. Compose preview와 실제 화면 육안 확인은 Android Studio에서 추가 QA가 필요합니다.
 - 남은 이슈: Home 입력을 실제 Topic 생성으로 연결하는 작업은 `T-300-topic-create-flow` 범위입니다. 다음 작업은 자료 모음/필터 UX인 `T-210-data-list-filter-selection`을 우선 추천합니다.
 - PR: 브랜치 push 후 PR URL 제공 예정
+
+### 2026-05-31 / T-210-data-list-filter-selection / Codex
+
+- Branch: `feat/T-210-data-list-filter-selection`
+- Status: Inbox 자료 모음/필터/선택 UX 구현 완료
+- 변경 파일: `app/src/main/java/com/smartclipboard/ai/presentation/inbox/**`, `app/src/main/java/com/smartclipboard/ai/presentation/screens/ShellScreens.kt`, `app/src/test/java/com/smartclipboard/ai/presentation/inbox/InboxUiStateMapperTest.kt`, 관련 문서
+- 작업 요약: Inbox 전용 UI 상태/매퍼/ViewModel/Compose 화면을 추가했습니다. 카테고리는 최근, 이미지, 링크, 텍스트, 파일, 중요, 미분석으로 고정했고, 세부 자료는 리스트/그리드로 전환할 수 있습니다. 중요 표시는 기존 `saveDataItem` 경로로 토글하고, 삭제는 `deletedAtMillis`를 기록하는 soft-delete로 처리합니다.
+- 테스트/빌드: TDD RED로 `InboxUiStateMapper` 부재 실패를 확인한 뒤 구현했습니다. `.\gradlew.bat testDebugUnitTest --tests com.smartclipboard.ai.presentation.inbox.InboxUiStateMapperTest` 성공. PR 전 전체 검증으로 `.\gradlew.bat assembleDebug test`를 실행합니다.
+- 수동 확인: 에뮬레이터/실기기 화면 확인은 아직 하지 않았습니다. 실제 삭제/중요 표시 UX는 Android Studio 또는 기기에서 추가 확인이 필요합니다.
+- 남은 이슈: Topic 추가 버튼은 진입점만 있으며 실제 Topic 연결은 `T-300`, `T-310` 범위입니다. 다음 작업은 용량/권한 UX인 `T-240-settings-ux-storage-permission`을 우선 추천합니다.
+- PR: 브랜치 push 후 PR URL 제공 예정
