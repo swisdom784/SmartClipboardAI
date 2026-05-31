@@ -488,21 +488,21 @@
 ### T-310-topic-data-selection-flow
 
 - 작업명: Topic 자료 자동 선택 및 수정 UX
-- Status: Ready
-- Owner: 미배정
+- Status: Done
+- Owner: Codex
 - 목적: AI가 고른 자료를 한 줄 요약으로 보여주고, 사용자가 필요할 때만 수정합니다.
 - 담당 브랜치명: `feat/T-310-topic-data-selection-flow`
 - 예상 수정 파일: `presentation/topic/selection/`, selection use case, tests
 - 선행 task: `T-210-data-list-filter-selection`, `T-300-topic-create-flow`
 - Blocked by: 없음
-- Ready criteria: Inbox 자료 UX와 Topic 생성 API가 준비됨
+- Ready criteria: 완료됨
 - 병렬 진행 가능 여부: 제한적 가능
-- Can run in parallel with: `T-400`은 contract freeze 후 가능
+- Can run in parallel with: `T-400`은 selection 결과 계약을 사용해 진행 가능
 - Cannot run with: `T-210` selection state 변경 작업
-- 충돌 가능성이 있는 파일: selection component, Topic ViewModel
+- 충돌 가능성이 있는 파일: selection component, Topic ViewModel, Topic cross-ref repository 계약
 - 완료 기준: `사용된 자료 N개` 요약, tap-to-edit, 선택 저장이 동작
-- 검증 방법: fake DataItem selection 테스트, 수동 선택 변경 확인
-- 작업자가 수정해도 되는 파일 범위: Topic selection package와 tests
+- 검증 방법: `TopicDataSelectionUseCaseTest`, `TopicDataSelectionUiStateMapperTest`, `DataRepositoryImplIntegrationTest`, `.\gradlew.bat assembleDebug test`
+- 작업자가 수정해도 되는 파일 범위: Topic selection package와 tests, 선택 저장에 필요한 최소 repository/DAO 계약
 - 수정하면 안 되는 파일 범위: Inbox category 구조 변경
 - 관련 task 문서 경로: `docs/tasks/T-310-topic-data-selection-flow.md`
 
@@ -511,13 +511,13 @@
 ### T-400-topic-analysis-draft
 
 - 작업명: TopicAnalysis 생성 흐름
-- Status: Not Ready
+- Status: Ready
 - Owner: 미배정
 - 목적: Topic과 연결 DataItem을 Gemini에 보내 분석 요약과 근거를 생성합니다.
 - 담당 브랜치명: `feat/T-400-topic-analysis-draft`
 - 예상 수정 파일: `processing/gemini/analysis/`, `presentation/analysis/`, tests
 - 선행 task: `T-150-gemini-topic-recommendation`, `T-310-topic-data-selection-flow`
-- Blocked by: `T-150`, `T-310` 미완료
+- Blocked by: 없음
 - Ready criteria: Gemini manager, Topic/DataItem 연결, selection 결과가 준비됨
 - 병렬 진행 가능 여부: 제한적 가능
 - Can run in parallel with: `T-410`은 DTO 계약 합의 후 가능
@@ -640,9 +640,9 @@
 
 ## 지금 가능한 작업
 
-현재 바로 시작 가능한 task는 `T-310`입니다.
+현재 바로 시작 가능한 task는 `T-400`입니다.
 
-`T-010-agents-and-docs-setup`, `T-000-current-code-audit`, `T-020-architecture-baseline`, `T-030-data-model-audit`, `T-050-permission-and-manifest-baseline`, `T-040-navigation-baseline`, `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`, `T-150-gemini-topic-recommendation`, `T-160-storage-quota-cleanup`, `T-170-repository-integration`, `T-200-home-ux-redesign`, `T-210-data-list-filter-selection`, `T-220-save-feedback-bottom-sheet`, `T-230-logs-tab-flow`, `T-240-settings-ux-storage-permission`, `T-300-topic-create-flow`는 완료된 상태입니다. 이제 Topic 자료 선택 흐름을 구현할 수 있습니다.
+`T-010-agents-and-docs-setup`, `T-000-current-code-audit`, `T-020-architecture-baseline`, `T-030-data-model-audit`, `T-050-permission-and-manifest-baseline`, `T-040-navigation-baseline`, `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`, `T-150-gemini-topic-recommendation`, `T-160-storage-quota-cleanup`, `T-170-repository-integration`, `T-200-home-ux-redesign`, `T-210-data-list-filter-selection`, `T-220-save-feedback-bottom-sheet`, `T-230-logs-tab-flow`, `T-240-settings-ux-storage-permission`, `T-300-topic-create-flow`, `T-310-topic-data-selection-flow`는 완료된 상태입니다. 이제 선택된 Topic/DataItem을 Gemini 분석 입력으로 연결할 수 있습니다.
 
 ## 아직 시작하면 안 되는 작업 예시
 
@@ -650,4 +650,4 @@
 
 ## 추천 다음 작업
 
-1. `T-310-topic-data-selection-flow`
+1. `T-400-topic-analysis-draft`

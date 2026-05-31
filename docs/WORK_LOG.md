@@ -238,3 +238,14 @@
 - 수동 확인: 실제 Home 입력과 추천 카드 클릭 수동 테스트는 아직 하지 않았습니다.
 - 남은 이슈: Topic 생성 후 자료 선택 화면으로 실제 이동하는 UI는 `T-310-topic-data-selection-flow`에서 연결합니다.
 - PR: 브랜치 push 후 PR URL 제공 예정
+
+### 2026-06-01 / T-310-topic-data-selection-flow / Codex
+
+- Branch: `feat/T-310-topic-data-selection-flow`
+- Status: Topic 자료 선택 요약/수정/저장 흐름 구현 완료
+- 변경 파일: `app/src/main/java/com/smartclipboard/ai/presentation/topic/selection/**`, `app/src/main/java/com/smartclipboard/ai/presentation/home/HomeScreen.kt`, `app/src/main/java/com/smartclipboard/ai/presentation/navigation/SmartClipboardRoot.kt`, `app/src/main/java/com/smartclipboard/ai/presentation/screens/ShellScreens.kt`, `DataRepository`, `DataRepositoryImpl`, `TopicDao`, 관련 테스트, 관련 문서
+- 작업 요약: Topic에 연결된 자료를 `사용된 자료 N개`로 요약하고, 자료 선택 화면에서 체크박스로 추가/제거 후 저장할 수 있게 했습니다. Home에서 새 Topic 생성 또는 기존 Topic 클릭 시 자료 선택 화면으로 이동합니다. 선택 저장은 기존 Topic-DataItem cross-ref를 교체하고 사용자 수정 선택은 `TopicItemSelectedBy.USER`로 기록합니다.
+- 테스트/빌드: TDD RED로 selection use case와 UI state mapper 부재 실패를 확인한 뒤 구현했습니다. `TopicDataSelectionUseCaseTest`, `TopicDataSelectionUiStateMapperTest`, `DataRepositoryImplIntegrationTest` 성공. PR 전 전체 검증으로 `.\gradlew.bat assembleDebug test`를 실행합니다.
+- 수동 확인: 실제 기기에서 Home 입력/추천 수락 후 자료 선택 화면 이동과 저장 후 닫힘은 추가 QA가 필요합니다.
+- 남은 이슈: TopicAnalysis 생성과 Gemini 분석 입력 구성은 `T-400-topic-analysis-draft` 범위입니다.
+- PR: 브랜치 push 후 PR URL 제공 예정

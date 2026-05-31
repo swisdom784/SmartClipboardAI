@@ -14,10 +14,17 @@ import com.smartclipboard.ai.presentation.home.HomeRoute
 import com.smartclipboard.ai.presentation.inbox.InboxRoute
 import com.smartclipboard.ai.presentation.logs.LogsRoute
 import com.smartclipboard.ai.presentation.settings.SettingsRoute
+import com.smartclipboard.ai.presentation.topic.selection.TopicDataSelectionRoute
 
 @Composable
-fun HomeShellScreen(modifier: Modifier = Modifier) {
-    HomeRoute(modifier = modifier)
+fun HomeShellScreen(
+    modifier: Modifier = Modifier,
+    onTopicSelectionRequested: (Long) -> Unit = {}
+) {
+    HomeRoute(
+        modifier = modifier,
+        onTopicSelectionRequested = onTopicSelectionRequested
+    )
 }
 
 @Composable
@@ -57,11 +64,15 @@ fun TopicCreateShellScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun TopicDataSelectionShellScreen(modifier: Modifier = Modifier) {
-    ShellScreen(
-        title = "자료 선택",
-        subtitle = "Topic에 사용할 자료",
-        modifier = modifier
+fun TopicDataSelectionShellScreen(
+    topicId: Long,
+    modifier: Modifier = Modifier,
+    onClose: () -> Unit = {}
+) {
+    TopicDataSelectionRoute(
+        topicId = topicId,
+        modifier = modifier,
+        onClose = onClose
     )
 }
 

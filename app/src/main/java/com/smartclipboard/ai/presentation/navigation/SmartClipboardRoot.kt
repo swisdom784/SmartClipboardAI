@@ -1,5 +1,6 @@
 package com.smartclipboard.ai.presentation.navigation
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -22,6 +23,7 @@ import com.smartclipboard.ai.presentation.screens.HomeShellScreen
 import com.smartclipboard.ai.presentation.screens.InboxShellScreen
 import com.smartclipboard.ai.presentation.screens.LogsShellScreen
 import com.smartclipboard.ai.presentation.screens.SettingsShellScreen
+import com.smartclipboard.ai.presentation.screens.TopicDataSelectionShellScreen
 
 @Composable
 fun SmartClipboardRoot(
@@ -31,22 +33,40 @@ fun SmartClipboardRoot(
     var selectedDestinationRoute by rememberSaveable {
         mutableStateOf(TopLevelDestination.default.route)
     }
+    var selectedTopicId by rememberSaveable {
+        mutableStateOf<Long?>(null)
+    }
     val selectedDestination = TopLevelDestination.fromRoute(selectedDestinationRoute)
+    BackHandler(enabled = selectedTopicId != null) {
+        selectedTopicId = null
+    }
 
     Scaffold(
         bottomBar = {
-            SmartClipboardBottomBar(
-                selectedDestination = selectedDestination,
-                onDestinationSelected = { selectedDestinationRoute = it.route }
-            )
+            if (selectedTopicId == null) {
+                SmartClipboardBottomBar(
+                    selectedDestination = selectedDestination,
+                    onDestinationSelected = { selectedDestinationRoute = it.route }
+                )
+            }
         }
     ) { contentPadding ->
-        TopLevelDestinationContent(
-            selectedDestination = selectedDestination,
-            contentPadding = contentPadding,
-            onPickFilesRequested = onPickFilesRequested,
-            onRequestImagePermission = onRequestImagePermission
-        )
+        val topicId = selectedTopicId
+        if (topicId != null) {
+            TopicDataSelectionShellScreen(
+                topicId = topicId,
+                modifier = Modifier.padding(contentPadding),
+                onClose = { selectedTopicId = null }
+            )
+        } else {
+            TopLevelDestinationContent(
+                selectedDestination = selectedDestination,
+                contentPadding = contentPadding,
+                onPickFilesRequested = onPickFilesRequested,
+                onRequestImagePermission = onRequestImagePermission,
+                onTopicSelectionRequested = { selectedTopicId = it }
+            )
+        }
     }
 }
 
@@ -72,10 +92,14 @@ private fun TopLevelDestinationContent(
     selectedDestination: TopLevelDestination,
     contentPadding: PaddingValues,
     onPickFilesRequested: () -> Unit,
-    onRequestImagePermission: () -> Unit
+    onRequestImagePermission: () -> Unit,
+    onTopicSelectionRequested: (Long) -> Unit
 ) {
     when (selectedDestination) {
-        TopLevelDestination.Home -> HomeShellScreen(Modifier.padding(contentPadding))
+        TopLevelDestination.Home -> HomeShellScreen(
+            modifier = Modifier.padding(contentPadding),
+            onTopicSelectionRequested = onTopicSelectionRequested
+        )
         TopLevelDestination.Inbox -> InboxShellScreen(
             modifier = Modifier.padding(contentPadding),
             onPickFilesRequested = onPickFilesRequested

@@ -22,6 +22,20 @@ interface TopicDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTopicItemCrossRefs(entities: List<TopicItemCrossRefEntity>)
 
+    @Query("DELETE FROM topic_item_cross_refs WHERE topicId = :topicId")
+    suspend fun deleteTopicItemCrossRefs(topicId: Long): Int
+
+    @Transaction
+    suspend fun replaceTopicItemCrossRefs(
+        topicId: Long,
+        entities: List<TopicItemCrossRefEntity>
+    ) {
+        deleteTopicItemCrossRefs(topicId)
+        if (entities.isNotEmpty()) {
+            insertTopicItemCrossRefs(entities)
+        }
+    }
+
     @Query("SELECT * FROM topics WHERE id = :id")
     suspend fun getTopicById(id: Long): TopicEntity?
 

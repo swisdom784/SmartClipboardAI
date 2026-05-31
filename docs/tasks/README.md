@@ -22,6 +22,6 @@
 
 ## 현재 Ready 작업
 
-- `T-310-topic-data-selection-flow`: Topic 자료 자동 선택 및 수정 UX
+- `T-400-topic-analysis-draft`: TopicAnalysis 생성 흐름
 
-`T-300`에서 사용자 입력/AI 추천 기반 Topic 생성을 완료했습니다. 이제 다음 Ready 작업은 Topic에 사용할 자료 선택 흐름인 `T-310`입니다.
+`T-310`에서 Topic에 사용할 자료 선택과 저장 흐름을 완료했습니다. 이제 다음 Ready 작업은 선택된 Topic/DataItem을 Gemini 분석 입력으로 연결하는 `T-400`입니다.

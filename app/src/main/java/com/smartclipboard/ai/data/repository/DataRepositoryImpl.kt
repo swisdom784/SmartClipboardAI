@@ -85,6 +85,25 @@ class DataRepositoryImpl @Inject constructor(
             .map { entities -> entities.map { it.toDomain() } }
     }
 
+    override suspend fun replaceTopicDataItems(
+        topicId: Long,
+        dataItemIds: List<Long>,
+        selectedBy: TopicItemSelectedBy
+    ) {
+        val now = System.currentTimeMillis()
+        topicDao.replaceTopicItemCrossRefs(
+            topicId = topicId,
+            entities = dataItemIds.distinct().map { dataItemId ->
+                TopicItemCrossRefEntity(
+                    topicId = topicId,
+                    dataItemId = dataItemId,
+                    selectedBy = selectedBy.name,
+                    createdAtMillis = now
+                )
+            }
+        )
+    }
+
     override suspend fun saveTopicAnalysis(analysis: TopicAnalysis): Long {
         return topicAnalysisDao.insert(analysis.toEntity())
     }

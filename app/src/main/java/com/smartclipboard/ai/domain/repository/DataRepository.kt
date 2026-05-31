@@ -31,6 +31,14 @@ interface DataRepository {
 
     fun observeDataItemsForTopic(topicId: Long): Flow<List<DataItem>>
 
+    suspend fun replaceTopicDataItems(
+        topicId: Long,
+        dataItemIds: List<Long>,
+        selectedBy: TopicItemSelectedBy = TopicItemSelectedBy.USER
+    ) {
+        error("Topic data item replacement is not implemented")
+    }
+
     suspend fun saveTopicAnalysis(analysis: TopicAnalysis): Long
 
     fun observeTopicAnalyses(topicId: Long): Flow<List<TopicAnalysis>>
