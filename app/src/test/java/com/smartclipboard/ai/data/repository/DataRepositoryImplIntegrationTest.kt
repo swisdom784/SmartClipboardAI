@@ -15,6 +15,7 @@ import com.smartclipboard.ai.domain.model.DataItemStorage
 import com.smartclipboard.ai.domain.model.DataItemType
 import com.smartclipboard.ai.domain.model.EnrichmentStatus
 import com.smartclipboard.ai.domain.model.Topic
+import com.smartclipboard.ai.domain.model.TopicItemSelectedBy
 import com.smartclipboard.ai.domain.model.TopicOrigin
 import com.smartclipboard.ai.domain.repository.InboxFilter
 import com.smartclipboard.ai.processing.gemini.recommendation.GeminiTopicRecommendationManager
@@ -134,6 +135,23 @@ class DataRepositoryImplIntegrationTest {
         assertEquals(0L, usage.overQuotaBytes)
     }
 
+    @Test
+    fun `topic data items can be replaced as a user selection`() = runBlocking {
+        val topicDao = FakeTopicDao(emptyList())
+        val repository = repository(topicDao = topicDao)
+
+        repository.replaceTopicDataItems(
+            topicId = 7L,
+            dataItemIds = listOf(2L, 3L, 2L),
+            selectedBy = TopicItemSelectedBy.USER
+        )
+
+        assertEquals(listOf(7L), topicDao.deletedTopicIds)
+        assertEquals(listOf(2L, 3L), topicDao.insertedCrossRefs.map { it.dataItemId })
+        assertEquals(listOf("USER", "USER"), topicDao.insertedCrossRefs.map { it.selectedBy })
+    }
+
+
     private fun repository(
         dataItemDao: FakeDataItemDao = FakeDataItemDao(emptyList()),
         topicDao: FakeTopicDao = FakeTopicDao(emptyList()),
@@ -250,11 +268,21 @@ class DataRepositoryImplIntegrationTest {
     private class FakeTopicDao(
         private val topics: List<TopicEntity>
     ) : TopicDao {
+        val deletedTopicIds = mutableListOf<Long>()
+        val insertedCrossRefs = mutableListOf<TopicItemCrossRefEntity>()
+
         override suspend fun insertTopic(entity: TopicEntity): Long = entity.id
 
         override suspend fun updateTopic(entity: TopicEntity) = Unit
 
-        override suspend fun insertTopicItemCrossRefs(entities: List<TopicItemCrossRefEntity>) = Unit
+        override suspend fun insertTopicItemCrossRefs(entities: List<TopicItemCrossRefEntity>) {
+            insertedCrossRefs += entities
+        }
+
+        override suspend fun deleteTopicItemCrossRefs(topicId: Long): Int {
+            deletedTopicIds += topicId
+            return 0
+        }
 
         override suspend fun getTopicById(id: Long): TopicEntity? = topics.firstOrNull { it.id == id }
 

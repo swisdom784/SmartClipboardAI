@@ -57,21 +57,36 @@ import com.smartclipboard.ai.ui.theme.SmartClipboardTheme
 fun HomeRoute(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
-    onOpenMaterials: () -> Unit = {}
+    onOpenMaterials: () -> Unit = {},
+    onTopicSelectionRequested: (Long) -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(viewModel) {
         viewModel.start()
     }
+    LaunchedEffect(viewModel) {
+        viewModel.topicCreatedEvents.collect { topicId ->
+            onTopicSelectionRequested(topicId)
+        }
+    }
 
     HomeScreen(
         state = uiState,
         modifier = modifier,
         onSubmitRequest = viewModel::submitUserRequest,
-        onOpenTask = viewModel::openTask,
+        onOpenTask = { task ->
+            when (task.kind) {
+                HomeTaskKind.TOPIC -> task.topicIdOrNull()?.let(onTopicSelectionRequested)
+                HomeTaskKind.RECOMMENDATION -> viewModel.openTask(task)
+            }
+        },
         onOpenMaterials = onOpenMaterials
     )
+}
+
+private fun HomeTaskItem.topicIdOrNull(): Long? {
+    return id.removePrefix("topic:").toLongOrNull()
 }
 
 @Composable

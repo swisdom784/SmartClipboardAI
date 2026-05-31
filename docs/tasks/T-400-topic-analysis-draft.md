@@ -6,11 +6,11 @@
 
 ## 작업 상태
 
-- Status: Not Ready
+- Status: Ready
 - Owner: 미배정
 - Branch: `feat/T-400-topic-analysis-draft`
 - Depends on: `T-150-gemini-topic-recommendation`, `T-310-topic-data-selection-flow`
-- Blocked by: `T-150`, `T-310` 미완료
+- Blocked by: 없음
 - Ready criteria: Gemini manager, Topic/DataItem 연결, selection 결과가 준비됨
 - Can run in parallel with: `T-410`은 DTO 계약 합의 후 가능
 - Cannot run with: Gemini manager 계약 변경 작업
