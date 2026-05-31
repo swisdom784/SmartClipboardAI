@@ -128,3 +128,14 @@
 - 수동 확인: 실제 기기에서 system picker로 이미지/PDF 선택 후 DB 저장되는 수동 테스트는 아직 하지 않았습니다.
 - 남은 이슈: 다음 작업은 `T-140-enrichment-ocr-og-pipeline`입니다. SAF/Share/MediaStore로 들어온 링크/이미지에 OCR/OG 전처리 상태를 연결해야 합니다.
 - PR: 아직 없음. remote가 연결되지 않아 push/PR은 만들지 않았습니다.
+
+### 2026-05-30 / T-140-enrichment-ocr-og-pipeline / Codex
+
+- Branch: `feat/T-140-enrichment-ocr-og-pipeline`
+- Status: OCR/OG 전처리 파이프라인 구현 완료
+- 변경 파일: `app/src/main/java/com/smartclipboard/ai/processing/**`, `app/src/main/java/com/smartclipboard/ai/collection/**`, `app/src/main/java/com/smartclipboard/ai/data/source/local/dao/DataItemDao.kt`, `app/src/main/java/com/smartclipboard/ai/di/ProcessingModule.kt`, `gradle/libs.versions.toml`, `app/build.gradle.kts`, 관련 테스트, 관련 문서
+- 작업 요약: pending DataItem을 대상으로 링크 OG와 이미지 OCR을 수행하는 `DataItemEnrichmentManager`를 추가했습니다. Jsoup OG 추출은 `Dispatchers.IO`, OCR은 ML Kit Korean Text Recognition으로 처리합니다. Share/Clipboard/MediaStore/SAF 저장 성공 후 `DataItemEnrichmentTrigger`가 최대 3개 항목을 2초 timeout 안에서 시도하고, 실패는 최대 3회 retry 후 `FAILED`로 남깁니다. timeout/cancellation은 retry 실패로 세지 않습니다.
+- 테스트/빌드: TDD RED로 전처리 클래스 부재 실패, 저장 직후 trigger 부재 실패, cancellation 처리 실패를 확인한 뒤 구현했습니다. `.\gradlew.bat testDebugUnitTest` 성공, `.\gradlew.bat assembleDebug test` 성공.
+- 수동 확인: 실제 기기에서 ML Kit OCR, 실제 URL OG, Share Sheet/Tile transparent flow 수동 확인은 아직 하지 않았습니다.
+- 남은 이슈: 다음 작업은 `T-150-gemini-topic-recommendation`입니다. Gemini API key는 `local.properties -> BuildConfig.GEMINI_API_KEY` 경로를 유지해야 합니다.
+- PR: 브랜치 push 후 PR 작성 예정

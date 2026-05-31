@@ -4,17 +4,28 @@ import com.smartclipboard.ai.domain.model.DataItem
 import com.smartclipboard.ai.domain.model.DataItemSource
 import com.smartclipboard.ai.domain.model.DataItemType
 import com.smartclipboard.ai.domain.repository.DataRepository
+import com.smartclipboard.ai.processing.enrichment.DataItemEnrichmentTrigger
+import com.smartclipboard.ai.processing.enrichment.NoOpDataItemEnrichmentTrigger
 import javax.inject.Inject
 
 class ShareContentHandler @Inject constructor(
-    private val repository: DataRepository
+    private val repository: DataRepository,
+    private val enrichmentTrigger: DataItemEnrichmentTrigger
 ) {
     private var nowMillis: () -> Long = { System.currentTimeMillis() }
 
     internal constructor(
         repository: DataRepository,
         nowMillis: () -> Long
-    ) : this(repository) {
+    ) : this(repository, NoOpDataItemEnrichmentTrigger) {
+        this.nowMillis = nowMillis
+    }
+
+    internal constructor(
+        repository: DataRepository,
+        enrichmentTrigger: DataItemEnrichmentTrigger,
+        nowMillis: () -> Long
+    ) : this(repository, enrichmentTrigger) {
         this.nowMillis = nowMillis
     }
 
@@ -29,7 +40,7 @@ class ShareContentHandler @Inject constructor(
         val uniqueItems = candidates.distinctBy { it.shareDeduplicationKey() }
         var savedCount = 0
 
-        return try {
+        val result = try {
             uniqueItems.forEach { item ->
                 repository.saveDataItem(item)
                 savedCount += 1
@@ -53,6 +64,15 @@ class ShareContentHandler @Inject constructor(
             } else {
                 ShareSaveResult.Failure(ShareFailureReason.SaveFailed)
             }
+        }
+
+        runEnrichmentAfterInput(savedCount)
+        return result
+    }
+
+    private suspend fun runEnrichmentAfterInput(savedCount: Int) {
+        if (savedCount > 0) {
+            runCatching { enrichmentTrigger.runAfterDataInput(savedCount) }
         }
     }
 

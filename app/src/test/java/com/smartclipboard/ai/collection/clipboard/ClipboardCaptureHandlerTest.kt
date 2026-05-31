@@ -8,6 +8,7 @@ import com.smartclipboard.ai.domain.model.TopicAction
 import com.smartclipboard.ai.domain.model.TopicAnalysis
 import com.smartclipboard.ai.domain.model.TopicItemSelectedBy
 import com.smartclipboard.ai.domain.repository.DataRepository
+import com.smartclipboard.ai.processing.enrichment.DataItemEnrichmentTrigger
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.runBlocking
@@ -43,6 +44,21 @@ class ClipboardCaptureHandlerTest {
         assertEquals(DataItemType.LINK, repository.savedItems.single().type)
         assertEquals("https://example.com/product", repository.savedItems.single().textContent)
         assertEquals("https://example.com/product", repository.savedItems.single().sourceUri)
+    }
+
+    @Test
+    fun `successful clipboard capture triggers pending enrichment`() = runBlocking {
+        val repository = FakeDataRepository()
+        val enrichmentTrigger = FakeEnrichmentTrigger()
+        val handler = ClipboardCaptureHandler(
+            repository = repository,
+            enrichmentTrigger = enrichmentTrigger,
+            nowMillis = { fixedNow }
+        )
+
+        handler.save(ClipboardPayload(text = "https://example.com/product"))
+
+        assertEquals(listOf(1), enrichmentTrigger.savedCounts)
     }
 
     @Test
@@ -129,5 +145,13 @@ class ClipboardCaptureHandlerTest {
         override suspend fun updateTopicAction(action: TopicAction) = error("Not used in this test")
 
         override fun observeTopicActions(topicId: Long): Flow<List<TopicAction>> = emptyFlow()
+    }
+
+    private class FakeEnrichmentTrigger : DataItemEnrichmentTrigger {
+        val savedCounts = mutableListOf<Int>()
+
+        override suspend fun runAfterDataInput(savedCount: Int) {
+            savedCounts += savedCount
+        }
     }
 }

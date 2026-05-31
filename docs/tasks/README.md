@@ -9,7 +9,7 @@
 - 각 작업자는 자기 task 문서의 체크리스트만 수정합니다.
 - `docs/IMPLEMENTATION_PLAN.md`의 전체 상태 변경은 프로젝트 오너가 관리합니다.
 - 공통 파일 수정이 필요하면 먼저 이유와 영향 범위를 설명하고 승인을 받습니다.
-- commit/push는 사용자 승인 전 금지합니다.
+- Git/브랜치/commit/push는 프로젝트 오너가 Codex에게 위임한 범위 안에서 수행합니다.
 
 ## Ready 작업 찾기
 
@@ -22,6 +22,6 @@
 
 ## 현재 Ready 작업
 
-- `T-140-enrichment-ocr-og-pipeline`: OCR/OG 추출 전처리 파이프라인
+- `T-150-gemini-topic-recommendation`: Gemini 기반 이번 실행 Topic 추천
 
-`T-100`, `T-110`, `T-120`, `T-130`에서 공유, 클립보드, MediaStore, SAF 입력 경로를 완료했습니다. 이제 입력된 링크와 이미지의 OG/OCR 전처리 흐름을 구현합니다.
+`T-140`에서 링크/이미지의 OG/OCR 전처리와 저장 직후 짧은 enrichment trigger를 완료했습니다. 다음은 새로 들어온 자료를 바탕으로 이번 실행에서만 보여줄 AI 추천 후보를 생성하는 흐름입니다.

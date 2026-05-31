@@ -4,12 +4,19 @@ import com.smartclipboard.ai.domain.model.DataItem
 import com.smartclipboard.ai.domain.model.DataItemSource
 import com.smartclipboard.ai.domain.model.DataItemType
 import com.smartclipboard.ai.domain.repository.DataRepository
+import com.smartclipboard.ai.processing.enrichment.DataItemEnrichmentTrigger
+import com.smartclipboard.ai.processing.enrichment.NoOpDataItemEnrichmentTrigger
 import javax.inject.Inject
 import kotlinx.coroutines.flow.first
 
 class MediaImportHandler @Inject constructor(
-    private val repository: DataRepository
+    private val repository: DataRepository,
+    private val enrichmentTrigger: DataItemEnrichmentTrigger
 ) : MediaImageImporter {
+    internal constructor(
+        repository: DataRepository
+    ) : this(repository, NoOpDataItemEnrichmentTrigger)
+
     override suspend fun importImages(candidates: List<MediaImageCandidate>): MediaImportResult {
         val existingItems = repository.observeDataItemsByType(IMAGE_TYPES).first()
         val existingMediaStoreIds = existingItems.mapNotNull { it.mediaStoreId }.toSet()
@@ -41,11 +48,18 @@ class MediaImportHandler @Inject constructor(
             }
         }
 
+        runEnrichmentAfterInput(importedCount)
         return MediaImportResult.Imported(
             importedCount = importedCount,
             skippedCount = skippedCount,
             failedCount = failedCount
         )
+    }
+
+    private suspend fun runEnrichmentAfterInput(savedCount: Int) {
+        if (savedCount > 0) {
+            runCatching { enrichmentTrigger.runAfterDataInput(savedCount) }
+        }
     }
 
     private fun MediaImageCandidate.toDataItem(): DataItem {

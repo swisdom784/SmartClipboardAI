@@ -36,4 +36,21 @@ interface DataItemDao {
         """
     )
     fun observeByTypes(types: List<String>): Flow<List<DataItemEntity>>
+
+    @Query(
+        """
+        SELECT * FROM data_items
+        WHERE deletedAtMillis IS NULL
+            AND enrichmentStatus = 'PENDING'
+            AND enrichmentRetryCount < :maxRetries
+            AND type IN (:types)
+        ORDER BY capturedAtMillis DESC, id DESC
+        LIMIT :limit
+        """
+    )
+    suspend fun getPendingForEnrichment(
+        types: List<String>,
+        maxRetries: Int,
+        limit: Int
+    ): List<DataItemEntity>
 }

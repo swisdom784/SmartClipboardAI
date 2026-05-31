@@ -274,35 +274,35 @@
 ### T-140-enrichment-ocr-og-pipeline
 
 - 작업명: OCR/OG 추출 전처리 파이프라인
-- Status: Ready
-- Owner: 미배정
+- Status: Done
+- Owner: Codex
 - 목적: 이미지 OCR과 링크 OG 추출을 입력 직후 시도하고, 실패 시 retry 상태로 남깁니다.
 - 담당 브랜치명: `feat/T-140-enrichment-ocr-og-pipeline`
-- 예상 수정 파일: `processing/ocr/`, `processing/web/`, enrichment entity/dao, tests
+- 예상 수정 파일: `processing/ocr/`, `processing/web/`, `processing/enrichment/`, enrichment DAO, collection handler trigger, tests
 - 선행 task: `T-030-data-model-audit`, `T-100-share-target-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`
 - Blocked by: 없음
-- Ready criteria: enrichment 상태 필드와 retry count 저장 방식, 입력 직후 처리할 collection hook이 확정됨
+- Ready criteria: 완료됨
 - 병렬 진행 가능 여부: 제한적 가능
 - Can run in parallel with: `T-150`은 interface 합의 후 가능
 - Cannot run with: `T-030`, `T-170`
-- 충돌 가능성이 있는 파일: DataItem enrichment model, repository update methods
-- 완료 기준: OCR/OG 성공 저장, 3회 retry 후 pending/failed 처리, IO dispatcher 사용
-- 검증 방법: fake OCR/Web extractor 단위 테스트, 실제 URL 수동 테스트
-- 작업자가 수정해도 되는 파일 범위: OCR/Web extractor, enrichment tests
-- 수정하면 안 되는 파일 범위: 수집 Activity, UI 화면
+- 충돌 가능성이 있는 파일: DataItem DAO, collection handlers, Gradle dependency catalog
+- 완료 기준: OCR/OG 성공 저장, 3회 retry 후 failed 처리, cancellation은 retry로 세지 않음, IO dispatcher 사용
+- 검증 방법: fake OCR/Web extractor 단위 테스트, parser 단위 테스트, `.\gradlew.bat testDebugUnitTest`, `.\gradlew.bat assembleDebug test`
+- 작업자가 수정해도 되는 파일 범위: OCR/Web/enrichment package, collection handler trigger, tests
+- 수정하면 안 되는 파일 범위: 수집 Activity lifecycle, UI 화면
 - 관련 task 문서 경로: `docs/tasks/T-140-enrichment-ocr-og-pipeline.md`
 
 ### T-150-gemini-topic-recommendation
 
 - 작업명: Gemini 기반 이번 실행 Topic 추천
-- Status: Not Ready
+- Status: Ready
 - Owner: 미배정
 - 목적: 새로 수집/분석된 자료에서 이번 실행의 추천 후보만 생성합니다.
 - 담당 브랜치명: `feat/T-150-gemini-topic-recommendation`
 - 예상 수정 파일: `processing/gemini/`, recommendation repository, settings key access, tests
 - 선행 task: `T-140-enrichment-ocr-og-pipeline`
-- Blocked by: `T-140` 미완료
-- Ready criteria: Gemini key 주입 방식과 DataItem summary/enrichment 계약 확정
+- Blocked by: 없음
+- Ready criteria: `T-140` 완료, Gemini key는 `local.properties -> BuildConfig.GEMINI_API_KEY`로 주입, 이번 실행 추천은 사용자 수락 전 영구 저장하지 않는 정책 확정
 - 병렬 진행 가능 여부: 제한적 가능
 - Can run in parallel with: `T-160` 중 파일 충돌이 없는 경우
 - Cannot run with: `T-030`, `T-170`
@@ -640,19 +640,19 @@
 
 ## 지금 가능한 작업
 
-현재 바로 시작 가능한 task는 `T-140-enrichment-ocr-og-pipeline` 하나입니다.
+현재 바로 시작 가능한 task는 `T-150-gemini-topic-recommendation` 하나입니다.
 
-`T-010-agents-and-docs-setup`, `T-000-current-code-audit`, `T-020-architecture-baseline`, `T-030-data-model-audit`, `T-050-permission-and-manifest-baseline`, `T-040-navigation-baseline`, `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`는 완료된 상태입니다. 이제 입력된 링크와 이미지의 OG/OCR 전처리 흐름을 구현합니다.
+`T-010-agents-and-docs-setup`, `T-000-current-code-audit`, `T-020-architecture-baseline`, `T-030-data-model-audit`, `T-050-permission-and-manifest-baseline`, `T-040-navigation-baseline`, `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`는 완료된 상태입니다. 이제 새로 수집/보강된 자료를 바탕으로 이번 실행의 AI 추천 후보를 생성합니다.
 
 ## 아직 시작하면 안 되는 작업 예시
 
-- `T-160-storage-quota-cleanup`: `T-140` 전처리 상태 흐름이 준비된 뒤 시작 가능
-- `T-220-save-feedback-bottom-sheet`: `T-140` 이후 저장/전처리 상태 메시지 기준을 정리한 뒤 시작 가능
+- `T-160-storage-quota-cleanup`: `T-150`에서 추천 세션/자료 보존 기준을 먼저 확인한 뒤 시작
+- `T-220-save-feedback-bottom-sheet`: 저장 직후 상태 메시지와 AI 추천 상태 표시 기준을 `T-150` 이후 정리한 뒤 시작
 - `T-200-home-ux-redesign`: Navigation과 Repository API가 확정되지 않았으므로 시작 금지
 - `T-500-calendar-intent-draft`: TopicAction payload와 Manifest queries가 확정되지 않았으므로 시작 금지
 
 ## 추천 다음 작업
 
-1. `T-140-enrichment-ocr-og-pipeline`
-2. 완료 후 `T-150-gemini-topic-recommendation`을 Ready 전환합니다.
-3. 그 다음에 AI 추천과 정리 흐름을 구현합니다.
+1. `T-150-gemini-topic-recommendation`
+2. 완료 후 `T-160-storage-quota-cleanup` 또는 `T-170-repository-integration` 준비 상태를 재검토합니다.
+3. 그 다음에 Home/Inbox UX가 사용할 repository API를 정리합니다.
