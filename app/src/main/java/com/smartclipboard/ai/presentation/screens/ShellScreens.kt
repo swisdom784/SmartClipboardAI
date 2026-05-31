@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.smartclipboard.ai.presentation.home.HomeRoute
 import com.smartclipboard.ai.presentation.inbox.InboxRoute
+import com.smartclipboard.ai.presentation.logs.LogsRoute
 import com.smartclipboard.ai.presentation.settings.SettingsRoute
 
 @Composable
@@ -32,11 +33,7 @@ fun InboxShellScreen(
 
 @Composable
 fun LogsShellScreen(modifier: Modifier = Modifier) {
-    ShellScreen(
-        title = "Logs",
-        subtitle = "확인한 작업",
-        modifier = modifier
-    )
+    LogsRoute(modifier = modifier)
 }
 
 @Composable

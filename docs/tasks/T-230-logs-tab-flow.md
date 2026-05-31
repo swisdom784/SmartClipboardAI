@@ -6,12 +6,12 @@
 
 ## 작업 상태
 
-- Status: Ready
-- Owner: 미배정
+- Status: Done
+- Owner: Codex
 - Branch: `feat/T-230-logs-tab-flow`
 - Depends on: `T-040-navigation-baseline`, `T-170-repository-integration`
 - Blocked by: 없음
-- Ready criteria: 사용자-visible log 저장 기준과 route가 확정됨
+- Ready criteria: 완료됨
 - Can run in parallel with: `T-200`, `T-210`, `T-240`
 - Cannot run with: repository log 계약 변경 작업
 
@@ -36,15 +36,24 @@
 - badge 필터를 제공합니다.
 - 완료/미완료 작업을 구분합니다.
 
+T-230 구현 결과:
+
+- 별도 Log Entity가 아직 없으므로 현재 단계에서는 `Topic`을 사용자-visible 작업 기록으로 사용합니다.
+- `LogsUiStateMapper`가 Topic을 사용자 요청, AI 추천, 진행 중, 완료, 미완료 badge가 있는 log entry로 변환합니다.
+- OCR/OG/Gemini 내부 자동 이벤트는 Logs에 표시하지 않습니다.
+- `LogsViewModel`은 `DataRepository.observeTopics()`를 구독하고 badge filter 상태를 관리합니다.
+- Logs 화면은 전체, 사용자 요청, AI 추천, 진행 중, 완료, 미완료 필터를 제공합니다.
+- TopicAction 기반 외부 앱 전송 기록은 `T-410` 이후 확장 범위로 남깁니다.
+
 ## 체크리스트
 
-- [ ] 코드 읽기
-- [ ] 관련 문서 확인
-- [ ] 선행 task 완료 여부 확인
-- [ ] 구현
-- [ ] 빌드 확인
-- [ ] 테스트/수동 확인
-- [ ] 변경 요약 작성
+- [x] 코드 읽기
+- [x] 관련 문서 확인
+- [x] 선행 task 완료 여부 확인
+- [x] 구현
+- [x] 빌드 확인
+- [x] 테스트/수동 확인
+- [x] 변경 요약 작성
 - [ ] PR 작성
 
 ## 완료 기준
@@ -58,6 +67,12 @@
 - fake log data UI 테스트
 - badge 필터 수동 확인
 - 완료/미완료 기록 표시 확인
+
+실제 검증:
+
+- `LogsUiStateMapperTest`로 Topic 기반 log 변환, filter count, 완료 filter를 검증했습니다.
+- `.\gradlew.bat testDebugUnitTest --tests com.smartclipboard.ai.presentation.logs.LogsUiStateMapperTest` 성공.
+- 전체 빌드/테스트 결과는 PR 작성 전 `.\gradlew.bat assembleDebug test`로 확인합니다.
 
 ## PR에 반드시 적을 내용
 

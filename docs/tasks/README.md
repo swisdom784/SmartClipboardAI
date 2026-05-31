@@ -22,6 +22,6 @@
 
 ## 현재 Ready 작업
 
-- `T-230-logs-tab-flow`: 사용자 확인 기록 Logs 탭
+- `T-300-topic-create-flow`: 사용자 입력 기반 Topic 생성
 
-`T-220`에서 저장 피드백 문구와 Toast hook을 완료했습니다. 이제 남은 Ready 작업은 사용자 확인 기록 Logs 탭인 `T-230`입니다.
+`T-230`에서 Logs 탭을 완료했습니다. 이제 다음 Ready 작업은 Home 입력과 AI 추천을 실제 Topic으로 연결하는 `T-300`입니다.

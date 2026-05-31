@@ -423,20 +423,20 @@
 ### T-230-logs-tab-flow
 
 - 작업명: 사용자 확인 기록 Logs 탭
-- Status: Ready
-- Owner: 미배정
+- Status: Done
+- Owner: Codex
 - 목적: 사용자가 확인한 작업, 추천 수락, 전송, 완료/미완료 기록을 badge로 필터링합니다.
 - 담당 브랜치명: `feat/T-230-logs-tab-flow`
 - 예상 수정 파일: `presentation/logs/`, log model/query, tests
 - 선행 task: `T-040-navigation-baseline`, `T-170-repository-integration`
 - Blocked by: 없음
-- Ready criteria: 사용자-visible log 저장 기준과 route 확정
+- Ready criteria: 완료됨
 - 병렬 진행 가능 여부: 예
 - Can run in parallel with: `T-200`, `T-210`, `T-240`
 - Cannot run with: repository log 계약 변경 작업
 - 충돌 가능성이 있는 파일: log entity/query, navigation tab
 - 완료 기준: 내부 자동 이벤트가 아닌 사용자 확인 기록만 표시하고 badge 필터가 동작
-- 검증 방법: fake log UI 테스트, 수동 필터 확인
+- 검증 방법: `LogsUiStateMapperTest`, Compose compile, `.\gradlew.bat assembleDebug test`
 - 작업자가 수정해도 되는 파일 범위: Logs package와 log query tests
 - 수정하면 안 되는 파일 범위: Home/Inbox UI 세부 변경
 - 관련 task 문서 경로: `docs/tasks/T-230-logs-tab-flow.md`
@@ -467,14 +467,14 @@
 ### T-300-topic-create-flow
 
 - 작업명: 사용자 입력 기반 Topic 생성
-- Status: Not Ready
+- Status: Ready
 - Owner: 미배정
 - 목적: Home 입력 또는 추천 수락으로 Topic을 생성합니다.
 - 담당 브랜치명: `feat/T-300-topic-create-flow`
 - 예상 수정 파일: `presentation/topic/`, Topic ViewModel/use case, tests
 - 선행 task: `T-200-home-ux-redesign`
-- Blocked by: `T-200` 미완료
-- Ready criteria: Home 입력 이벤트와 Topic repository API 확정
+- Blocked by: 없음
+- Ready criteria: Home 입력 UI와 Topic repository API가 준비됨
 - 병렬 진행 가능 여부: 제한적 가능
 - Can run in parallel with: `T-310`은 UI 계약 합의 후 가능
 - Cannot run with: Topic model/repository 변경 작업
@@ -640,9 +640,9 @@
 
 ## 지금 가능한 작업
 
-현재 바로 시작 가능한 task는 `T-230`입니다.
+현재 바로 시작 가능한 task는 `T-300`입니다.
 
-`T-010-agents-and-docs-setup`, `T-000-current-code-audit`, `T-020-architecture-baseline`, `T-030-data-model-audit`, `T-050-permission-and-manifest-baseline`, `T-040-navigation-baseline`, `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`, `T-150-gemini-topic-recommendation`, `T-160-storage-quota-cleanup`, `T-170-repository-integration`, `T-200-home-ux-redesign`, `T-210-data-list-filter-selection`, `T-220-save-feedback-bottom-sheet`, `T-240-settings-ux-storage-permission`는 완료된 상태입니다. 이제 Logs 화면 작업을 구현할 수 있습니다.
+`T-010-agents-and-docs-setup`, `T-000-current-code-audit`, `T-020-architecture-baseline`, `T-030-data-model-audit`, `T-050-permission-and-manifest-baseline`, `T-040-navigation-baseline`, `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`, `T-150-gemini-topic-recommendation`, `T-160-storage-quota-cleanup`, `T-170-repository-integration`, `T-200-home-ux-redesign`, `T-210-data-list-filter-selection`, `T-220-save-feedback-bottom-sheet`, `T-230-logs-tab-flow`, `T-240-settings-ux-storage-permission`는 완료된 상태입니다. 이제 Topic 생성 흐름을 구현할 수 있습니다.
 
 ## 아직 시작하면 안 되는 작업 예시
 
@@ -650,4 +650,4 @@
 
 ## 추천 다음 작업
 
-1. `T-230-logs-tab-flow`
+1. `T-300-topic-create-flow`

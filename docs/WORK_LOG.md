@@ -216,3 +216,14 @@
 - 수동 확인: 실제 Share Sheet/Quick Tile Toast 표시 수동 테스트는 아직 하지 않았습니다.
 - 남은 이슈: 작은 BottomSheet 피드백은 아직 구현하지 않았고, 이번 task는 Toast hook 기준으로 닫았습니다. 다음 작업은 `T-230-logs-tab-flow`입니다.
 - PR: 브랜치 push 후 PR URL 제공 예정
+
+### 2026-05-31 / T-230-logs-tab-flow / Codex
+
+- Branch: `feat/T-230-logs-tab-flow`
+- Status: Topic 기반 Logs 탭 구현 완료
+- 변경 파일: `app/src/main/java/com/smartclipboard/ai/presentation/logs/**`, `app/src/main/java/com/smartclipboard/ai/presentation/screens/ShellScreens.kt`, `app/src/test/java/com/smartclipboard/ai/presentation/logs/LogsUiStateMapperTest.kt`, 관련 문서
+- 작업 요약: 별도 Log Entity가 없는 현재 구조에서는 `Topic`을 사용자-visible 작업 기록으로 사용합니다. Logs 탭은 전체, 사용자 요청, AI 추천, 진행 중, 완료, 미완료 필터와 badge를 제공합니다. 내부 OCR/OG/Gemini 자동 이벤트는 기록에 표시하지 않습니다.
+- 테스트/빌드: TDD RED로 Logs mapper 부재 실패를 확인한 뒤 구현했습니다. `.\gradlew.bat testDebugUnitTest --tests com.smartclipboard.ai.presentation.logs.LogsUiStateMapperTest` 성공. PR 전 전체 검증으로 `.\gradlew.bat assembleDebug test`를 실행합니다.
+- 수동 확인: 실제 화면 필터링 수동 테스트는 아직 하지 않았습니다.
+- 남은 이슈: TopicAction 기반 외부 앱 전송 기록은 `T-410` 이후 확장 범위입니다. 다음 Ready 작업은 `T-300-topic-create-flow`입니다.
+- PR: 브랜치 push 후 PR URL 제공 예정
