@@ -11,14 +11,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.smartclipboard.ai.presentation.home.HomeRoute
 
 @Composable
 fun HomeShellScreen(modifier: Modifier = Modifier) {
-    ShellScreen(
-        title = "SmartClipboard",
-        subtitle = "Home",
-        modifier = modifier
-    )
+    HomeRoute(modifier = modifier)
 }
 
 @Composable

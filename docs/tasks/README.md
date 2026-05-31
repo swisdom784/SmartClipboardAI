@@ -22,10 +22,9 @@
 
 ## 현재 Ready 작업
 
-- `T-200-home-ux-redesign`: ChatGPT/Codex 스타일 Home UX 재설계
 - `T-210-data-list-filter-selection`: Inbox 자료 모음, 필터, 선택 UX
 - `T-220-save-feedback-bottom-sheet`: 저장 피드백 Toast/BottomSheet UX
 - `T-230-logs-tab-flow`: 사용자 확인 기록 Logs 탭
 - `T-240-settings-ux-storage-permission`: Settings 수집 기간, 용량, 권한 UX
 
-`T-170`에서 ViewModel용 repository facade를 완료했습니다. 이제 Home, Inbox, feedback, Logs, Settings 화면 작업은 서로 충돌하지 않게 병렬로 진행할 수 있습니다. 단일 작업자는 사용자-facing 첫 화면인 `T-200`을 우선 추천합니다.
+`T-200`에서 Home UX를 완료했습니다. 이제 Inbox, feedback, Logs, Settings 화면 작업은 서로 충돌하지 않게 병렬로 진행할 수 있습니다. 단일 작업자는 자료 확인 흐름인 `T-210`을 우선 추천합니다.

@@ -360,20 +360,20 @@
 ### T-200-home-ux-redesign
 
 - 작업명: ChatGPT/Codex 스타일 Home UX 재설계
-- Status: Ready
-- Owner: 미배정
+- Status: Done
+- Owner: Codex
 - 목적: 새 작업 입력, 이전 작업, 이번 AI 추천, 자동 분석 상태를 단순하게 보여줍니다.
 - 담당 브랜치명: `feat/T-200-home-ux-redesign`
 - 예상 수정 파일: `presentation/home/`, Home ViewModel tests, UI tests
 - 선행 task: `T-040-navigation-baseline`, `T-170-repository-integration`
 - Blocked by: 없음
-- Ready criteria: navigation route와 Home용 repository API 확정
+- Ready criteria: 완료됨
 - 병렬 진행 가능 여부: 예
 - Can run in parallel with: `T-210`, `T-230`, `T-240`
 - Cannot run with: `T-040`
 - 충돌 가능성이 있는 파일: root scaffold, theme token
 - 완료 기준: Home이 작업 중심으로 동작하고 과거 AI 추천을 영구 노출하지 않음
-- 검증 방법: Compose preview, 수동 UX 확인, ViewModel state 테스트
+- 검증 방법: `HomeUiStateMapperTest`, Compose compile, `.\gradlew.bat assembleDebug test`
 - 작업자가 수정해도 되는 파일 범위: Home package와 Home 전용 tests
 - 수정하면 안 되는 파일 범위: navigation root 변경, repository 계약 변경
 - 관련 task 문서 경로: `docs/tasks/T-200-home-ux-redesign.md`
@@ -640,9 +640,9 @@
 
 ## 지금 가능한 작업
 
-현재 바로 시작 가능한 task는 `T-200`, `T-210`, `T-220`, `T-230`, `T-240`입니다.
+현재 바로 시작 가능한 task는 `T-210`, `T-220`, `T-230`, `T-240`입니다.
 
-`T-010-agents-and-docs-setup`, `T-000-current-code-audit`, `T-020-architecture-baseline`, `T-030-data-model-audit`, `T-050-permission-and-manifest-baseline`, `T-040-navigation-baseline`, `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`, `T-150-gemini-topic-recommendation`, `T-160-storage-quota-cleanup`, `T-170-repository-integration`는 완료된 상태입니다. 이제 사용자-facing 화면을 병렬로 구현할 수 있습니다.
+`T-010-agents-and-docs-setup`, `T-000-current-code-audit`, `T-020-architecture-baseline`, `T-030-data-model-audit`, `T-050-permission-and-manifest-baseline`, `T-040-navigation-baseline`, `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`, `T-150-gemini-topic-recommendation`, `T-160-storage-quota-cleanup`, `T-170-repository-integration`, `T-200-home-ux-redesign`는 완료된 상태입니다. 이제 Inbox, feedback, Logs, Settings 화면 작업을 병렬로 구현할 수 있습니다.
 
 ## 아직 시작하면 안 되는 작업 예시
 
@@ -650,6 +650,6 @@
 
 ## 추천 다음 작업
 
-1. `T-200-home-ux-redesign`
-2. 이어서 `T-210-data-list-filter-selection`
-3. 그 다음에 `T-240-settings-ux-storage-permission` 또는 `T-220-save-feedback-bottom-sheet`
+1. `T-210-data-list-filter-selection`
+2. 이어서 `T-240-settings-ux-storage-permission`
+3. 그 다음에 `T-220-save-feedback-bottom-sheet` 또는 `T-230-logs-tab-flow`

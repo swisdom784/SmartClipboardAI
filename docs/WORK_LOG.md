@@ -172,3 +172,14 @@
 - 수동 확인: 화면 UI가 아직 없어 수동 UX 확인은 하지 않았습니다.
 - 남은 이슈: 다음 작업은 사용자-facing 첫 화면인 `T-200-home-ux-redesign`을 우선 추천합니다.
 - PR: 브랜치 push 후 PR URL 제공 예정
+
+### 2026-05-31 / T-200-home-ux-redesign / Codex
+
+- Branch: `feat/T-200-home-ux-redesign`
+- Status: ChatGPT/Codex 스타일 Home UX 구현 완료
+- 변경 파일: `app/src/main/java/com/smartclipboard/ai/presentation/home/**`, `app/src/main/java/com/smartclipboard/ai/presentation/screens/ShellScreens.kt`, `app/src/test/java/com/smartclipboard/ai/presentation/home/HomeUiStateMapperTest.kt`, 관련 문서
+- 작업 요약: Home 전용 UI 상태/매퍼/ViewModel/Compose 화면을 추가했습니다. 첫 화면은 새 작업 입력, 자동 수집/분석 상태, 이번 실행 AI 추천, 기존 작업, 접이식 최근 자료 요약을 단순한 행/카드 구조로 보여줍니다. 기존 `HomeShellScreen`은 route 변경 없이 새 `HomeRoute`로 연결했습니다.
+- 테스트/빌드: TDD RED로 `HomeUiStateMapper` 부재 실패를 확인한 뒤 구현했습니다. `.\gradlew.bat testDebugUnitTest --tests com.smartclipboard.ai.presentation.home.HomeUiStateMapperTest` 성공. PR 전 전체 검증으로 `.\gradlew.bat assembleDebug test`를 실행합니다.
+- 수동 확인: 에뮬레이터/실기기 화면 확인은 아직 하지 않았습니다. Compose preview와 실제 화면 육안 확인은 Android Studio에서 추가 QA가 필요합니다.
+- 남은 이슈: Home 입력을 실제 Topic 생성으로 연결하는 작업은 `T-300-topic-create-flow` 범위입니다. 다음 작업은 자료 모음/필터 UX인 `T-210-data-list-filter-selection`을 우선 추천합니다.
+- PR: 브랜치 push 후 PR URL 제공 예정
