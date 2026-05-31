@@ -57,8 +57,6 @@ import com.smartclipboard.ai.ui.theme.SmartClipboardTheme
 fun HomeRoute(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
-    onSubmitRequest: (String) -> Unit = {},
-    onOpenTask: (HomeTaskItem) -> Unit = {},
     onOpenMaterials: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -70,8 +68,8 @@ fun HomeRoute(
     HomeScreen(
         state = uiState,
         modifier = modifier,
-        onSubmitRequest = onSubmitRequest,
-        onOpenTask = onOpenTask,
+        onSubmitRequest = viewModel::submitUserRequest,
+        onOpenTask = viewModel::openTask,
         onOpenMaterials = onOpenMaterials
     )
 }

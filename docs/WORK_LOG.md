@@ -227,3 +227,14 @@
 - 수동 확인: 실제 화면 필터링 수동 테스트는 아직 하지 않았습니다.
 - 남은 이슈: TopicAction 기반 외부 앱 전송 기록은 `T-410` 이후 확장 범위입니다. 다음 Ready 작업은 `T-300-topic-create-flow`입니다.
 - PR: 브랜치 push 후 PR URL 제공 예정
+
+### 2026-06-01 / T-300-topic-create-flow / Codex
+
+- Branch: `feat/T-300-topic-create-flow`
+- Status: 사용자 입력/AI 추천 기반 Topic 생성 흐름 구현 완료
+- 변경 파일: `app/src/main/java/com/smartclipboard/ai/presentation/topic/**`, `app/src/main/java/com/smartclipboard/ai/presentation/home/**`, `app/src/test/java/com/smartclipboard/ai/presentation/topic/TopicCreateUseCaseTest.kt`, 관련 문서
+- 작업 요약: `TopicCreateUseCase`를 추가해 Home 입력은 `USER_REQUEST`, AI 추천 수락은 `AI_RECOMMENDATION` Topic으로 저장합니다. 추천 수락 시 연결 자료 id는 `TopicItemSelectedBy.AI`로 저장합니다. HomeViewModel은 입력 제출과 추천 카드 클릭을 use case에 연결하고, 후속 화면 이동에 사용할 `topicCreatedEvents`를 노출합니다.
+- 테스트/빌드: TDD RED로 Topic create use case 부재 실패를 확인한 뒤 구현했습니다. `.\gradlew.bat testDebugUnitTest --tests com.smartclipboard.ai.presentation.topic.TopicCreateUseCaseTest --tests com.smartclipboard.ai.presentation.home.HomeUiStateMapperTest` 성공. PR 전 전체 검증으로 `.\gradlew.bat assembleDebug test`를 실행합니다.
+- 수동 확인: 실제 Home 입력과 추천 카드 클릭 수동 테스트는 아직 하지 않았습니다.
+- 남은 이슈: Topic 생성 후 자료 선택 화면으로 실제 이동하는 UI는 `T-310-topic-data-selection-flow`에서 연결합니다.
+- PR: 브랜치 push 후 PR URL 제공 예정
