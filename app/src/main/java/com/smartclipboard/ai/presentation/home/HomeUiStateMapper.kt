@@ -40,6 +40,7 @@ object HomeUiStateMapper {
             id = "recommendation:$id",
             title = title,
             subtitle = reason,
+            prompt = prompt,
             kind = HomeTaskKind.RECOMMENDATION,
             badges = listOf(HomeTaskBadge.AI_RECOMMENDATION, HomeTaskBadge.REVIEW_REQUIRED),
             sourceDataItemIds = sourceDataItemIds
@@ -63,6 +64,7 @@ object HomeUiStateMapper {
             id = "topic:$id",
             title = title,
             subtitle = prompt.orEmpty(),
+            prompt = prompt,
             kind = HomeTaskKind.TOPIC,
             badges = listOf(sourceBadge, statusBadge)
         )

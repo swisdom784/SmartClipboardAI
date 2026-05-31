@@ -467,20 +467,20 @@
 ### T-300-topic-create-flow
 
 - 작업명: 사용자 입력 기반 Topic 생성
-- Status: Ready
-- Owner: 미배정
+- Status: Done
+- Owner: Codex
 - 목적: Home 입력 또는 추천 수락으로 Topic을 생성합니다.
 - 담당 브랜치명: `feat/T-300-topic-create-flow`
 - 예상 수정 파일: `presentation/topic/`, Topic ViewModel/use case, tests
 - 선행 task: `T-200-home-ux-redesign`
 - Blocked by: 없음
-- Ready criteria: Home 입력 UI와 Topic repository API가 준비됨
+- Ready criteria: 완료됨
 - 병렬 진행 가능 여부: 제한적 가능
 - Can run in parallel with: `T-310`은 UI 계약 합의 후 가능
 - Cannot run with: Topic model/repository 변경 작업
 - 충돌 가능성이 있는 파일: Topic route, Home navigation event
 - 완료 기준: 사용자 요청/AI 추천 source badge를 가진 Topic이 생성됨
-- 검증 방법: ViewModel 테스트, 수동 생성 확인
+- 검증 방법: `TopicCreateUseCaseTest`, Home compile, `.\gradlew.bat assembleDebug test`
 - 작업자가 수정해도 되는 파일 범위: Topic create package와 tests
 - 수정하면 안 되는 파일 범위: DataItem model/DAO 변경
 - 관련 task 문서 경로: `docs/tasks/T-300-topic-create-flow.md`
@@ -488,14 +488,14 @@
 ### T-310-topic-data-selection-flow
 
 - 작업명: Topic 자료 자동 선택 및 수정 UX
-- Status: Not Ready
+- Status: Ready
 - Owner: 미배정
 - 목적: AI가 고른 자료를 한 줄 요약으로 보여주고, 사용자가 필요할 때만 수정합니다.
 - 담당 브랜치명: `feat/T-310-topic-data-selection-flow`
 - 예상 수정 파일: `presentation/topic/selection/`, selection use case, tests
 - 선행 task: `T-210-data-list-filter-selection`, `T-300-topic-create-flow`
-- Blocked by: `T-210`, `T-300` 미완료
-- Ready criteria: Inbox selection component와 Topic 생성 API가 준비됨
+- Blocked by: 없음
+- Ready criteria: Inbox 자료 UX와 Topic 생성 API가 준비됨
 - 병렬 진행 가능 여부: 제한적 가능
 - Can run in parallel with: `T-400`은 contract freeze 후 가능
 - Cannot run with: `T-210` selection state 변경 작업
@@ -640,9 +640,9 @@
 
 ## 지금 가능한 작업
 
-현재 바로 시작 가능한 task는 `T-300`입니다.
+현재 바로 시작 가능한 task는 `T-310`입니다.
 
-`T-010-agents-and-docs-setup`, `T-000-current-code-audit`, `T-020-architecture-baseline`, `T-030-data-model-audit`, `T-050-permission-and-manifest-baseline`, `T-040-navigation-baseline`, `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`, `T-150-gemini-topic-recommendation`, `T-160-storage-quota-cleanup`, `T-170-repository-integration`, `T-200-home-ux-redesign`, `T-210-data-list-filter-selection`, `T-220-save-feedback-bottom-sheet`, `T-230-logs-tab-flow`, `T-240-settings-ux-storage-permission`는 완료된 상태입니다. 이제 Topic 생성 흐름을 구현할 수 있습니다.
+`T-010-agents-and-docs-setup`, `T-000-current-code-audit`, `T-020-architecture-baseline`, `T-030-data-model-audit`, `T-050-permission-and-manifest-baseline`, `T-040-navigation-baseline`, `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`, `T-150-gemini-topic-recommendation`, `T-160-storage-quota-cleanup`, `T-170-repository-integration`, `T-200-home-ux-redesign`, `T-210-data-list-filter-selection`, `T-220-save-feedback-bottom-sheet`, `T-230-logs-tab-flow`, `T-240-settings-ux-storage-permission`, `T-300-topic-create-flow`는 완료된 상태입니다. 이제 Topic 자료 선택 흐름을 구현할 수 있습니다.
 
 ## 아직 시작하면 안 되는 작업 예시
 
@@ -650,4 +650,4 @@
 
 ## 추천 다음 작업
 
-1. `T-300-topic-create-flow`
+1. `T-310-topic-data-selection-flow`

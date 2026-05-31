@@ -17,6 +17,7 @@ data class HomeTaskItem(
     val id: String,
     val title: String,
     val subtitle: String,
+    val prompt: String? = null,
     val kind: HomeTaskKind,
     val badges: List<HomeTaskBadge>,
     val sourceDataItemIds: List<Long> = emptyList()
