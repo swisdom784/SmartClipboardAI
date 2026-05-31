@@ -6,12 +6,12 @@
 
 ## 작업 상태
 
-- Status: Not Ready
+- Status: Ready
 - Owner: 미배정
 - Branch: `feat/T-150-gemini-topic-recommendation`
 - Depends on: `T-140-enrichment-ocr-og-pipeline`
-- Blocked by: `T-140` 미완료
-- Ready criteria: Gemini key 주입 방식, enrichment summary, recommendation 저장 방식이 확정됨
+- Blocked by: 없음
+- Ready criteria: `T-140` 완료, Gemini key는 `local.properties -> BuildConfig.GEMINI_API_KEY`로 주입, 이번 실행 추천은 사용자 수락 전 영구 저장하지 않는 정책 확정
 - Can run in parallel with: `T-160` 중 파일 충돌이 없는 경우
 - Cannot run with: `T-030`, `T-170`
 

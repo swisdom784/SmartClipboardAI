@@ -83,6 +83,8 @@ dependencies {
     ksp(libs.room.compiler)
 
     implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.jsoup)
+    implementation(libs.mlkit.text.recognition.korean)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

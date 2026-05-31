@@ -8,6 +8,7 @@ import com.smartclipboard.ai.domain.model.TopicAction
 import com.smartclipboard.ai.domain.model.TopicAnalysis
 import com.smartclipboard.ai.domain.model.TopicItemSelectedBy
 import com.smartclipboard.ai.domain.repository.DataRepository
+import com.smartclipboard.ai.processing.enrichment.DataItemEnrichmentTrigger
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
@@ -39,6 +40,32 @@ class SafImportHandlerTest {
         assertEquals(DataItemSource.SAF, repository.savedItems.single().source)
         assertEquals("content://picker/image/1", repository.savedItems.single().sourceUri)
         assertEquals(fixedNow, repository.savedItems.single().capturedAtMillis)
+    }
+
+    @Test
+    fun `successful SAF import triggers pending enrichment`() = runBlocking {
+        val repository = FakeDataRepository()
+        val enrichmentTrigger = FakeEnrichmentTrigger()
+        val handler = SafImportHandler(
+            repository = repository,
+            enrichmentTrigger = enrichmentTrigger,
+            nowMillis = { fixedNow }
+        )
+
+        handler.importFiles(
+            listOf(
+                SafPickedFile(
+                    uri = "content://picker/image/1",
+                    mimeType = "image/png"
+                ),
+                SafPickedFile(
+                    uri = "content://picker/image/2",
+                    mimeType = "image/png"
+                )
+            )
+        )
+
+        assertEquals(listOf(2), enrichmentTrigger.savedCounts)
     }
 
     @Test
@@ -159,5 +186,13 @@ class SafImportHandlerTest {
         override suspend fun updateTopicAction(action: TopicAction) = error("Not used in this test")
 
         override fun observeTopicActions(topicId: Long): Flow<List<TopicAction>> = error("Not used in this test")
+    }
+
+    private class FakeEnrichmentTrigger : DataItemEnrichmentTrigger {
+        val savedCounts = mutableListOf<Int>()
+
+        override suspend fun runAfterDataInput(savedCount: Int) {
+            savedCounts += savedCount
+        }
     }
 }

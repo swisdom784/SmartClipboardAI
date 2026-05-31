@@ -4,17 +4,28 @@ import com.smartclipboard.ai.domain.model.DataItem
 import com.smartclipboard.ai.domain.model.DataItemSource
 import com.smartclipboard.ai.domain.model.DataItemType
 import com.smartclipboard.ai.domain.repository.DataRepository
+import com.smartclipboard.ai.processing.enrichment.DataItemEnrichmentTrigger
+import com.smartclipboard.ai.processing.enrichment.NoOpDataItemEnrichmentTrigger
 import javax.inject.Inject
 
 class ClipboardCaptureHandler @Inject constructor(
-    private val repository: DataRepository
+    private val repository: DataRepository,
+    private val enrichmentTrigger: DataItemEnrichmentTrigger
 ) {
     private var nowMillis: () -> Long = { System.currentTimeMillis() }
 
     internal constructor(
         repository: DataRepository,
         nowMillis: () -> Long
-    ) : this(repository) {
+    ) : this(repository, NoOpDataItemEnrichmentTrigger) {
+        this.nowMillis = nowMillis
+    }
+
+    internal constructor(
+        repository: DataRepository,
+        enrichmentTrigger: DataItemEnrichmentTrigger,
+        nowMillis: () -> Long
+    ) : this(repository, enrichmentTrigger) {
         this.nowMillis = nowMillis
     }
 
@@ -44,10 +55,15 @@ class ClipboardCaptureHandler @Inject constructor(
 
         return try {
             repository.saveDataItem(item)
+            runEnrichmentAfterInput(savedCount = 1)
             ClipboardCaptureResult.Success(savedCount = 1)
         } catch (_: Exception) {
             ClipboardCaptureResult.Failure(ClipboardFailureReason.SaveFailed)
         }
+    }
+
+    private suspend fun runEnrichmentAfterInput(savedCount: Int) {
+        runCatching { enrichmentTrigger.runAfterDataInput(savedCount) }
     }
 
     private fun String.firstUrlOrNull(): String? {

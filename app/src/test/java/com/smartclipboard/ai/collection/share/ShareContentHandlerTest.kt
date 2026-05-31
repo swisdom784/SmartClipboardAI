@@ -8,6 +8,7 @@ import com.smartclipboard.ai.domain.model.TopicAction
 import com.smartclipboard.ai.domain.model.TopicAnalysis
 import com.smartclipboard.ai.domain.model.TopicItemSelectedBy
 import com.smartclipboard.ai.domain.repository.DataRepository
+import com.smartclipboard.ai.processing.enrichment.DataItemEnrichmentTrigger
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.runBlocking
@@ -82,6 +83,27 @@ class ShareContentHandlerTest {
     }
 
     @Test
+    fun `successful share triggers pending enrichment`() = runBlocking {
+        val repository = FakeDataRepository()
+        val enrichmentTrigger = FakeEnrichmentTrigger()
+        val handler = ShareContentHandler(
+            repository = repository,
+            enrichmentTrigger = enrichmentTrigger,
+            nowMillis = { fixedNow }
+        )
+
+        handler.save(
+            SharePayload(
+                action = ShareAction.Send,
+                mimeType = "text/plain",
+                text = "https://example.com/article"
+            )
+        )
+
+        assertEquals(listOf(1), enrichmentTrigger.savedCounts)
+    }
+
+    @Test
     fun `multiple shared streams are saved once per unique uri`() = runBlocking {
         val repository = FakeDataRepository()
         val handler = ShareContentHandler(repository, nowMillis = { fixedNow })
@@ -151,5 +173,13 @@ class ShareContentHandlerTest {
         override suspend fun updateTopicAction(action: TopicAction) = error("Not used in this test")
 
         override fun observeTopicActions(topicId: Long): Flow<List<TopicAction>> = emptyFlow()
+    }
+
+    private class FakeEnrichmentTrigger : DataItemEnrichmentTrigger {
+        val savedCounts = mutableListOf<Int>()
+
+        override suspend fun runAfterDataInput(savedCount: Int) {
+            savedCounts += savedCount
+        }
     }
 }

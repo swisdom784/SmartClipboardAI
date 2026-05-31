@@ -4,18 +4,29 @@ import com.smartclipboard.ai.domain.model.DataItem
 import com.smartclipboard.ai.domain.model.DataItemSource
 import com.smartclipboard.ai.domain.model.DataItemType
 import com.smartclipboard.ai.domain.repository.DataRepository
+import com.smartclipboard.ai.processing.enrichment.DataItemEnrichmentTrigger
+import com.smartclipboard.ai.processing.enrichment.NoOpDataItemEnrichmentTrigger
 import javax.inject.Inject
 import kotlinx.coroutines.flow.first
 
 class SafImportHandler @Inject constructor(
-    private val repository: DataRepository
+    private val repository: DataRepository,
+    private val enrichmentTrigger: DataItemEnrichmentTrigger
 ) {
     private var nowMillis: () -> Long = { System.currentTimeMillis() }
 
     internal constructor(
         repository: DataRepository,
         nowMillis: () -> Long
-    ) : this(repository) {
+    ) : this(repository, NoOpDataItemEnrichmentTrigger) {
+        this.nowMillis = nowMillis
+    }
+
+    internal constructor(
+        repository: DataRepository,
+        enrichmentTrigger: DataItemEnrichmentTrigger,
+        nowMillis: () -> Long
+    ) : this(repository, enrichmentTrigger) {
         this.nowMillis = nowMillis
     }
 
@@ -50,11 +61,18 @@ class SafImportHandler @Inject constructor(
             }
         }
 
+        runEnrichmentAfterInput(importedCount)
         return SafImportResult.Imported(
             importedCount = importedCount,
             skippedCount = skippedCount,
             failedCount = failedCount
         )
+    }
+
+    private suspend fun runEnrichmentAfterInput(savedCount: Int) {
+        if (savedCount > 0) {
+            runCatching { enrichmentTrigger.runAfterDataInput(savedCount) }
+        }
     }
 
     private fun SafPickedFile.toDataItem(now: Long): DataItem {

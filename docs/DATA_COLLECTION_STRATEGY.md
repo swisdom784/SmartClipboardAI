@@ -201,17 +201,21 @@ T-130 구현 상태:
 
 ## OCR 전략
 
-- 이미지 OCR은 ML Kit 또는 현재 `SourceExtractor`/향후 `OcrProcessor` 구조를 활용합니다.
-- OCR은 DataItem 저장 후 enqueue합니다.
+- 이미지 OCR은 `OcrProcessor` 계약과 `MlKitOcrProcessor` 구현을 사용합니다.
+- MVP의 실제 구현은 ML Kit Korean Text Recognition 기반입니다.
+- OCR은 DataItem 저장 후 `DataItemEnrichmentTrigger`가 최대 3개 항목을 2초 timeout 안에서 먼저 시도합니다.
 - OCR 결과는 DataItem enrichment로 저장합니다.
-- 실패 시 최대 3회 retry 후 다음 앱 실행 또는 `AI 다시 분석`에서 재시도합니다.
+- 실패 시 최대 3회 retry 후 `FAILED`로 남깁니다.
+- timeout/cancellation은 실패 retry로 세지 않고 pending 상태를 유지합니다.
 
 ## OG 추출 전략
 
 - 링크 미리보기는 Open Graph 태그를 우선합니다.
 - 필요한 정보: `og:title`, `og:description`, `og:image`
-- Jsoup 네트워크 작업은 `Dispatchers.IO`에서 처리합니다.
+- `OpenGraphMetadataParser`는 OG, Twitter card, 일반 `description` meta를 순서대로 사용합니다.
+- Jsoup 네트워크 작업은 `JsoupWebExtractor`에서 `Dispatchers.IO`로 처리합니다.
 - 실패해도 원본 URL 저장은 유지합니다.
+- Share/Clipboard 저장 직후 2초 안에 끝나지 않으면 다음 실행 또는 재분석 흐름에서 다시 처리합니다.
 
 ## 자동 삭제 정책
 

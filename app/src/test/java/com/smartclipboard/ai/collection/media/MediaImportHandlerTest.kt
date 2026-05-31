@@ -8,6 +8,7 @@ import com.smartclipboard.ai.domain.model.TopicAction
 import com.smartclipboard.ai.domain.model.TopicAnalysis
 import com.smartclipboard.ai.domain.model.TopicItemSelectedBy
 import com.smartclipboard.ai.domain.repository.DataRepository
+import com.smartclipboard.ai.processing.enrichment.DataItemEnrichmentTrigger
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
@@ -36,6 +37,25 @@ class MediaImportHandlerTest {
         assertEquals(DataItemSource.MEDIASTORE, repository.savedItems.single().source)
         assertEquals(10L, repository.savedItems.single().mediaStoreId)
         assertEquals("content://media/external/images/media/10", repository.savedItems.single().sourceUri)
+    }
+
+    @Test
+    fun `successful media import triggers pending enrichment`() = runBlocking {
+        val repository = FakeDataRepository()
+        val enrichmentTrigger = FakeEnrichmentTrigger()
+        val handler = MediaImportHandler(
+            repository = repository,
+            enrichmentTrigger = enrichmentTrigger
+        )
+
+        handler.importImages(
+            listOf(
+                mediaCandidate(mediaStoreId = 10L, contentUri = "content://media/10"),
+                mediaCandidate(mediaStoreId = 11L, contentUri = "content://media/11")
+            )
+        )
+
+        assertEquals(listOf(2), enrichmentTrigger.savedCounts)
     }
 
     @Test
@@ -169,5 +189,13 @@ class MediaImportHandlerTest {
         override suspend fun updateTopicAction(action: TopicAction) = error("Not used in this test")
 
         override fun observeTopicActions(topicId: Long): Flow<List<TopicAction>> = error("Not used in this test")
+    }
+
+    private class FakeEnrichmentTrigger : DataItemEnrichmentTrigger {
+        val savedCounts = mutableListOf<Int>()
+
+        override suspend fun runAfterDataInput(savedCount: Int) {
+            savedCounts += savedCount
+        }
     }
 }
