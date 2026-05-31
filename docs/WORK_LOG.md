@@ -139,3 +139,91 @@
 - 수동 확인: 실제 기기에서 ML Kit OCR, 실제 URL OG, Share Sheet/Tile transparent flow 수동 확인은 아직 하지 않았습니다.
 - 남은 이슈: 다음 작업은 `T-150-gemini-topic-recommendation`입니다. Gemini API key는 `local.properties -> BuildConfig.GEMINI_API_KEY` 경로를 유지해야 합니다.
 - PR: 브랜치 push 후 PR 작성 예정
+
+### 2026-05-31 / T-150-gemini-topic-recommendation / Codex
+
+- Branch: `feat/T-150-gemini-topic-recommendation`
+- Status: Gemini 기반 이번 실행 추천 세션 구현 완료
+- 변경 파일: `app/src/main/java/com/smartclipboard/ai/processing/gemini/recommendation/**`, `app/src/main/java/com/smartclipboard/ai/di/ProcessingModule.kt`, 관련 테스트, 관련 문서
+- 작업 요약: Gemini API key를 `BuildConfig.GEMINI_API_KEY`로 주입하고, `gemini-2.5-flash:generateContent` REST 호출 구조를 추가했습니다. 추천 후보는 `InMemoryRecommendationSessionStore`의 현재 세션으로만 보관하며, 새로 refresh하면 이전 추천을 교체합니다. key가 없거나 네트워크 실패가 있어도 예외를 UI로 던지지 않고 `SKIPPED`/`FAILED` 세션으로 처리합니다.
+- 테스트/빌드: TDD RED로 추천 parser/generator/manager/client parser 부재 실패를 확인한 뒤 구현했습니다. `.\gradlew.bat testDebugUnitTest` 성공, `.\gradlew.bat assembleDebug test` 성공.
+- 수동 확인: 현재 `local.properties`의 `gemini.api.key`가 비어 있어 실제 Gemini 네트워크 smoke test는 수행하지 않았습니다. key 없음 fallback은 단위 테스트로 확인했습니다.
+- 남은 이슈: 다음 작업은 `T-160-storage-quota-cleanup`입니다.
+- PR: 브랜치 push 후 PR URL 제공 예정
+
+### 2026-05-31 / T-160-storage-quota-cleanup / Codex
+
+- Branch: `feat/T-160-storage-quota-cleanup`
+- Status: 저장 용량 계산과 안전한 자동 삭제 정책 구현 완료
+- 변경 파일: `app/src/main/java/com/smartclipboard/ai/storage/**`, `app/src/main/java/com/smartclipboard/ai/di/StorageModule.kt`, `DataItemDao`, `TopicDao`, 관련 테스트, 관련 문서
+- 작업 요약: active DataItem 사용량과 quota 초과량을 계산하고, 중요 표시/보존/Topic 연결 항목을 제외한 cleanup 후보를 선택하는 정책을 추가했습니다. 자동 정리는 MediaStore 원본을 삭제하지 않고 앱 DB의 DataItem만 soft-delete합니다. 내부 복사본이 있는 항목을 먼저 정리 후보로 보고, 이후 오래된 미연결 DataItem을 선택합니다.
+- 테스트/빌드: TDD RED로 storage 정책/manager/store 부재 실패를 확인한 뒤 구현했습니다. `.\gradlew.bat testDebugUnitTest` 성공, `.\gradlew.bat assembleDebug test` 성공.
+- 수동 확인: 실제 Settings UI가 아직 없어 화면 수동 확인은 하지 않았습니다.
+- 남은 이슈: 다음 작업은 `T-170-repository-integration`입니다.
+- PR: 브랜치 push 후 PR URL 제공 예정
+
+### 2026-05-31 / T-170-repository-integration / Codex
+
+- Branch: `chore/T-170-repository-integration`
+- Status: ViewModel용 Repository facade 통합 완료
+- 변경 파일: `app/src/main/java/com/smartclipboard/ai/domain/repository/**`, `app/src/main/java/com/smartclipboard/ai/data/repository/DataRepositoryImpl.kt`, `RecommendationDataSource`, 관련 테스트, 관련 문서
+- 작업 요약: `HomeRepositoryState`, `InboxFilter`와 Home/Inbox/추천/저장 사용량/cleanup API를 `DataRepository`에 추가했습니다. `DataRepositoryImpl`은 추천 세션과 저장 cleanup manager를 facade로 노출합니다. 추천 data source가 `DataRepository`를 다시 주입받던 구조를 `DataItemDao` 기반으로 바꿔 순환 의존성을 피했습니다.
+- 테스트/빌드: TDD RED로 repository facade API 부재 실패를 확인한 뒤 구현했습니다. `.\gradlew.bat testDebugUnitTest` 성공, `.\gradlew.bat assembleDebug test` 성공.
+- 수동 확인: 화면 UI가 아직 없어 수동 UX 확인은 하지 않았습니다.
+- 남은 이슈: 다음 작업은 사용자-facing 첫 화면인 `T-200-home-ux-redesign`을 우선 추천합니다.
+- PR: 브랜치 push 후 PR URL 제공 예정
+
+### 2026-05-31 / T-200-home-ux-redesign / Codex
+
+- Branch: `feat/T-200-home-ux-redesign`
+- Status: ChatGPT/Codex 스타일 Home UX 구현 완료
+- 변경 파일: `app/src/main/java/com/smartclipboard/ai/presentation/home/**`, `app/src/main/java/com/smartclipboard/ai/presentation/screens/ShellScreens.kt`, `app/src/test/java/com/smartclipboard/ai/presentation/home/HomeUiStateMapperTest.kt`, 관련 문서
+- 작업 요약: Home 전용 UI 상태/매퍼/ViewModel/Compose 화면을 추가했습니다. 첫 화면은 새 작업 입력, 자동 수집/분석 상태, 이번 실행 AI 추천, 기존 작업, 접이식 최근 자료 요약을 단순한 행/카드 구조로 보여줍니다. 기존 `HomeShellScreen`은 route 변경 없이 새 `HomeRoute`로 연결했습니다.
+- 테스트/빌드: TDD RED로 `HomeUiStateMapper` 부재 실패를 확인한 뒤 구현했습니다. `.\gradlew.bat testDebugUnitTest --tests com.smartclipboard.ai.presentation.home.HomeUiStateMapperTest` 성공. PR 전 전체 검증으로 `.\gradlew.bat assembleDebug test`를 실행합니다.
+- 수동 확인: 에뮬레이터/실기기 화면 확인은 아직 하지 않았습니다. Compose preview와 실제 화면 육안 확인은 Android Studio에서 추가 QA가 필요합니다.
+- 남은 이슈: Home 입력을 실제 Topic 생성으로 연결하는 작업은 `T-300-topic-create-flow` 범위입니다. 다음 작업은 자료 모음/필터 UX인 `T-210-data-list-filter-selection`을 우선 추천합니다.
+- PR: 브랜치 push 후 PR URL 제공 예정
+
+### 2026-05-31 / T-210-data-list-filter-selection / Codex
+
+- Branch: `feat/T-210-data-list-filter-selection`
+- Status: Inbox 자료 모음/필터/선택 UX 구현 완료
+- 변경 파일: `app/src/main/java/com/smartclipboard/ai/presentation/inbox/**`, `app/src/main/java/com/smartclipboard/ai/presentation/screens/ShellScreens.kt`, `app/src/test/java/com/smartclipboard/ai/presentation/inbox/InboxUiStateMapperTest.kt`, 관련 문서
+- 작업 요약: Inbox 전용 UI 상태/매퍼/ViewModel/Compose 화면을 추가했습니다. 카테고리는 최근, 이미지, 링크, 텍스트, 파일, 중요, 미분석으로 고정했고, 세부 자료는 리스트/그리드로 전환할 수 있습니다. 중요 표시는 기존 `saveDataItem` 경로로 토글하고, 삭제는 `deletedAtMillis`를 기록하는 soft-delete로 처리합니다.
+- 테스트/빌드: TDD RED로 `InboxUiStateMapper` 부재 실패를 확인한 뒤 구현했습니다. `.\gradlew.bat testDebugUnitTest --tests com.smartclipboard.ai.presentation.inbox.InboxUiStateMapperTest` 성공. PR 전 전체 검증으로 `.\gradlew.bat assembleDebug test`를 실행합니다.
+- 수동 확인: 에뮬레이터/실기기 화면 확인은 아직 하지 않았습니다. 실제 삭제/중요 표시 UX는 Android Studio 또는 기기에서 추가 확인이 필요합니다.
+- 남은 이슈: Topic 추가 버튼은 진입점만 있으며 실제 Topic 연결은 `T-300`, `T-310` 범위입니다. 다음 작업은 용량/권한 UX인 `T-240-settings-ux-storage-permission`을 우선 추천합니다.
+- PR: 브랜치 push 후 PR URL 제공 예정
+
+### 2026-05-31 / T-240-settings-ux-storage-permission / Codex
+
+- Branch: `feat/T-240-settings-ux-storage-permission`
+- Status: Settings 수집 기간/용량/권한 UX 구현 완료
+- 변경 파일: `app/src/main/java/com/smartclipboard/ai/presentation/settings/**`, `app/src/main/java/com/smartclipboard/ai/presentation/main/MainActivity.kt`, `app/src/main/java/com/smartclipboard/ai/presentation/navigation/SmartClipboardRoot.kt`, `app/src/main/java/com/smartclipboard/ai/presentation/screens/ShellScreens.kt`, `app/src/test/java/com/smartclipboard/ai/presentation/settings/SettingsUiStateMapperTest.kt`, 관련 문서
+- 작업 요약: Settings 전용 UI 상태/SharedPreferences store/ViewModel/Compose 화면을 추가했습니다. 수집 기간 preset/custom은 설정 저장 후 MediaStore checkpoint를 조정해 다음 수집 범위에 반영합니다. 저장 용량은 `DataRepository.getStorageUsage()`로 표시하고, 정리 버튼은 `cleanupStorage()`를 호출합니다. 권한 버튼은 MainActivity의 이미지 권한 launcher와 연결했습니다.
+- 테스트/빌드: TDD RED로 Settings 상태/정책 클래스 부재 실패를 확인한 뒤 구현했습니다. `.\gradlew.bat testDebugUnitTest --tests com.smartclipboard.ai.presentation.settings.SettingsUiStateMapperTest` 성공. PR 전 전체 검증으로 `.\gradlew.bat assembleDebug test`를 실행합니다.
+- 수동 확인: 에뮬레이터/실기기 화면 확인은 아직 하지 않았습니다. 실제 권한 dialog와 SharedPreferences 재시작 유지 여부는 Android Studio 또는 기기에서 추가 확인이 필요합니다.
+- 남은 이슈: 자동 저장 직후 quota cleanup trigger는 아직 수집 파이프라인에 직접 연결하지 않았습니다. 현재는 Settings의 정리 버튼과 T-160 cleanup manager로 수행합니다. 다음 작업은 `T-220-save-feedback-bottom-sheet`입니다.
+- PR: 브랜치 push 후 PR URL 제공 예정
+
+### 2026-05-31 / T-220-save-feedback-bottom-sheet / Codex
+
+- Branch: `feat/T-220-save-feedback-bottom-sheet`
+- Status: 저장 피드백 문구와 Toast hook 정리 완료
+- 변경 파일: `app/src/main/java/com/smartclipboard/ai/presentation/feedback/**`, `ShareReceiverActivity`, `ClipboardCaptureActivity`, `strings.xml`, `app/src/test/java/com/smartclipboard/ai/presentation/feedback/SaveFeedbackMessageMapperTest.kt`, 관련 문서
+- 작업 요약: Share/Clipboard 저장 결과를 `SaveFeedbackMessageMapper`로 모아 성공/부분 실패/빈 클립보드/저장 실패 문구를 일관화했습니다. Activity는 저장 로직을 유지하고 feedback hook만 공통 Toast로 교체했습니다.
+- 테스트/빌드: TDD RED로 feedback mapper 부재 실패를 확인한 뒤 구현했습니다. `.\gradlew.bat testDebugUnitTest --tests com.smartclipboard.ai.presentation.feedback.SaveFeedbackMessageMapperTest` 성공. PR 전 전체 검증으로 `.\gradlew.bat assembleDebug test`를 실행합니다.
+- 수동 확인: 실제 Share Sheet/Quick Tile Toast 표시 수동 테스트는 아직 하지 않았습니다.
+- 남은 이슈: 작은 BottomSheet 피드백은 아직 구현하지 않았고, 이번 task는 Toast hook 기준으로 닫았습니다. 다음 작업은 `T-230-logs-tab-flow`입니다.
+- PR: 브랜치 push 후 PR URL 제공 예정
+
+### 2026-05-31 / T-230-logs-tab-flow / Codex
+
+- Branch: `feat/T-230-logs-tab-flow`
+- Status: Topic 기반 Logs 탭 구현 완료
+- 변경 파일: `app/src/main/java/com/smartclipboard/ai/presentation/logs/**`, `app/src/main/java/com/smartclipboard/ai/presentation/screens/ShellScreens.kt`, `app/src/test/java/com/smartclipboard/ai/presentation/logs/LogsUiStateMapperTest.kt`, 관련 문서
+- 작업 요약: 별도 Log Entity가 없는 현재 구조에서는 `Topic`을 사용자-visible 작업 기록으로 사용합니다. Logs 탭은 전체, 사용자 요청, AI 추천, 진행 중, 완료, 미완료 필터와 badge를 제공합니다. 내부 OCR/OG/Gemini 자동 이벤트는 기록에 표시하지 않습니다.
+- 테스트/빌드: TDD RED로 Logs mapper 부재 실패를 확인한 뒤 구현했습니다. `.\gradlew.bat testDebugUnitTest --tests com.smartclipboard.ai.presentation.logs.LogsUiStateMapperTest` 성공. PR 전 전체 검증으로 `.\gradlew.bat assembleDebug test`를 실행합니다.
+- 수동 확인: 실제 화면 필터링 수동 테스트는 아직 하지 않았습니다.
+- 남은 이슈: TopicAction 기반 외부 앱 전송 기록은 `T-410` 이후 확장 범위입니다. 다음 Ready 작업은 `T-300-topic-create-flow`입니다.
+- PR: 브랜치 push 후 PR URL 제공 예정

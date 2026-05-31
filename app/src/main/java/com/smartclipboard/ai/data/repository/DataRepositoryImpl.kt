@@ -11,18 +11,32 @@ import com.smartclipboard.ai.domain.model.DataItem
 import com.smartclipboard.ai.domain.model.DataItemType
 import com.smartclipboard.ai.domain.model.Topic
 import com.smartclipboard.ai.domain.model.TopicAction
+import com.smartclipboard.ai.domain.model.TopicStatus
 import com.smartclipboard.ai.domain.model.TopicAnalysis
 import com.smartclipboard.ai.domain.model.TopicItemSelectedBy
 import com.smartclipboard.ai.domain.repository.DataRepository
+import com.smartclipboard.ai.domain.repository.HomeRepositoryState
+import com.smartclipboard.ai.domain.repository.InboxFilter
+import com.smartclipboard.ai.domain.model.EnrichmentStatus
+import com.smartclipboard.ai.processing.gemini.recommendation.GeminiTopicRecommendationManager
+import com.smartclipboard.ai.processing.gemini.recommendation.RecommendationSession
+import com.smartclipboard.ai.processing.gemini.recommendation.RecommendationSessionStore
+import com.smartclipboard.ai.storage.StorageCleanupManager
+import com.smartclipboard.ai.storage.StorageCleanupResult
+import com.smartclipboard.ai.storage.StorageUsageSummary
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 
 class DataRepositoryImpl @Inject constructor(
     private val dataItemDao: DataItemDao,
     private val topicDao: TopicDao,
     private val topicAnalysisDao: TopicAnalysisDao,
-    private val topicActionDao: TopicActionDao
+    private val topicActionDao: TopicActionDao,
+    private val recommendationManager: GeminiTopicRecommendationManager,
+    private val recommendationSessionStore: RecommendationSessionStore,
+    private val storageCleanupManager: StorageCleanupManager
 ) : DataRepository {
     override suspend fun saveDataItem(item: DataItem): Long {
         return dataItemDao.insert(item.toEntity())
@@ -91,5 +105,62 @@ class DataRepositoryImpl @Inject constructor(
     override fun observeTopicActions(topicId: Long): Flow<List<TopicAction>> {
         return topicActionDao.observeByTopicId(topicId)
             .map { entities -> entities.map { it.toDomain() } }
+    }
+
+    override fun observeHomeState(): Flow<HomeRepositoryState> {
+        return combine(
+            observeDataItems(),
+            observeTopics(),
+            recommendationSessionStore.currentSession
+        ) { dataItems, topics, recommendationSession ->
+            HomeRepositoryState(
+                recentDataItems = dataItems
+                    .sortedWith(compareByDescending<DataItem> { it.capturedAtMillis }.thenByDescending { it.id })
+                    .take(HOME_RECENT_ITEM_LIMIT),
+                activeTopics = topics
+                    .filterNot { it.status == TopicStatus.ARCHIVED }
+                    .sortedWith(compareByDescending<Topic> { it.updatedAtMillis }.thenByDescending { it.id }),
+                recommendationSession = recommendationSession
+            )
+        }
+    }
+
+    override fun observeInboxItems(filter: InboxFilter): Flow<List<DataItem>> {
+        val source = if (filter.types.isEmpty()) {
+            observeDataItems()
+        } else {
+            observeDataItemsByType(filter.types)
+        }
+
+        return source.map { items ->
+            items.filter { item ->
+                (!filter.importantOnly || item.storage.isImportant) &&
+                    (!filter.pendingAnalysisOnly || item.enrichment.status.isPendingForUser())
+            }
+        }
+    }
+
+    override fun observeCurrentRecommendationSession(): Flow<RecommendationSession?> {
+        return recommendationSessionStore.currentSession
+    }
+
+    override suspend fun refreshTopicRecommendations(limit: Int): RecommendationSession {
+        return recommendationManager.refresh(limit)
+    }
+
+    override suspend fun getStorageUsage(quotaBytes: Long): StorageUsageSummary {
+        return storageCleanupManager.calculateUsage(quotaBytes)
+    }
+
+    override suspend fun cleanupStorage(quotaBytes: Long): StorageCleanupResult {
+        return storageCleanupManager.cleanup(quotaBytes)
+    }
+
+    private fun EnrichmentStatus.isPendingForUser(): Boolean {
+        return this == EnrichmentStatus.PENDING || this == EnrichmentStatus.PROCESSING
+    }
+
+    private companion object {
+        const val HOME_RECENT_ITEM_LIMIT = 12
     }
 }

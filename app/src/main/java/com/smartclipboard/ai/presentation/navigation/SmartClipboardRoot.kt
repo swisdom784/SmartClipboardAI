@@ -25,7 +25,8 @@ import com.smartclipboard.ai.presentation.screens.SettingsShellScreen
 
 @Composable
 fun SmartClipboardRoot(
-    onPickFilesRequested: () -> Unit = {}
+    onPickFilesRequested: () -> Unit = {},
+    onRequestImagePermission: () -> Unit = {}
 ) {
     var selectedDestinationRoute by rememberSaveable {
         mutableStateOf(TopLevelDestination.default.route)
@@ -43,7 +44,8 @@ fun SmartClipboardRoot(
         TopLevelDestinationContent(
             selectedDestination = selectedDestination,
             contentPadding = contentPadding,
-            onPickFilesRequested = onPickFilesRequested
+            onPickFilesRequested = onPickFilesRequested,
+            onRequestImagePermission = onRequestImagePermission
         )
     }
 }
@@ -69,7 +71,8 @@ private fun SmartClipboardBottomBar(
 private fun TopLevelDestinationContent(
     selectedDestination: TopLevelDestination,
     contentPadding: PaddingValues,
-    onPickFilesRequested: () -> Unit
+    onPickFilesRequested: () -> Unit,
+    onRequestImagePermission: () -> Unit
 ) {
     when (selectedDestination) {
         TopLevelDestination.Home -> HomeShellScreen(Modifier.padding(contentPadding))
@@ -78,7 +81,10 @@ private fun TopLevelDestinationContent(
             onPickFilesRequested = onPickFilesRequested
         )
         TopLevelDestination.Logs -> LogsShellScreen(Modifier.padding(contentPadding))
-        TopLevelDestination.Settings -> SettingsShellScreen(Modifier.padding(contentPadding))
+        TopLevelDestination.Settings -> SettingsShellScreen(
+            modifier = Modifier.padding(contentPadding),
+            onRequestImagePermission = onRequestImagePermission
+        )
     }
 }
 

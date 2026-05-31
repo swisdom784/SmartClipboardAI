@@ -152,6 +152,33 @@ Repository 계약:
 - `MlKitOcrProcessor`: ML Kit Korean Text Recognition으로 content URI OCR 수행
 - `DataItemEnrichmentTrigger`: Share/Clipboard/MediaStore/SAF 저장 성공 후 최대 3개 항목을 2초 timeout 안에서 시도
 
+`T-150` 기준 Gemini 추천은 사용자 수락 전 영구 저장하지 않습니다.
+
+- `GeminiTopicRecommendationManager`: 현재 DataItem을 입력으로 이번 실행 추천 세션 생성
+- `InMemoryRecommendationSessionStore`: 앱 프로세스 안의 최신 추천 세션만 유지하고 새 추천이 오면 교체
+- `GeminiRecommendationPromptBuilder`: 세부 실행 버튼이 아니라 `최근 자료 정리`, `새 자료 다시 보기`, `AI 다시 분석` 같은 흐름형 추천을 요청
+- `HttpGeminiTextClient`: `BuildConfig.GEMINI_API_KEY`로 주입된 key를 사용해 Gemini REST `generateContent` 호출
+- `GeminiRecommendationParser`: 모델 응답 JSON을 `TopicRecommendationCandidate`로 변환
+- key가 비어 있거나 호출에 실패해도 Home 흐름이 깨지지 않도록 `SKIPPED` 또는 `FAILED` 세션으로 남깁니다.
+
+`T-160` 기준 저장 정리는 MediaStore 원본을 삭제하지 않는 soft-delete 정책입니다.
+
+- `StorageQuotaPolicy`: active DataItem 사용량, quota 초과량, cleanup 후보 계산
+- 보호 기준: 중요 표시, 사용자 보존, Topic 연결 항목은 자동 삭제 제외
+- 정리 순서: 내부 복사본이 있는 항목 우선, 이후 Topic에 연결되지 않은 오래된 DataItem
+- `StorageCleanupManager`: 후보 DataItem을 DB에서 soft-delete하고 Settings가 쓸 사용량 요약을 반환
+- `RoomStorageCleanupStore`: DataItem active 목록, Topic 연결 ID, soft-delete DAO query 연결
+
+`T-170` 기준 Repository facade는 후속 ViewModel이 내부 collaborator를 직접 몰라도 되도록 아래 API를 제공합니다.
+
+- `observeHomeState()`: 최근 DataItem, active Topic, 현재 추천 세션을 결합
+- `observeInboxItems(filter)`: 타입, 중요 표시, 미분석 상태 기준 Inbox 자료 조회
+- `observeCurrentRecommendationSession()`: 이번 실행 추천 세션 구독
+- `refreshTopicRecommendations(limit)`: Gemini 추천 refresh
+- `getStorageUsage(quotaBytes)`: Settings 용량 표시용 사용량 계산
+- `cleanupStorage(quotaBytes)`: 저장 한도 초과 시 soft-delete 실행
+- `RepositoryRecommendationDataSource`는 순환 의존성을 피하기 위해 `DataRepository`가 아니라 `DataItemDao`를 직접 사용합니다.
+
 ## Coroutines 역할
 
 - Room, MediaStore, 파일 복사, Jsoup OG 추출, OCR, Gemini 호출은 IO dispatcher에서 실행

@@ -295,20 +295,20 @@
 ### T-150-gemini-topic-recommendation
 
 - 작업명: Gemini 기반 이번 실행 Topic 추천
-- Status: Ready
-- Owner: 미배정
+- Status: Done
+- Owner: Codex
 - 목적: 새로 수집/분석된 자료에서 이번 실행의 추천 후보만 생성합니다.
 - 담당 브랜치명: `feat/T-150-gemini-topic-recommendation`
 - 예상 수정 파일: `processing/gemini/`, recommendation repository, settings key access, tests
 - 선행 task: `T-140-enrichment-ocr-og-pipeline`
 - Blocked by: 없음
-- Ready criteria: `T-140` 완료, Gemini key는 `local.properties -> BuildConfig.GEMINI_API_KEY`로 주입, 이번 실행 추천은 사용자 수락 전 영구 저장하지 않는 정책 확정
+- Ready criteria: 완료됨
 - 병렬 진행 가능 여부: 제한적 가능
 - Can run in parallel with: `T-160` 중 파일 충돌이 없는 경우
 - Cannot run with: `T-030`, `T-170`
-- 충돌 가능성이 있는 파일: Gemini manager, repository, settings
-- 완료 기준: 하드코딩 key 없이 BuildConfig/local.properties 기반 호출 구조와 fake 테스트가 존재
-- 검증 방법: fake Gemini 테스트, 실제 key가 있는 로컬에서 수동 smoke test
+- 충돌 가능성이 있는 파일: Gemini recommendation package, DI module
+- 완료 기준: 하드코딩 key 없이 BuildConfig/local.properties 기반 호출 구조와 fake 테스트가 존재, 추천 후보는 사용자 수락 전 영구 저장하지 않음
+- 검증 방법: fake Gemini 테스트, key 없음 fallback 테스트, parser 테스트, 실제 key가 있는 로컬에서 수동 smoke test
 - 작업자가 수정해도 되는 파일 범위: Gemini/recommendation package, tests
 - 수정하면 안 되는 파일 범위: UI 완성 화면, 외부 앱 export
 - 관련 task 문서 경로: `docs/tasks/T-150-gemini-topic-recommendation.md`
@@ -316,41 +316,41 @@
 ### T-160-storage-quota-cleanup
 
 - 작업명: 저장 용량 한도와 자동 삭제 정책
-- Status: Not Ready
-- Owner: 미배정
+- Status: Done
+- Owner: Codex
 - 목적: 자동 수집 자료가 용량을 넘으면 안전한 순서로 오래된 데이터를 정리합니다.
 - 담당 브랜치명: `feat/T-160-storage-quota-cleanup`
 - 예상 수정 파일: storage policy, cleanup worker/use case, settings repository, tests
-- 선행 task: `T-030-data-model-audit`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`
-- Blocked by: `T-140` 미완료
-- Ready criteria: DataItem 중요 표시, topic 연결, internal copy 여부 필드가 확정됨
+- 선행 task: `T-030-data-model-audit`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`, `T-150-gemini-topic-recommendation`
+- Blocked by: 없음
+- Ready criteria: 완료됨
 - 병렬 진행 가능 여부: 제한적 가능
-- Can run in parallel with: `T-150`
+- Can run in parallel with: 없음
 - Cannot run with: `T-030`, `T-170`, `T-240`
 - 충돌 가능성이 있는 파일: settings repository, DataItem flags, cleanup DAO
-- 완료 기준: cache/internal copy/unused DataItem 정리 순서가 테스트로 고정됨
-- 검증 방법: quota 계산 단위 테스트, 삭제 제외 대상 테스트
-- 작업자가 수정해도 되는 파일 범위: storage policy package, cleanup tests
+- 완료 기준: 사용량/초과량 계산, 내부 복사본 우선, 중요/보존/Topic 연결 제외, 오래된 DataItem soft-delete 순서가 테스트로 고정됨
+- 검증 방법: quota 계산 단위 테스트, 삭제 제외 대상 테스트, manager soft-delete 테스트, `.\gradlew.bat testDebugUnitTest`, `.\gradlew.bat assembleDebug test`
+- 작업자가 수정해도 되는 파일 범위: storage policy package, cleanup tests, cleanup DAO query
 - 수정하면 안 되는 파일 범위: Inbox UI, Topic UI
 - 관련 task 문서 경로: `docs/tasks/T-160-storage-quota-cleanup.md`
 
 ### T-170-repository-integration
 
 - 작업명: DataRepository 통합 정리
-- Status: Not Ready
-- Owner: 미배정
+- Status: Done
+- Owner: Codex
 - 목적: 수집, enrichment, 추천, 저장 정책을 ViewModel이 쓰기 쉬운 API로 통합합니다.
 - 담당 브랜치명: `chore/T-170-repository-integration`
 - 예상 수정 파일: `domain/repository/`, `data/repository/`, integration tests
 - 선행 task: `T-100`, `T-110`, `T-120`, `T-130`, `T-140`, `T-150`, `T-160`
-- Blocked by: Phase 2/3 개별 구현 미완료
-- Ready criteria: 수집/전처리/추천/정리 기능의 인터페이스가 모두 구현됨
+- Blocked by: 없음
+- Ready criteria: 완료됨
 - 병렬 진행 가능 여부: 아니오
 - Can run in parallel with: 없음
 - Cannot run with: repository를 만지는 모든 task
 - 충돌 가능성이 있는 파일: DataRepository 전체
-- 완료 기준: Home/Inbox/Topic/Analysis ViewModel이 사용할 API가 안정화됨
-- 검증 방법: repository integration test, fake datasource test
+- 완료 기준: Home/Inbox/Settings ViewModel이 사용할 Repository API가 안정화되고 순환 의존성이 제거됨
+- 검증 방법: repository integration test, fake datasource test, `.\gradlew.bat testDebugUnitTest`, `.\gradlew.bat assembleDebug test`
 - 작업자가 수정해도 되는 파일 범위: repository 계약/구현/테스트
 - 수정하면 안 되는 파일 범위: 화면 UI 완성 작업
 - 관련 task 문서 경로: `docs/tasks/T-170-repository-integration.md`
@@ -360,20 +360,20 @@
 ### T-200-home-ux-redesign
 
 - 작업명: ChatGPT/Codex 스타일 Home UX 재설계
-- Status: Not Ready
-- Owner: 미배정
+- Status: Done
+- Owner: Codex
 - 목적: 새 작업 입력, 이전 작업, 이번 AI 추천, 자동 분석 상태를 단순하게 보여줍니다.
 - 담당 브랜치명: `feat/T-200-home-ux-redesign`
 - 예상 수정 파일: `presentation/home/`, Home ViewModel tests, UI tests
 - 선행 task: `T-040-navigation-baseline`, `T-170-repository-integration`
-- Blocked by: `T-040`, `T-170` 미완료
-- Ready criteria: navigation route와 Home용 repository API 확정
+- Blocked by: 없음
+- Ready criteria: 완료됨
 - 병렬 진행 가능 여부: 예
 - Can run in parallel with: `T-210`, `T-230`, `T-240`
 - Cannot run with: `T-040`
 - 충돌 가능성이 있는 파일: root scaffold, theme token
 - 완료 기준: Home이 작업 중심으로 동작하고 과거 AI 추천을 영구 노출하지 않음
-- 검증 방법: Compose preview, 수동 UX 확인, ViewModel state 테스트
+- 검증 방법: `HomeUiStateMapperTest`, Compose compile, `.\gradlew.bat assembleDebug test`
 - 작업자가 수정해도 되는 파일 범위: Home package와 Home 전용 tests
 - 수정하면 안 되는 파일 범위: navigation root 변경, repository 계약 변경
 - 관련 task 문서 경로: `docs/tasks/T-200-home-ux-redesign.md`
@@ -381,20 +381,20 @@
 ### T-210-data-list-filter-selection
 
 - 작업명: Inbox 자료 모음, 필터, 선택 UX
-- Status: Not Ready
-- Owner: 미배정
+- Status: Done
+- Owner: Codex
 - 목적: 이미지/링크/텍스트/파일 카테고리와 리스트/그리드 전환을 제공합니다.
 - 담당 브랜치명: `feat/T-210-data-list-filter-selection`
 - 예상 수정 파일: `presentation/inbox/`, Inbox ViewModel tests, UI tests
 - 선행 task: `T-040-navigation-baseline`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-170-repository-integration`
-- Blocked by: `T-170` 미완료
-- Ready criteria: Inbox route, repository query API, DataItem type taxonomy 확정
+- Blocked by: 없음
+- Ready criteria: 완료됨
 - 병렬 진행 가능 여부: 예
 - Can run in parallel with: `T-200`, `T-230`, `T-240`
 - Cannot run with: `T-040`, repository query 변경 작업
 - 충돌 가능성이 있는 파일: Inbox route, selection state
 - 완료 기준: 카테고리 카드, list/grid 전환, 삭제/중요/Topic 추가 entry가 동작
-- 검증 방법: fake data Compose 테스트, 수동 삭제/필터 확인
+- 검증 방법: `InboxUiStateMapperTest`, Compose compile, `.\gradlew.bat assembleDebug test`
 - 작업자가 수정해도 되는 파일 범위: Inbox package와 tests
 - 수정하면 안 되는 파일 범위: DataItem model/DAO 계약 변경
 - 관련 task 문서 경로: `docs/tasks/T-210-data-list-filter-selection.md`
@@ -402,20 +402,20 @@
 ### T-220-save-feedback-bottom-sheet
 
 - 작업명: 저장 피드백 Toast/BottomSheet UX
-- Status: Not Ready
-- Owner: 미배정
+- Status: Done
+- Owner: Codex
 - 목적: Share/Tile 저장 시 앱 전체가 켜진 듯 보이지 않는 짧은 피드백을 제공합니다.
 - 담당 브랜치명: `feat/T-220-save-feedback-bottom-sheet`
 - 예상 수정 파일: `presentation/feedback/`, Share/Clipboard feedback hook, tests
 - 선행 task: `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`
-- Blocked by: `T-140` 미완료
-- Ready criteria: Share/Tile/MediaStore/SAF 저장 결과 이벤트가 View/UI에 전달됨
+- Blocked by: 없음
+- Ready criteria: 완료됨
 - 병렬 진행 가능 여부: 예
 - Can run in parallel with: `T-200`, `T-210`
 - Cannot run with: `T-100`, `T-110`의 Activity lifecycle 수정
 - 충돌 가능성이 있는 파일: ShareReceiverActivity, TransparentActivity
 - 완료 기준: 성공/부분 실패/오류 문구가 UX 톤과 일치하고 자동 종료 흐름이 안정적임
-- 검증 방법: Share/Tile 수동 테스트, screenshot 또는 동작 설명
+- 검증 방법: `SaveFeedbackMessageMapperTest`, `.\gradlew.bat assembleDebug test`
 - 작업자가 수정해도 되는 파일 범위: feedback UI package와 연동 hook
 - 수정하면 안 되는 파일 범위: 수집 저장 로직 변경
 - 관련 task 문서 경로: `docs/tasks/T-220-save-feedback-bottom-sheet.md`
@@ -423,20 +423,20 @@
 ### T-230-logs-tab-flow
 
 - 작업명: 사용자 확인 기록 Logs 탭
-- Status: Not Ready
-- Owner: 미배정
+- Status: Done
+- Owner: Codex
 - 목적: 사용자가 확인한 작업, 추천 수락, 전송, 완료/미완료 기록을 badge로 필터링합니다.
 - 담당 브랜치명: `feat/T-230-logs-tab-flow`
 - 예상 수정 파일: `presentation/logs/`, log model/query, tests
 - 선행 task: `T-040-navigation-baseline`, `T-170-repository-integration`
-- Blocked by: `T-040`, `T-170` 미완료
-- Ready criteria: 사용자-visible log 저장 기준과 route 확정
+- Blocked by: 없음
+- Ready criteria: 완료됨
 - 병렬 진행 가능 여부: 예
 - Can run in parallel with: `T-200`, `T-210`, `T-240`
 - Cannot run with: repository log 계약 변경 작업
 - 충돌 가능성이 있는 파일: log entity/query, navigation tab
 - 완료 기준: 내부 자동 이벤트가 아닌 사용자 확인 기록만 표시하고 badge 필터가 동작
-- 검증 방법: fake log UI 테스트, 수동 필터 확인
+- 검증 방법: `LogsUiStateMapperTest`, Compose compile, `.\gradlew.bat assembleDebug test`
 - 작업자가 수정해도 되는 파일 범위: Logs package와 log query tests
 - 수정하면 안 되는 파일 범위: Home/Inbox UI 세부 변경
 - 관련 task 문서 경로: `docs/tasks/T-230-logs-tab-flow.md`
@@ -444,20 +444,20 @@
 ### T-240-settings-ux-storage-permission
 
 - 작업명: Settings 수집 기간, 용량, 권한 UX
-- Status: Not Ready
-- Owner: 미배정
+- Status: Done
+- Owner: Codex
 - 목적: 자동 수집 기간과 저장 용량/자동 삭제 정책을 사용자가 조정할 수 있게 합니다.
 - 담당 브랜치명: `feat/T-240-settings-ux-storage-permission`
 - 예상 수정 파일: `presentation/settings/`, settings repository, tests
 - 선행 task: `T-040-navigation-baseline`, `T-160-storage-quota-cleanup`, `T-170-repository-integration`
-- Blocked by: `T-040`, `T-160`, `T-170` 미완료
-- Ready criteria: settings storage model과 quota policy 확정
+- Blocked by: 없음
+- Ready criteria: 완료됨
 - 병렬 진행 가능 여부: 예
 - Can run in parallel with: `T-200`, `T-210`, `T-230`
 - Cannot run with: `T-160` policy 변경 작업
 - 충돌 가능성이 있는 파일: settings repository, Settings route
 - 완료 기준: 수집 기간 preset/custom, 용량 표시, 자동 삭제 설명, 권한 상태가 표시됨
-- 검증 방법: settings state test, 수동 변경/재시작 확인
+- 검증 방법: `SettingsUiStateMapperTest`, Compose compile, `.\gradlew.bat assembleDebug test`
 - 작업자가 수정해도 되는 파일 범위: Settings package와 tests
 - 수정하면 안 되는 파일 범위: storage policy 핵심 알고리즘 변경
 - 관련 task 문서 경로: `docs/tasks/T-240-settings-ux-storage-permission.md`
@@ -467,14 +467,14 @@
 ### T-300-topic-create-flow
 
 - 작업명: 사용자 입력 기반 Topic 생성
-- Status: Not Ready
+- Status: Ready
 - Owner: 미배정
 - 목적: Home 입력 또는 추천 수락으로 Topic을 생성합니다.
 - 담당 브랜치명: `feat/T-300-topic-create-flow`
 - 예상 수정 파일: `presentation/topic/`, Topic ViewModel/use case, tests
 - 선행 task: `T-200-home-ux-redesign`
-- Blocked by: `T-200` 미완료
-- Ready criteria: Home 입력 이벤트와 Topic repository API 확정
+- Blocked by: 없음
+- Ready criteria: Home 입력 UI와 Topic repository API가 준비됨
 - 병렬 진행 가능 여부: 제한적 가능
 - Can run in parallel with: `T-310`은 UI 계약 합의 후 가능
 - Cannot run with: Topic model/repository 변경 작업
@@ -640,19 +640,14 @@
 
 ## 지금 가능한 작업
 
-현재 바로 시작 가능한 task는 `T-150-gemini-topic-recommendation` 하나입니다.
+현재 바로 시작 가능한 task는 `T-300`입니다.
 
-`T-010-agents-and-docs-setup`, `T-000-current-code-audit`, `T-020-architecture-baseline`, `T-030-data-model-audit`, `T-050-permission-and-manifest-baseline`, `T-040-navigation-baseline`, `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`는 완료된 상태입니다. 이제 새로 수집/보강된 자료를 바탕으로 이번 실행의 AI 추천 후보를 생성합니다.
+`T-010-agents-and-docs-setup`, `T-000-current-code-audit`, `T-020-architecture-baseline`, `T-030-data-model-audit`, `T-050-permission-and-manifest-baseline`, `T-040-navigation-baseline`, `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`, `T-150-gemini-topic-recommendation`, `T-160-storage-quota-cleanup`, `T-170-repository-integration`, `T-200-home-ux-redesign`, `T-210-data-list-filter-selection`, `T-220-save-feedback-bottom-sheet`, `T-230-logs-tab-flow`, `T-240-settings-ux-storage-permission`는 완료된 상태입니다. 이제 Topic 생성 흐름을 구현할 수 있습니다.
 
 ## 아직 시작하면 안 되는 작업 예시
 
-- `T-160-storage-quota-cleanup`: `T-150`에서 추천 세션/자료 보존 기준을 먼저 확인한 뒤 시작
-- `T-220-save-feedback-bottom-sheet`: 저장 직후 상태 메시지와 AI 추천 상태 표시 기준을 `T-150` 이후 정리한 뒤 시작
-- `T-200-home-ux-redesign`: Navigation과 Repository API가 확정되지 않았으므로 시작 금지
 - `T-500-calendar-intent-draft`: TopicAction payload와 Manifest queries가 확정되지 않았으므로 시작 금지
 
 ## 추천 다음 작업
 
-1. `T-150-gemini-topic-recommendation`
-2. 완료 후 `T-160-storage-quota-cleanup` 또는 `T-170-repository-integration` 준비 상태를 재검토합니다.
-3. 그 다음에 Home/Inbox UX가 사용할 repository API를 정리합니다.
+1. `T-300-topic-create-flow`

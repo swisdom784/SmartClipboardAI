@@ -6,12 +6,12 @@ Home 입력 또는 AI 추천 수락으로 사용자 검토 가능한 `Topic`을 
 
 ## 작업 상태
 
-- Status: Not Ready
+- Status: Ready
 - Owner: 미배정
 - Branch: `feat/T-300-topic-create-flow`
 - Depends on: `T-200-home-ux-redesign`
-- Blocked by: `T-200` 미완료
-- Ready criteria: Home 입력 이벤트와 Topic repository API가 확정됨
+- Blocked by: 없음
+- Ready criteria: Home 입력 UI와 Topic repository API가 준비됨
 - Can run in parallel with: `T-310`은 UI 계약 합의 후 가능
 - Cannot run with: Topic model/repository 변경 작업
 

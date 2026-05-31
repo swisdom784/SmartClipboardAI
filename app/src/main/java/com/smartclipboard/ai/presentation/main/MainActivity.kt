@@ -55,7 +55,10 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     SmartClipboardRoot(
-                        onPickFilesRequested = { pickFiles.launch("*/*") }
+                        onPickFilesRequested = { pickFiles.launch("*/*") },
+                        onRequestImagePermission = {
+                            requestImagePermissions.launch(requiredImagePermissions().toTypedArray())
+                        }
                     )
                 }
             }

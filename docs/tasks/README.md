@@ -22,6 +22,6 @@
 
 ## 현재 Ready 작업
 
-- `T-150-gemini-topic-recommendation`: Gemini 기반 이번 실행 Topic 추천
+- `T-300-topic-create-flow`: 사용자 입력 기반 Topic 생성
 
-`T-140`에서 링크/이미지의 OG/OCR 전처리와 저장 직후 짧은 enrichment trigger를 완료했습니다. 다음은 새로 들어온 자료를 바탕으로 이번 실행에서만 보여줄 AI 추천 후보를 생성하는 흐름입니다.
+`T-230`에서 Logs 탭을 완료했습니다. 이제 다음 Ready 작업은 Home 입력과 AI 추천을 실제 Topic으로 연결하는 `T-300`입니다.

@@ -38,4 +38,7 @@ interface TopicDao {
         """
     )
     fun observeDataItemsForTopic(topicId: Long): Flow<List<DataItemEntity>>
+
+    @Query("SELECT DISTINCT dataItemId FROM topic_item_cross_refs")
+    suspend fun getLinkedDataItemIds(): List<Long>
 }

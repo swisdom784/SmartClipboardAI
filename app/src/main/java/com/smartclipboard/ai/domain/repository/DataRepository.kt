@@ -6,6 +6,10 @@ import com.smartclipboard.ai.domain.model.Topic
 import com.smartclipboard.ai.domain.model.TopicAction
 import com.smartclipboard.ai.domain.model.TopicAnalysis
 import com.smartclipboard.ai.domain.model.TopicItemSelectedBy
+import com.smartclipboard.ai.processing.gemini.recommendation.RecommendationSession
+import com.smartclipboard.ai.storage.StorageCleanupResult
+import com.smartclipboard.ai.storage.StorageUsageSummary
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.Flow
 
 interface DataRepository {
@@ -36,4 +40,22 @@ interface DataRepository {
     suspend fun updateTopicAction(action: TopicAction)
 
     fun observeTopicActions(topicId: Long): Flow<List<TopicAction>>
+
+    fun observeHomeState(): Flow<HomeRepositoryState> = emptyFlow()
+
+    fun observeInboxItems(filter: InboxFilter = InboxFilter()): Flow<List<DataItem>> = emptyFlow()
+
+    fun observeCurrentRecommendationSession(): Flow<RecommendationSession?> = emptyFlow()
+
+    suspend fun refreshTopicRecommendations(limit: Int = 20): RecommendationSession {
+        error("Recommendation refresh is not implemented")
+    }
+
+    suspend fun getStorageUsage(quotaBytes: Long): StorageUsageSummary {
+        error("Storage usage is not implemented")
+    }
+
+    suspend fun cleanupStorage(quotaBytes: Long): StorageCleanupResult {
+        error("Storage cleanup is not implemented")
+    }
 }
