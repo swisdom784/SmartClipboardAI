@@ -326,3 +326,14 @@
 - 수동 확인: 수정 APK 재설치 후 Topic 자료 선택 화면이 정상 렌더링되고 AndroidRuntime 크래시가 없음을 확인했습니다. Quick Settings Tile은 추가/클릭까지 확인했으나 ADB에서 클립보드 값을 주입하지 못해 실제 텍스트 저장은 손검증으로 남겼습니다.
 - 남은 이슈: Gemini end-to-end, SAF picker, Samsung Notes/Calendar/Reminder handoff, 권한 거부/부분 허용 UX는 `docs/QA_REPORT.md`의 known issue로 기록했습니다.
 - PR: 브랜치 push 후 PR URL 제공 예정
+
+### 2026-06-01 / T-910-gemini-device-qa-plan / Codex
+
+- Branch: `test/T-910-gemini-device-qa-plan`
+- Status: Gemini key smoke test와 Phase 9 task 계획 작성
+- 변경 파일: `docs/QA_REPORT.md`, `docs/IMPLEMENTATION_PLAN.md`, `docs/tasks/README.md`, `docs/tasks/T-910-gemini-key-diagnostics.md`, `docs/tasks/T-920-gemini-recommendation-analysis-e2e.md`, `docs/tasks/T-930-topic-selection-large-library-ux.md`, `docs/tasks/T-940-device-manual-qa-suite.md`, `docs/superpowers/plans/2026-06-01-gemini-and-device-qa-hardening.md`
+- 작업 요약: `local.properties`의 Gemini key 존재 여부를 값 노출 없이 확인했고, 직접 Gemini endpoint smoke test를 실행했습니다. Gemini 응답은 `API_KEY_INVALID`였으므로 성공 E2E는 진행하지 않고, Gemini 진단 UX와 대량 자료 선택 UX, E2E QA, 남은 수동 QA를 Phase 9 task로 분리했습니다.
+- 테스트/빌드: `.\gradlew.bat assembleDebug test --console=plain` 성공
+- 수동 확인: ADB 재설치 단계에서 연결된 device/emulator가 없어 실기기 재검증은 중단했습니다.
+- 남은 이슈: 유효한 Gemini key 확인, ADB 기기 재연결, Gemini 실패 상태의 사용자 표시, 대량 자료 선택 저장 UX, SAF/QS/Samsung handoff 수동 QA
+- PR: 브랜치 push 후 PR URL 제공 예정

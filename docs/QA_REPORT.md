@@ -163,9 +163,21 @@
 | --- | --- | --- | --- | --- |
 | QA-001 | High | Fixed | 대량 MediaStore 자료에서 Topic 자료 선택 화면 진입 시 OOM 발생 | `QA-FIX-001`로 수정 및 재검증 |
 | QA-002 | Medium | Open | Quick Settings Tile은 추가/클릭까지 확인했지만 ADB에서 클립보드 값을 자동 주입하지 못함 | 실제 텍스트/링크 복사 후 Tile 클릭 손검증 |
-| QA-003 | High | Open | 실제 Gemini 추천/분석 네트워크 smoke test는 아직 end-to-end로 확인하지 못함 | 자료 선택 저장 후 분석 화면에서 Gemini 호출 확인 |
+| QA-003 | High | Open | `local.properties`에 Gemini key 값은 있으나 직접 Gemini smoke test가 `API_KEY_INVALID`로 실패함 | 유효한 key 확인, 앱 내 진단 UX와 실패 표시 추가 |
 | QA-004 | Medium | Open | Samsung Notes/Calendar/Reminder handoff는 단위 테스트로 intent spec만 확인됨 | Galaxy 기기에서 실제 앱 전송 확인 |
 | QA-005 | Medium | Open | SAF picker, 권한 거부/부분 허용, Settings preset/custom 저장은 시스템 UI 손검증 필요 | Android Studio/실기기에서 수동 체크 |
+| QA-006 | High | Open | Topic 자료 선택 화면은 OOM은 해결됐지만 대량 자료에서 저장 버튼이 긴 목록 아래에 있어 실제 선택 저장/분석 진입이 어렵다 | sticky action bar, 검색/필터/페이징 UX 개선 |
+| QA-007 | Medium | Open | Home의 Gemini 추천 실패 상태가 사용자에게 노출되지 않고 READY 추천만 표시된다 | 추천 실패/건너뜀 상태를 조용하지만 확인 가능한 카드로 표시 |
+
+## 2026-06-01 추가 Gemini QA
+
+- `local.properties`의 `gemini.api.key` 존재 여부: 설정됨
+- 직접 Gemini endpoint smoke test: 실패
+- 실패 응답: `API_KEY_INVALID`
+- 자동 빌드/테스트: `.\gradlew.bat assembleDebug test --console=plain` 성공
+- 실기기 재설치/화면 QA: ADB 연결 해제로 중단
+
+메모: key 값은 문서와 로그에 기록하지 않습니다. 현재 상태에서 Gemini 성공 E2E는 진행할 수 없고, 앱은 invalid key를 명확히 진단하거나 사용자에게 복구 가능한 상태로 안내하는 UX가 필요합니다.
 
 ## Release Readiness
 

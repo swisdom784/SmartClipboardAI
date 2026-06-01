@@ -638,18 +638,105 @@
 - 수정하면 안 되는 파일 범위: 승인 없는 구조 변경, 새 기능 추가
 - 관련 task 문서 경로: `docs/tasks/T-900-qa-build-test.md`
 
+## Phase 9: Gemini E2E와 사용성 안정화
+
+### T-910-gemini-key-diagnostics
+
+- 작업명: Gemini key 검증과 실패 진단 UX
+- Status: Ready
+- Owner: Unassigned
+- 목적: `local.properties` 또는 BuildConfig에 key가 있어도 invalid/권한 문제일 때 앱이 조용히 실패하지 않고 Settings/Home에서 확인 가능한 상태를 제공한다.
+- 담당 브랜치명: `feat/T-910-gemini-key-diagnostics`
+- 예상 수정 파일: `processing/gemini/**`, `presentation/settings/**`, `presentation/home/**`, tests, docs
+- 선행 task: `T-900`
+- Blocked by: 없음
+- Ready criteria: `QA-003`, `QA-007` 재현 완료
+- 병렬 진행 가능 여부: 제한적 가능
+- Can run in parallel with: `T-930-topic-selection-large-library-ux`
+- Cannot run with: Gemini generator/client contract 변경 작업
+- 충돌 가능성이 있는 파일: `HttpGeminiTextClient`, Gemini generator, Settings/Home UI state
+- 완료 기준: invalid key, blank key, network failure가 구분된 상태로 표현되고 앱이 복구 가능한 안내를 제공
+- 검증 방법: 단위 테스트, 직접 Gemini smoke test, invalid key 앱 실행 확인
+- 작업자가 수정해도 되는 파일 범위: Gemini diagnostics, Settings/Home 표시, 관련 테스트와 문서
+- 수정하면 안 되는 파일 범위: TopicAnalysis/TopicAction 모델 구조 변경, 외부 앱 export 흐름
+- 관련 task 문서 경로: `docs/tasks/T-910-gemini-key-diagnostics.md`
+
+### T-920-gemini-recommendation-analysis-e2e
+
+- 작업명: Gemini 추천/분석 end-to-end 검증
+- Status: Not Ready
+- Owner: Unassigned
+- 목적: 유효한 Gemini key로 Home 추천 생성, 추천 수락 Topic 생성, 자료 선택 저장, 분석 완료, action draft 생성까지 실제 기기에서 확인한다.
+- 담당 브랜치명: `test/T-920-gemini-recommendation-analysis-e2e`
+- 예상 수정 파일: QA docs, 작은 테스트 hook 또는 debug-only QA helper, 관련 테스트
+- 선행 task: `T-910`
+- Blocked by: `T-910` 완료, 유효한 Gemini key, ADB 연결된 기기
+- Ready criteria: Gemini key 진단이 성공 상태를 반환하고 실기기 연결 가능
+- 병렬 진행 가능 여부: 아니오
+- Can run in parallel with: 없음
+- Cannot run with: Gemini diagnostics 또는 Topic selection UX 변경 작업
+- 충돌 가능성이 있는 파일: QA 문서, 분석/추천 UI 상태
+- 완료 기준: 실제 Gemini 추천과 분석 결과가 DB/UI에 반영되고 실패 케이스가 문서화됨
+- 검증 방법: `.\gradlew.bat assembleDebug test`, 실기기 수동 QA, DB 상태 확인
+- 작업자가 수정해도 되는 파일 범위: QA 문서, 승인된 작은 QA helper
+- 수정하면 안 되는 파일 범위: 모델/Repository 대규모 변경
+- 관련 task 문서 경로: `docs/tasks/T-920-gemini-recommendation-analysis-e2e.md`
+
+### T-930-topic-selection-large-library-ux
+
+- 작업명: 대량 자료 선택 UX 안정화
+- Status: Ready
+- Owner: Unassigned
+- 목적: 1만 개 이상 MediaStore 자료가 있어도 Topic 자료 선택 화면에서 원하는 자료를 찾고 저장/분석으로 이동할 수 있게 한다.
+- 담당 브랜치명: `feat/T-930-topic-selection-large-library-ux`
+- 예상 수정 파일: `presentation/topic/selection/**`, 관련 tests, docs
+- 선행 task: `T-900`
+- Blocked by: 없음
+- Ready criteria: `QA-006` 재현 완료
+- 병렬 진행 가능 여부: 제한적 가능
+- Can run in parallel with: `T-910`
+- Cannot run with: Topic selection model/repository contract 변경 작업
+- 충돌 가능성이 있는 파일: TopicDataSelection screen/state/mapper
+- 완료 기준: 저장 버튼이 긴 목록에 묻히지 않고, 검색/필터 또는 최근 자료 제한 정책이 사용자에게 자연스럽게 동작
+- 검증 방법: mapper/viewmodel 테스트, 실기기 대량 자료 화면 smoke test
+- 작업자가 수정해도 되는 파일 범위: Topic selection UI/state/tests
+- 수정하면 안 되는 파일 범위: DataItem/Topic DB schema, Gemini analysis flow
+- 관련 task 문서 경로: `docs/tasks/T-930-topic-selection-large-library-ux.md`
+
+### T-940-device-manual-qa-suite
+
+- 작업명: 남은 실기기 수동 QA 체크리스트 완료
+- Status: Not Ready
+- Owner: Unassigned
+- 목적: SAF picker, 권한 거부/부분 허용, QS clipboard content, Samsung Notes/Calendar/Reminder handoff를 실제 기기에서 끝까지 확인한다.
+- 담당 브랜치명: `test/T-940-device-manual-qa-suite`
+- 예상 수정 파일: `docs/QA_REPORT.md`, `docs/WORK_LOG.md`, 필요 시 작은 bug fix 파일
+- 선행 task: `T-910`, `T-930`
+- Blocked by: ADB 연결된 기기, 수동 조작 시간, `T-910`, `T-930`
+- Ready criteria: Gemini 진단 UX와 대량 자료 선택 UX가 안정화됨
+- 병렬 진행 가능 여부: 아니오
+- Can run in parallel with: 없음
+- Cannot run with: UI/Manifest/Permission 변경 작업
+- 충돌 가능성이 있는 파일: QA 문서, Settings/Permission/Export 관련 fix 파일
+- 완료 기준: `docs/QA_REPORT.md`의 `QA-002`, `QA-004`, `QA-005`가 확인 또는 후속 bug task로 분리됨
+- 검증 방법: 실기기 수동 QA, `adb` 로그, DB 확인, 앱별 handoff 확인
+- 작업자가 수정해도 되는 파일 범위: QA 문서, 승인된 작은 bug fix
+- 수정하면 안 되는 파일 범위: 새 기능 추가, 대규모 구조 변경
+- 관련 task 문서 경로: `docs/tasks/T-940-device-manual-qa-suite.md`
+
 ## 지금 가능한 작업
 
-현재 바로 시작 가능한 task는 없습니다.
+현재 바로 시작 가능한 task는 `T-910-gemini-key-diagnostics`, `T-930-topic-selection-large-library-ux`입니다.
 
-MVP 계획에 포함된 task는 `T-900`까지 모두 완료 처리했습니다. 실제 기기 smoke QA 중 발견한 대량 MediaStore 자료 선택 화면 OOM은 `T-900` 범위의 작은 fix로 수정했고, 남은 손검증 항목은 `docs/QA_REPORT.md`에 known issue로 남겼습니다.
+MVP 계획에 포함된 task는 `T-900`까지 모두 완료 처리했습니다. 추가 QA에서 Gemini key invalid와 대량 자료 선택 UX 문제가 확인되어 Phase 9 후속 task를 만들었습니다.
 
 ## 아직 시작하면 안 되는 작업 예시
 
-- 대규모 새 기능 추가: 현재 MVP task가 완료됐으므로 새 task 문서를 먼저 작성하고 승인받아야 함
-- 남은 손검증 항목을 구현 task로 바꾸기: `docs/QA_REPORT.md`의 known issue를 오너가 새 task로 승격하기 전까지는 시작 금지
+- `T-920-gemini-recommendation-analysis-e2e`: `T-910` 완료와 유효한 Gemini key가 필요함
+- `T-940-device-manual-qa-suite`: `T-910`, `T-930` 완료와 ADB 연결 기기가 필요함
+- 대규모 새 기능 추가: Phase 9 외 작업은 새 task 문서를 먼저 작성하고 승인받아야 함
 
 ## 추천 다음 작업
 
-1. 현재 브랜치의 PR을 만들고 리뷰합니다.
-2. 리뷰 후 merge가 끝나면, `docs/QA_REPORT.md`의 남은 손검증 항목을 보고 새 task를 만들지 여부를 프로젝트 오너가 결정합니다.
+1. `T-910-gemini-key-diagnostics`: Gemini key invalid/네트워크 실패를 앱 안에서 진단 가능하게 만듭니다.
+2. `T-930-topic-selection-large-library-ux`: 대량 자료 화면에서 저장/분석 진입이 막히지 않도록 UX를 안정화합니다.

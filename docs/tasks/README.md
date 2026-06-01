@@ -22,6 +22,9 @@
 
 ## 현재 Ready 작업
 
-현재 Ready 작업은 없습니다.
+현재 Ready 작업은 아래 2개입니다.
 
-MVP 계획의 task는 `T-900`까지 완료됐습니다. 남은 항목은 `docs/QA_REPORT.md`의 known issue이며, 프로젝트 오너가 별도 task로 승격하기 전까지 Codex가 임의로 새 작업을 시작하지 않습니다.
+- `T-910-gemini-key-diagnostics`
+- `T-930-topic-selection-large-library-ux`
+
+`T-920-gemini-recommendation-analysis-e2e`는 `T-910` 완료와 유효한 Gemini key가 필요합니다. `T-940-device-manual-qa-suite`는 `T-910`, `T-930` 완료와 ADB 연결 기기가 필요합니다.
