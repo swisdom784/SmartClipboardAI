@@ -214,6 +214,11 @@ private fun TopicActionDraftCard(
                             Text("캘린더로 보내기")
                         }
                     }
+                    if (card.canExportToReminder) {
+                        TextButton(onClick = onExport) {
+                            Text("리마인더로 보내기")
+                        }
+                    }
                     TextButton(onClick = onComplete) {
                         Text("완료")
                     }

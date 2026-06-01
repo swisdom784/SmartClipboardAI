@@ -293,3 +293,14 @@
 - 수동 확인: 실제 Samsung Calendar 설치 기기와 기본 Calendar fallback 환경에서 insert 화면은 추가 QA가 필요합니다.
 - 남은 이슈: Reminder export는 `T-520` 범위입니다.
 - PR: `https://github.com/swisdom784/SmartClipboardAI/compare/feat/T-510-notes-share-draft...feat/T-500-calendar-intent-draft?expand=1`
+
+### 2026-06-01 / T-520-reminder-intent-draft / Codex
+
+- Branch: `feat/T-520-reminder-intent-draft`
+- Status: Samsung Reminder share 전송 구현 완료
+- 변경 파일: `app/src/main/java/com/smartclipboard/ai/export/reminder/**`, `app/src/main/java/com/smartclipboard/ai/presentation/analysis/**`, `app/src/test/java/com/smartclipboard/ai/export/reminder/**`, `app/src/test/java/com/smartclipboard/ai/presentation/analysis/action/**`, 관련 문서
+- 작업 요약: Reminder 카드에 `리마인더로 보내기` 액션을 추가하고, `ACTION_SEND` + `text/plain` + `Intent.EXTRA_TEXT` + Samsung Reminder package 지정으로 검토한 할 일 초안을 전송합니다. Samsung Reminder 실행이 시작되면 해당 action을 `EXPORTED`로 표시하고 완료 카드처럼 접습니다.
+- 테스트/빌드: `.\gradlew.bat assembleDebug test --console=plain` 성공
+- 수동 확인: 실제 Samsung Reminder 설치 기기에서 공유 수신 화면과 미설치 fallback Toast는 추가 QA가 필요합니다.
+- 남은 이슈: Phase 7 export 구현은 완료됐고, 다음 작업은 `T-900` 전체 QA입니다.
+- PR: `https://github.com/swisdom784/SmartClipboardAI/compare/feat/T-500-calendar-intent-draft...feat/T-520-reminder-intent-draft?expand=1`

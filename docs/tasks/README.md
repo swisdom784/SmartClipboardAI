@@ -22,6 +22,6 @@
 
 ## 현재 Ready 작업
 
-- `T-520-reminder-intent-draft`: Samsung Reminder share 전송
+- `T-900-qa-build-test`: 전체 QA, 빌드, 오류 처리, 문서 정리
 
-`T-500`에서 Samsung Calendar 전송 흐름을 완료했습니다. 이제 다음 Ready 작업은 `T-520-reminder-intent-draft` 하나입니다.
+`T-520`에서 Samsung Reminder 전송 흐름을 완료했습니다. Phase 7 export 작업이 모두 끝났으므로 다음 Ready 작업은 실제 사용 가능성을 확인하는 QA 단계입니다.

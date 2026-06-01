@@ -66,6 +66,29 @@ class TopicActionDraftUiStateMapperTest {
     }
 
     @Test
+    fun exposesReminderExportOnlyForPendingReminderCard() {
+        val state = TopicActionDraftUiStateMapper.map(
+            actions = listOf(
+                action(
+                    id = 5L,
+                    type = TopicActionType.REMINDER,
+                    status = TopicActionStatus.PENDING_REVIEW
+                ),
+                action(
+                    id = 6L,
+                    type = TopicActionType.NOTE,
+                    status = TopicActionStatus.PENDING_REVIEW
+                )
+            )
+        )
+
+        val reminderCard = state.cards.first { it.type == TopicActionType.REMINDER }
+        val noteCard = state.cards.first { it.type == TopicActionType.NOTE }
+        assertTrue(reminderCard.canExportToReminder)
+        assertFalse(noteCard.canExportToReminder)
+    }
+
+    @Test
     fun detectsAllRequiredActionsCompleted() {
         val state = TopicActionDraftUiStateMapper.map(
             actions = listOf(
