@@ -6,12 +6,12 @@
 
 ## 작업 상태
 
-- Status: Ready
-- Owner: 미배정
+- Status: Done
+- Owner: Codex
 - Branch: `feat/T-520-reminder-intent-draft`
 - Depends on: `T-410-topic-action-draft`, `T-050-permission-and-manifest-baseline`
 - Blocked by: 없음
-- Ready criteria: Reminder payload와 Samsung Reminder package query가 확정됨
+- Ready criteria: 완료됨
 - Can run in parallel with: `T-500`, `T-510`
 - Cannot run with: `T-050` Manifest 변경 작업
 
@@ -37,15 +37,25 @@
 - 미설치 시 사용자에게 짧게 안내합니다.
 - 사용자가 버튼을 눌렀을 때만 실행합니다.
 
+T-520 구현 결과:
+
+- `SamsungReminderShareIntentFactory`를 추가해 `ACTION_SEND`, `text/plain`, `Intent.EXTRA_TEXT`, `com.samsung.android.app.reminder` package 지정 spec을 생성합니다.
+- 여러 줄 할 일 본문은 preview 길이로 자르지 않고 전체 텍스트를 `EXTRA_TEXT`로 보냅니다.
+- `SamsungReminderExportLauncher`를 추가해 Samsung Reminder 설치 여부를 확인하고 `startActivity`를 실행합니다.
+- 미설치, 빈 내용, 실행 실패는 짧은 Toast 문구로 안내합니다.
+- 분석 화면의 Reminder 카드에만 `리마인더로 보내기` 버튼을 표시합니다.
+- 전송 시작 후 action 상태를 `EXPORTED`로 바꾸고 완료 카드처럼 접습니다.
+- Manifest query는 `T-050`에서 이미 추가된 `com.samsung.android.app.reminder`를 그대로 사용했습니다.
+
 ## 체크리스트
 
-- [ ] 코드 읽기
-- [ ] 관련 문서 확인
-- [ ] 선행 task 완료 여부 확인
-- [ ] 구현
-- [ ] 빌드 확인
-- [ ] 테스트/수동 확인
-- [ ] 변경 요약 작성
+- [x] 코드 읽기
+- [x] 관련 문서 확인
+- [x] 선행 task 완료 여부 확인
+- [x] 구현
+- [x] 빌드 확인
+- [x] 테스트/수동 확인
+- [x] 변경 요약 작성
 - [ ] PR 작성
 
 ## 완료 기준
@@ -60,6 +70,12 @@
 - 미설치 환경 fallback 안내 확인
 - 여러 줄 할 일 텍스트 전송 테스트
 - intent 생성 단위 테스트
+
+실제 검증:
+
+- `SamsungReminderShareIntentFactoryTest`로 action/type/package/text/multiline text/blank content 처리를 검증했습니다.
+- `TopicActionDraftUiStateMapperTest`로 Reminder 카드 export 가능 여부를 검증했습니다.
+- 전체 빌드/테스트는 `.\gradlew.bat assembleDebug test --console=plain`로 확인했고 성공했습니다.
 
 ## PR에 반드시 적을 내용
 

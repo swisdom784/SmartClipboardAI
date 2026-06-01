@@ -597,18 +597,18 @@
 ### T-520-reminder-intent-draft
 
 - 작업명: Samsung Reminder share 전송
-- Status: Ready
-- Owner: 미배정
+- Status: Done
+- Owner: Codex
 - 목적: 사용자가 검토한 할 일 초안을 Samsung Reminder로 보냅니다.
 - 담당 브랜치명: `feat/T-520-reminder-intent-draft`
-- 예상 수정 파일: `export/reminder/`, Manifest queries, action card hook, tests
+- 예상 수정 파일: `export/reminder/`, action card hook, tests
 - 선행 task: `T-410-topic-action-draft`, `T-050-permission-and-manifest-baseline`
 - Blocked by: 없음
-- Ready criteria: Reminder payload와 Samsung Reminder package query가 확정됨
+- Ready criteria: 완료됨
 - 병렬 진행 가능 여부: 예
 - Can run in parallel with: `T-500`, `T-510`
 - Cannot run with: `T-050` Manifest 변경 작업
-- 충돌 가능성이 있는 파일: Manifest queries, export manager
+- 충돌 가능성이 있는 파일: action card hook, export manager
 - 완료 기준: `ACTION_SEND` + `text/plain` + Samsung Reminder package 전송이 동작
 - 검증 방법: Samsung Reminder 설치 환경 수동 테스트, 미설치 fallback toast 확인
 - 작업자가 수정해도 되는 파일 범위: reminder export package와 tests
@@ -620,14 +620,14 @@
 ### T-900-qa-build-test
 
 - 작업명: 전체 QA, 빌드, 오류 처리, 문서 정리
-- Status: Not Ready
+- Status: Ready
 - Owner: 미배정
 - 목적: MVP end-to-end 흐름을 실제 기기 기준으로 점검하고 문서를 최신화합니다.
 - 담당 브랜치명: `test/T-900-qa-build-test`
 - 예상 수정 파일: QA docs, test fixes, small bug fix files approved in PR
 - 선행 task: `T-200`, `T-210`, `T-220`, `T-230`, `T-240`, `T-300`, `T-310`, `T-400`, `T-410`, `T-500`, `T-510`, `T-520`
-- Blocked by: Phase 4~7 주요 task 미완료
-- Ready criteria: MVP 주요 구현 task가 Done이고 테스트 기기/환경이 준비됨
+- Blocked by: 없음
+- Ready criteria: MVP 주요 구현 task가 Done임. 실제 기기/OS 버전은 QA 시작 시 기록해야 함
 - 병렬 진행 가능 여부: 제한적 가능
 - Can run in parallel with: 작은 문서 보완 task
 - Cannot run with: 대규모 기능 구현 task
@@ -640,14 +640,14 @@
 
 ## 지금 가능한 작업
 
-현재 바로 시작 가능한 task는 `T-520`입니다.
+현재 바로 시작 가능한 task는 `T-900`입니다.
 
-`T-010-agents-and-docs-setup`, `T-000-current-code-audit`, `T-020-architecture-baseline`, `T-030-data-model-audit`, `T-050-permission-and-manifest-baseline`, `T-040-navigation-baseline`, `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`, `T-150-gemini-topic-recommendation`, `T-160-storage-quota-cleanup`, `T-170-repository-integration`, `T-200-home-ux-redesign`, `T-210-data-list-filter-selection`, `T-220-save-feedback-bottom-sheet`, `T-230-logs-tab-flow`, `T-240-settings-ux-storage-permission`, `T-300-topic-create-flow`, `T-310-topic-data-selection-flow`, `T-400-topic-analysis-draft`, `T-410-topic-action-draft`, `T-500-calendar-intent-draft`, `T-510-notes-share-draft`는 완료된 상태입니다. 이제 Reminder로 보내는 흐름을 구현할 수 있습니다.
+`T-010-agents-and-docs-setup`, `T-000-current-code-audit`, `T-020-architecture-baseline`, `T-030-data-model-audit`, `T-050-permission-and-manifest-baseline`, `T-040-navigation-baseline`, `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`, `T-150-gemini-topic-recommendation`, `T-160-storage-quota-cleanup`, `T-170-repository-integration`, `T-200-home-ux-redesign`, `T-210-data-list-filter-selection`, `T-220-save-feedback-bottom-sheet`, `T-230-logs-tab-flow`, `T-240-settings-ux-storage-permission`, `T-300-topic-create-flow`, `T-310-topic-data-selection-flow`, `T-400-topic-analysis-draft`, `T-410-topic-action-draft`, `T-500-calendar-intent-draft`, `T-510-notes-share-draft`, `T-520-reminder-intent-draft`는 완료된 상태입니다. 이제 MVP 전체 QA와 실제 사용성 점검을 시작할 수 있습니다.
 
 ## 아직 시작하면 안 되는 작업 예시
 
-- `T-900-qa-build-test`: Phase 7 export 작업이 끝나지 않았으므로 시작 금지
+- 대규모 새 기능 추가: 현재 MVP 구현이 끝났으므로 먼저 `T-900`에서 QA와 known issue 정리를 진행해야 함
 
 ## 추천 다음 작업
 
-1. `T-520-reminder-intent-draft`
+1. `T-900-qa-build-test`

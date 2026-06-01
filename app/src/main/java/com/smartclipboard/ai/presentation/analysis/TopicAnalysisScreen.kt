@@ -36,6 +36,8 @@ import com.smartclipboard.ai.export.calendar.SamsungCalendarExportLauncher
 import com.smartclipboard.ai.export.calendar.SamsungCalendarExportResult
 import com.smartclipboard.ai.export.notes.SamsungNotesExportLauncher
 import com.smartclipboard.ai.export.notes.SamsungNotesExportResult
+import com.smartclipboard.ai.export.reminder.SamsungReminderExportLauncher
+import com.smartclipboard.ai.export.reminder.SamsungReminderExportResult
 import com.smartclipboard.ai.presentation.analysis.action.TopicActionDraftSection
 import com.smartclipboard.ai.presentation.analysis.action.TopicActionCardUiState
 import com.smartclipboard.ai.presentation.analysis.action.TopicActionDraftUiState
@@ -147,6 +149,34 @@ private fun handleActionExport(
 
             SamsungCalendarExportResult.Failed -> {
                 Toast.makeText(context, "캘린더로 보내지 못했어요", Toast.LENGTH_SHORT).show()
+            }
+        }
+        return
+    }
+
+    if (card.canExportToReminder) {
+        when (
+            SamsungReminderExportLauncher.export(
+                context = context,
+                title = card.title,
+                body = card.body
+            )
+        ) {
+            SamsungReminderExportResult.Started -> {
+                Toast.makeText(context, "Samsung Reminder로 보냅니다", Toast.LENGTH_SHORT).show()
+                onExported(card.id)
+            }
+
+            SamsungReminderExportResult.AppNotFound -> {
+                Toast.makeText(context, "Samsung Reminder를 찾을 수 없어요", Toast.LENGTH_SHORT).show()
+            }
+
+            SamsungReminderExportResult.EmptyContent -> {
+                Toast.makeText(context, "보낼 내용이 없어요", Toast.LENGTH_SHORT).show()
+            }
+
+            SamsungReminderExportResult.Failed -> {
+                Toast.makeText(context, "Samsung Reminder로 보내지 못했어요", Toast.LENGTH_SHORT).show()
             }
         }
     }
