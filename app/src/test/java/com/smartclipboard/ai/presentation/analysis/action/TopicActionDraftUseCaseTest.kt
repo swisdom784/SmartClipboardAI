@@ -87,6 +87,24 @@ class TopicActionDraftUseCaseTest {
     }
 
     @Test
+    fun marksExportedActionAsCompletedForExternalAppHandoff() = runBlocking {
+        val repository = RecordingActionRepository(
+            actions = listOf(action(id = 13L, type = TopicActionType.NOTE))
+        )
+        val useCase = TopicActionDraftUseCase(
+            repository = repository,
+            nowMillis = { 4_000L }
+        )
+
+        useCase.markActionExported(repository.actions.value.single())
+
+        val updated = repository.actions.value.single()
+        assertEquals(TopicActionStatus.EXPORTED, updated.status)
+        assertEquals(4_000L, updated.updatedAtMillis)
+        assertEquals(4_000L, updated.completedAtMillis)
+    }
+
+    @Test
     fun updatesActionContentAndPreview() = runBlocking {
         val repository = RecordingActionRepository(
             actions = listOf(action(id = 12L, type = TopicActionType.NOTE))

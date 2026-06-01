@@ -55,10 +55,21 @@ class TopicActionDraftUseCase @Inject constructor(
         )
     }
 
+    suspend fun markActionExported(action: TopicAction) {
+        val now = nowMillis()
+        repository.updateTopicAction(
+            action.copy(
+                status = TopicActionStatus.EXPORTED,
+                updatedAtMillis = now,
+                completedAtMillis = now
+            )
+        )
+    }
+
     suspend fun markAllCompleted(topicId: Long) {
         val actions = repository.observeTopicActions(topicId).first()
         actions
-            .filterNot { it.status == TopicActionStatus.COMPLETED }
+            .filterNot { it.status.isDoneStatus() }
             .forEach { action -> completeAction(action) }
     }
 
@@ -140,6 +151,10 @@ class TopicActionDraftUseCase @Inject constructor(
         return replace(Regex("\\s+"), " ")
             .trim()
             .take(MAX_PREVIEW_LENGTH)
+    }
+
+    private fun TopicActionStatus.isDoneStatus(): Boolean {
+        return this == TopicActionStatus.COMPLETED || this == TopicActionStatus.EXPORTED
     }
 
     private companion object {

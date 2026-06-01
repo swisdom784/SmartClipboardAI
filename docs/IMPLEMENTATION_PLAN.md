@@ -576,18 +576,18 @@
 ### T-510-notes-share-draft
 
 - 작업명: Samsung Notes share 전송
-- Status: Ready
-- Owner: 미배정
+- Status: Done
+- Owner: Codex
 - 목적: 사용자가 검토한 요약 노트 초안을 Samsung Notes로 보냅니다.
 - 담당 브랜치명: `feat/T-510-notes-share-draft`
-- 예상 수정 파일: `export/notes/`, Manifest queries, action card hook, tests
+- 예상 수정 파일: `export/notes/`, action card hook, tests
 - 선행 task: `T-410-topic-action-draft`, `T-050-permission-and-manifest-baseline`
 - Blocked by: 없음
-- Ready criteria: Notes payload와 Samsung Notes package query가 확정됨
+- Ready criteria: 완료됨
 - 병렬 진행 가능 여부: 예
 - Can run in parallel with: `T-500`, `T-520`
 - Cannot run with: `T-050` Manifest 변경 작업
-- 충돌 가능성이 있는 파일: Manifest queries, export manager
+- 충돌 가능성이 있는 파일: action card hook, export manager
 - 완료 기준: `ACTION_SEND` + `text/plain` + Samsung Notes package 전송이 동작
 - 검증 방법: Samsung Notes 설치 환경 수동 테스트, 미설치 fallback toast 확인
 - 작업자가 수정해도 되는 파일 범위: notes export package와 tests
@@ -640,9 +640,9 @@
 
 ## 지금 가능한 작업
 
-현재 바로 시작 가능한 task는 `T-500`, `T-510`, `T-520`입니다.
+현재 바로 시작 가능한 task는 `T-500`, `T-520`입니다.
 
-`T-010-agents-and-docs-setup`, `T-000-current-code-audit`, `T-020-architecture-baseline`, `T-030-data-model-audit`, `T-050-permission-and-manifest-baseline`, `T-040-navigation-baseline`, `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`, `T-150-gemini-topic-recommendation`, `T-160-storage-quota-cleanup`, `T-170-repository-integration`, `T-200-home-ux-redesign`, `T-210-data-list-filter-selection`, `T-220-save-feedback-bottom-sheet`, `T-230-logs-tab-flow`, `T-240-settings-ux-storage-permission`, `T-300-topic-create-flow`, `T-310-topic-data-selection-flow`, `T-400-topic-analysis-draft`, `T-410-topic-action-draft`는 완료된 상태입니다. 이제 검토한 초안을 Samsung 기본 앱으로 보내는 흐름을 구현할 수 있습니다.
+`T-010-agents-and-docs-setup`, `T-000-current-code-audit`, `T-020-architecture-baseline`, `T-030-data-model-audit`, `T-050-permission-and-manifest-baseline`, `T-040-navigation-baseline`, `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`, `T-150-gemini-topic-recommendation`, `T-160-storage-quota-cleanup`, `T-170-repository-integration`, `T-200-home-ux-redesign`, `T-210-data-list-filter-selection`, `T-220-save-feedback-bottom-sheet`, `T-230-logs-tab-flow`, `T-240-settings-ux-storage-permission`, `T-300-topic-create-flow`, `T-310-topic-data-selection-flow`, `T-400-topic-analysis-draft`, `T-410-topic-action-draft`, `T-510-notes-share-draft`는 완료된 상태입니다. 이제 Calendar와 Reminder로 보내는 흐름을 구현할 수 있습니다.
 
 ## 아직 시작하면 안 되는 작업 예시
 
@@ -650,4 +650,5 @@
 
 ## 추천 다음 작업
 
-1. `T-510-notes-share-draft`
+1. `T-500-calendar-intent-draft`
+2. `T-520-reminder-intent-draft`

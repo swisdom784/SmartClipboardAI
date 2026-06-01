@@ -175,6 +175,7 @@ Repository 계약:
 - `TopicActionDraftUiStateMapper`: 카드 preview, 완료 접힘 상태, 전체 완료 여부 계산
 - `TopicActionDraftSection`: 분석 화면 안에서 수정/완료/즉시 완료/뒤로가기 확인 흐름 제공
 - Samsung Notes/Calendar/Reminder 실제 intent 실행은 `T-500`, `T-510`, `T-520`에서 사용자 버튼 액션으로 연결
+- `T-510` 기준 Samsung Notes 전송은 `ACTION_SEND`, `text/plain`, `Intent.EXTRA_TEXT`, `com.samsung.android.app.notes` package 지정으로 처리하며, 실행 시작 후 해당 `TopicAction`을 `EXPORTED` 상태로 접습니다.
 - key가 비어 있거나 호출에 실패해도 Home 흐름이 깨지지 않도록 `SKIPPED` 또는 `FAILED` 세션으로 남깁니다.
 
 `T-160` 기준 저장 정리는 MediaStore 원본을 삭제하지 않는 soft-delete 정책입니다.

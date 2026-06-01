@@ -31,10 +31,12 @@ class TopicActionDraftUiStateMapperTest {
         assertEquals(listOf(1L, 2L), state.cards.map { it.id })
         assertEquals("노트", state.cards[0].typeLabel)
         assertEquals("검토 필요", state.cards[0].statusLabel)
+        assertTrue(state.cards[0].canExportToNotes)
         assertFalse(state.cards[0].isCollapsed)
         assertTrue(state.cards[0].previewText.length <= 80)
         assertEquals("캘린더", state.cards[1].typeLabel)
         assertEquals("완료", state.cards[1].statusLabel)
+        assertFalse(state.cards[1].canExportToNotes)
         assertTrue(state.cards[1].isCollapsed)
     }
 
@@ -50,6 +52,24 @@ class TopicActionDraftUiStateMapperTest {
 
         assertTrue(state.allRequiredCompleted)
         assertEquals("모든 초안이 완료되었습니다.", state.footerMessage)
+    }
+
+    @Test
+    fun treatsExportedActionsAsDoneForCardCollapseAndRequiredCompletion() {
+        val state = TopicActionDraftUiStateMapper.map(
+            actions = listOf(
+                action(id = 1L, type = TopicActionType.NOTE, status = TopicActionStatus.EXPORTED),
+                action(id = 2L, type = TopicActionType.CALENDAR, status = TopicActionStatus.COMPLETED),
+                action(id = 3L, type = TopicActionType.REMINDER, status = TopicActionStatus.COMPLETED)
+            )
+        )
+
+        val noteCard = state.cards.first()
+        assertEquals("전송됨", noteCard.statusLabel)
+        assertFalse(noteCard.canExportToNotes)
+        assertTrue(noteCard.isCompleted)
+        assertTrue(noteCard.isCollapsed)
+        assertTrue(state.allRequiredCompleted)
     }
 
     private fun action(
