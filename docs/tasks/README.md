@@ -22,6 +22,6 @@
 
 ## 현재 Ready 작업
 
-- `T-900-qa-build-test`: 전체 QA, 빌드, 오류 처리, 문서 정리
+현재 Ready 작업은 없습니다.
 
-`T-520`에서 Samsung Reminder 전송 흐름을 완료했습니다. Phase 7 export 작업이 모두 끝났으므로 다음 Ready 작업은 실제 사용 가능성을 확인하는 QA 단계입니다.
+`T-900`은 자동 빌드/테스트와 QA 리포트 작성까지 진행했지만, 연결된 Android device/emulator가 없어 수동 QA를 완료하지 못했습니다. 다음 진행을 위해서는 Android Studio 또는 실기기 연결이 필요합니다.

@@ -149,7 +149,7 @@
 - 테스트/빌드: TDD RED로 추천 parser/generator/manager/client parser 부재 실패를 확인한 뒤 구현했습니다. `.\gradlew.bat testDebugUnitTest` 성공, `.\gradlew.bat assembleDebug test` 성공.
 - 수동 확인: 현재 `local.properties`의 `gemini.api.key`가 비어 있어 실제 Gemini 네트워크 smoke test는 수행하지 않았습니다. key 없음 fallback은 단위 테스트로 확인했습니다.
 - 남은 이슈: 다음 작업은 `T-160-storage-quota-cleanup`입니다.
-- PR: 브랜치 push 후 PR URL 제공 예정
+- PR: `https://github.com/swisdom784/SmartClipboardAI/compare/feat/T-520-reminder-intent-draft...test/T-900-qa-build-test?expand=1`
 
 ### 2026-05-31 / T-160-storage-quota-cleanup / Codex
 
@@ -304,3 +304,14 @@
 - 수동 확인: 실제 Samsung Reminder 설치 기기에서 공유 수신 화면과 미설치 fallback Toast는 추가 QA가 필요합니다.
 - 남은 이슈: Phase 7 export 구현은 완료됐고, 다음 작업은 `T-900` 전체 QA입니다.
 - PR: `https://github.com/swisdom784/SmartClipboardAI/compare/feat/T-500-calendar-intent-draft...feat/T-520-reminder-intent-draft?expand=1`
+
+### 2026-06-01 / T-900-qa-build-test / Codex
+
+- Branch: `test/T-900-qa-build-test`
+- Status: 자동 검증 통과, 실제 기기 QA blocked
+- 변경 파일: `docs/QA_REPORT.md`, `docs/IMPLEMENTATION_PLAN.md`, `docs/WORK_LOG.md`, `docs/tasks/README.md`, `docs/tasks/T-900-qa-build-test.md`
+- 작업 요약: MVP end-to-end 수동 QA 체크리스트와 known issue를 `docs/QA_REPORT.md`에 정리했습니다. Debug APK 산출물, SHA-256, 자동 빌드/테스트 결과, adb 연결 상태를 기록했습니다.
+- 테스트/빌드: `git diff --check` 성공, `.\gradlew.bat assembleDebug test --console=plain` 성공
+- 수동 확인: `adb devices` 결과 연결된 device/emulator가 없어 실제 설치, Share/Tile/MediaStore/SAF/Gemini/Samsung 앱 전송 수동 QA는 미실행
+- 남은 이슈: Android device/emulator 연결, Gemini key 설정, Galaxy 기기 Samsung 앱 handoff 확인 필요
+- PR: 브랜치 push 후 PR URL 제공 예정

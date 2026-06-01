@@ -620,14 +620,14 @@
 ### T-900-qa-build-test
 
 - 작업명: 전체 QA, 빌드, 오류 처리, 문서 정리
-- Status: Ready
-- Owner: 미배정
+- Status: Blocked
+- Owner: Codex
 - 목적: MVP end-to-end 흐름을 실제 기기 기준으로 점검하고 문서를 최신화합니다.
 - 담당 브랜치명: `test/T-900-qa-build-test`
 - 예상 수정 파일: QA docs, test fixes, small bug fix files approved in PR
 - 선행 task: `T-200`, `T-210`, `T-220`, `T-230`, `T-240`, `T-300`, `T-310`, `T-400`, `T-410`, `T-500`, `T-510`, `T-520`
-- Blocked by: 없음
-- Ready criteria: MVP 주요 구현 task가 Done임. 실제 기기/OS 버전은 QA 시작 시 기록해야 함
+- Blocked by: 연결된 Android device/emulator 없음, 실제 Gemini key 없음
+- Ready criteria: Android device/emulator 연결, 필요 시 `local.properties`의 Gemini key 설정
 - 병렬 진행 가능 여부: 제한적 가능
 - Can run in parallel with: 작은 문서 보완 task
 - Cannot run with: 대규모 기능 구현 task
@@ -640,14 +640,17 @@
 
 ## 지금 가능한 작업
 
-현재 바로 시작 가능한 task는 `T-900`입니다.
+현재 바로 시작 가능한 task는 없습니다.
 
-`T-010-agents-and-docs-setup`, `T-000-current-code-audit`, `T-020-architecture-baseline`, `T-030-data-model-audit`, `T-050-permission-and-manifest-baseline`, `T-040-navigation-baseline`, `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`, `T-150-gemini-topic-recommendation`, `T-160-storage-quota-cleanup`, `T-170-repository-integration`, `T-200-home-ux-redesign`, `T-210-data-list-filter-selection`, `T-220-save-feedback-bottom-sheet`, `T-230-logs-tab-flow`, `T-240-settings-ux-storage-permission`, `T-300-topic-create-flow`, `T-310-topic-data-selection-flow`, `T-400-topic-analysis-draft`, `T-410-topic-action-draft`, `T-500-calendar-intent-draft`, `T-510-notes-share-draft`, `T-520-reminder-intent-draft`는 완료된 상태입니다. 이제 MVP 전체 QA와 실제 사용성 점검을 시작할 수 있습니다.
+`T-010-agents-and-docs-setup`, `T-000-current-code-audit`, `T-020-architecture-baseline`, `T-030-data-model-audit`, `T-050-permission-and-manifest-baseline`, `T-040-navigation-baseline`, `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`, `T-150-gemini-topic-recommendation`, `T-160-storage-quota-cleanup`, `T-170-repository-integration`, `T-200-home-ux-redesign`, `T-210-data-list-filter-selection`, `T-220-save-feedback-bottom-sheet`, `T-230-logs-tab-flow`, `T-240-settings-ux-storage-permission`, `T-300-topic-create-flow`, `T-310-topic-data-selection-flow`, `T-400-topic-analysis-draft`, `T-410-topic-action-draft`, `T-500-calendar-intent-draft`, `T-510-notes-share-draft`, `T-520-reminder-intent-draft`는 완료된 상태입니다. `T-900`은 자동 빌드/테스트와 QA 리포트 작성까지 진행했지만 실제 기기/에뮬레이터가 없어 수동 QA를 완료하지 못했습니다.
 
 ## 아직 시작하면 안 되는 작업 예시
 
 - 대규모 새 기능 추가: 현재 MVP 구현이 끝났으므로 먼저 `T-900`에서 QA와 known issue 정리를 진행해야 함
+- `T-900-qa-build-test`: 실제 device/emulator 연결과 Gemini key가 필요하므로 현재 환경에서는 완료 처리 금지
 
 ## 추천 다음 작업
 
-1. `T-900-qa-build-test`
+1. Android device/emulator 연결
+2. 필요 시 `local.properties`에 Gemini key 설정
+3. `T-900-qa-build-test`를 다시 In Progress로 바꾸고 수동 QA 시나리오 실행
