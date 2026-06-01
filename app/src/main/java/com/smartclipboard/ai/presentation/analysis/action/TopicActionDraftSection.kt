@@ -209,6 +209,11 @@ private fun TopicActionDraftCard(
                             Text("노트로 보내기")
                         }
                     }
+                    if (card.canExportToCalendar) {
+                        TextButton(onClick = onExport) {
+                            Text("캘린더로 보내기")
+                        }
+                    }
                     TextButton(onClick = onComplete) {
                         Text("완료")
                     }

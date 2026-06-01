@@ -32,6 +32,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.smartclipboard.ai.export.calendar.SamsungCalendarExportLauncher
+import com.smartclipboard.ai.export.calendar.SamsungCalendarExportResult
 import com.smartclipboard.ai.export.notes.SamsungNotesExportLauncher
 import com.smartclipboard.ai.export.notes.SamsungNotesExportResult
 import com.smartclipboard.ai.presentation.analysis.action.TopicActionDraftSection
@@ -73,35 +75,81 @@ fun TopicAnalysisRoute(
         onRetry = viewModel::retry,
         onEditAction = actionViewModel::updateActionContent,
         onExportAction = { card ->
-            when (
-                SamsungNotesExportLauncher.export(
-                    context = context,
-                    title = card.title,
-                    body = card.body
-                )
-            ) {
-                SamsungNotesExportResult.Started -> {
-                    Toast.makeText(context, "Samsung Notes로 보냅니다", Toast.LENGTH_SHORT).show()
-                    actionViewModel.markActionExported(card.id)
-                }
-
-                SamsungNotesExportResult.AppNotFound -> {
-                    Toast.makeText(context, "Samsung Notes를 찾을 수 없어요", Toast.LENGTH_SHORT).show()
-                }
-
-                SamsungNotesExportResult.EmptyContent -> {
-                    Toast.makeText(context, "보낼 내용이 없어요", Toast.LENGTH_SHORT).show()
-                }
-
-                SamsungNotesExportResult.Failed -> {
-                    Toast.makeText(context, "Samsung Notes로 보내지 못했어요", Toast.LENGTH_SHORT).show()
-                }
-            }
+            handleActionExport(
+                card = card,
+                context = context,
+                onExported = actionViewModel::markActionExported
+            )
         },
         onCompleteAction = actionViewModel::completeAction,
         onCompleteAll = actionViewModel::completeAll,
         onClose = onClose
     )
+}
+
+private fun handleActionExport(
+    card: TopicActionCardUiState,
+    context: android.content.Context,
+    onExported: (Long) -> Unit
+) {
+    if (card.canExportToNotes) {
+        when (
+            SamsungNotesExportLauncher.export(
+                context = context,
+                title = card.title,
+                body = card.body
+            )
+        ) {
+            SamsungNotesExportResult.Started -> {
+                Toast.makeText(context, "Samsung Notes로 보냅니다", Toast.LENGTH_SHORT).show()
+                onExported(card.id)
+            }
+
+            SamsungNotesExportResult.AppNotFound -> {
+                Toast.makeText(context, "Samsung Notes를 찾을 수 없어요", Toast.LENGTH_SHORT).show()
+            }
+
+            SamsungNotesExportResult.EmptyContent -> {
+                Toast.makeText(context, "보낼 내용이 없어요", Toast.LENGTH_SHORT).show()
+            }
+
+            SamsungNotesExportResult.Failed -> {
+                Toast.makeText(context, "Samsung Notes로 보내지 못했어요", Toast.LENGTH_SHORT).show()
+            }
+        }
+        return
+    }
+
+    if (card.canExportToCalendar) {
+        when (
+            SamsungCalendarExportLauncher.export(
+                context = context,
+                title = card.title,
+                description = card.body,
+                location = card.location,
+                beginTimeMs = card.scheduledStartAtMillis,
+                endTimeMs = card.scheduledEndAtMillis,
+                isAllDay = card.isAllDay
+            )
+        ) {
+            SamsungCalendarExportResult.Started -> {
+                Toast.makeText(context, "캘린더로 보냅니다", Toast.LENGTH_SHORT).show()
+                onExported(card.id)
+            }
+
+            SamsungCalendarExportResult.AppNotFound -> {
+                Toast.makeText(context, "캘린더 앱을 찾을 수 없어요", Toast.LENGTH_SHORT).show()
+            }
+
+            SamsungCalendarExportResult.InvalidTime -> {
+                Toast.makeText(context, "일정 시간이 필요해요", Toast.LENGTH_SHORT).show()
+            }
+
+            SamsungCalendarExportResult.Failed -> {
+                Toast.makeText(context, "캘린더로 보내지 못했어요", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 }
 
 @Composable

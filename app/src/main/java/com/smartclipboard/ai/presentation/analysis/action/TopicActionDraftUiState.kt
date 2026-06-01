@@ -19,6 +19,11 @@ data class TopicActionCardUiState(
     val body: String,
     val previewText: String,
     val canExportToNotes: Boolean,
+    val canExportToCalendar: Boolean,
+    val scheduledStartAtMillis: Long?,
+    val scheduledEndAtMillis: Long?,
+    val isAllDay: Boolean,
+    val location: String?,
     val isCollapsed: Boolean,
     val isCompleted: Boolean
 )
@@ -59,6 +64,11 @@ object TopicActionDraftUiStateMapper {
             body = body,
             previewText = previewText.compactPreview(),
             canExportToNotes = type == TopicActionType.NOTE && !isCompleted,
+            canExportToCalendar = type == TopicActionType.CALENDAR && !isCompleted,
+            scheduledStartAtMillis = scheduledStartAtMillis,
+            scheduledEndAtMillis = scheduledEndAtMillis,
+            isAllDay = isAllDay,
+            location = location,
             isCollapsed = isCompleted,
             isCompleted = isCompleted
         )

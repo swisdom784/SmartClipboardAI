@@ -37,7 +37,32 @@ class TopicActionDraftUiStateMapperTest {
         assertEquals("캘린더", state.cards[1].typeLabel)
         assertEquals("완료", state.cards[1].statusLabel)
         assertFalse(state.cards[1].canExportToNotes)
+        assertFalse(state.cards[1].canExportToCalendar)
         assertTrue(state.cards[1].isCollapsed)
+    }
+
+    @Test
+    fun exposesCalendarPayloadForCalendarExportCard() {
+        val state = TopicActionDraftUiStateMapper.map(
+            actions = listOf(
+                action(
+                    id = 4L,
+                    type = TopicActionType.CALENDAR,
+                    status = TopicActionStatus.PENDING_REVIEW,
+                    scheduledStartAtMillis = 1_714_492_800_000L,
+                    scheduledEndAtMillis = 1_714_579_200_000L,
+                    isAllDay = true,
+                    location = "제주 국제공항"
+                )
+            )
+        )
+
+        val card = state.cards.single()
+        assertTrue(card.canExportToCalendar)
+        assertEquals(1_714_492_800_000L, card.scheduledStartAtMillis)
+        assertEquals(1_714_579_200_000L, card.scheduledEndAtMillis)
+        assertEquals(true, card.isAllDay)
+        assertEquals("제주 국제공항", card.location)
     }
 
     @Test
@@ -76,7 +101,11 @@ class TopicActionDraftUiStateMapperTest {
         id: Long,
         type: TopicActionType,
         status: TopicActionStatus,
-        previewText: String = "본문"
+        previewText: String = "본문",
+        scheduledStartAtMillis: Long? = null,
+        scheduledEndAtMillis: Long? = null,
+        isAllDay: Boolean = false,
+        location: String? = null
     ): TopicAction {
         return TopicAction(
             id = id,
@@ -94,6 +123,10 @@ class TopicActionDraftUiStateMapperTest {
             title = "초안 $id",
             body = "본문 $id",
             previewText = previewText,
+            scheduledStartAtMillis = scheduledStartAtMillis,
+            scheduledEndAtMillis = scheduledEndAtMillis,
+            isAllDay = isAllDay,
+            location = location,
             createdAtMillis = id,
             updatedAtMillis = id
         )

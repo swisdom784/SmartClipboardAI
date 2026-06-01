@@ -6,12 +6,12 @@
 
 ## 작업 상태
 
-- Status: Ready
-- Owner: 미배정
+- Status: Done
+- Owner: Codex
 - Branch: `feat/T-500-calendar-intent-draft`
 - Depends on: `T-410-topic-action-draft`, `T-050-permission-and-manifest-baseline`
 - Blocked by: 없음
-- Ready criteria: Calendar payload와 Samsung package query가 확정됨
+- Ready criteria: 완료됨
 - Can run in parallel with: `T-510`, `T-520`
 - Cannot run with: `T-050` Manifest 변경 작업
 
@@ -37,15 +37,26 @@
 - Samsung Calendar가 없으면 기본 Calendar insert intent로 fallback합니다.
 - 사용자가 버튼을 눌렀을 때만 실행합니다.
 
+T-500 구현 결과:
+
+- `SamsungCalendarInsertIntentFactory`를 추가해 `ACTION_INSERT`와 Calendar Events URI 기반 insert spec을 생성합니다.
+- title, description, location, begin/end time, all-day 값을 Calendar insert extra로 전달합니다.
+- `SamsungCalendarPackagePolicy`를 추가해 `com.samsung.android.calendar`를 우선하고, 없으면 `com.samsung.android.app.calendar`를 사용합니다.
+- Samsung Calendar package가 없으면 package를 지정하지 않은 기본 Calendar insert intent로 fallback합니다.
+- begin/end 시간이 없거나 end가 start보다 빠르면 전송하지 않고 짧은 Toast로 안내합니다.
+- 분석 화면의 Calendar 카드에만 `캘린더로 보내기` 버튼을 표시합니다.
+- 전송 시작 후 action 상태를 `EXPORTED`로 바꾸고 완료 카드처럼 접습니다.
+- Manifest query는 `T-050`에서 이미 추가된 Samsung Calendar package query를 그대로 사용했습니다.
+
 ## 체크리스트
 
-- [ ] 코드 읽기
-- [ ] 관련 문서 확인
-- [ ] 선행 task 완료 여부 확인
-- [ ] 구현
-- [ ] 빌드 확인
-- [ ] 테스트/수동 확인
-- [ ] 변경 요약 작성
+- [x] 코드 읽기
+- [x] 관련 문서 확인
+- [x] 선행 task 완료 여부 확인
+- [x] 구현
+- [x] 빌드 확인
+- [x] 테스트/수동 확인
+- [x] 변경 요약 작성
 - [ ] PR 작성
 
 ## 완료 기준
@@ -60,6 +71,13 @@
 - 기본 Calendar fallback 테스트
 - invalid time payload 테스트
 - intent 생성 단위 테스트
+
+실제 검증:
+
+- `SamsungCalendarInsertIntentFactoryTest`로 action/data/title/description/location/time/all-day/package와 invalid time 처리를 검증했습니다.
+- `SamsungCalendarPackagePolicyTest`로 Samsung Calendar package 우선순위와 fallback null 처리를 검증했습니다.
+- `TopicActionDraftUiStateMapperTest`로 Calendar 카드 export 가능 여부와 schedule payload 노출을 검증했습니다.
+- 전체 빌드/테스트는 `.\gradlew.bat assembleDebug test --console=plain`로 확인했고 성공했습니다.
 
 ## PR에 반드시 적을 내용
 

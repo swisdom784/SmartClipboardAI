@@ -282,3 +282,14 @@
 - 수동 확인: 실제 Samsung Notes 설치 기기에서 공유 수신 화면과 미설치 fallback Toast는 추가 QA가 필요합니다.
 - 남은 이슈: Calendar/Reminder export는 `T-500`, `T-520` 범위입니다.
 - PR: `https://github.com/swisdom784/SmartClipboardAI/compare/feat/T-410-topic-action-draft...feat/T-510-notes-share-draft?expand=1`
+
+### 2026-06-01 / T-500-calendar-intent-draft / Codex
+
+- Branch: `feat/T-500-calendar-intent-draft`
+- Status: Samsung Calendar insert intent 전송 구현 완료
+- 변경 파일: `app/src/main/java/com/smartclipboard/ai/export/calendar/**`, `app/src/main/java/com/smartclipboard/ai/presentation/analysis/**`, `app/src/test/java/com/smartclipboard/ai/export/calendar/**`, `app/src/test/java/com/smartclipboard/ai/presentation/analysis/action/**`, 관련 문서
+- 작업 요약: Calendar 카드에 `캘린더로 보내기` 액션을 추가하고, `ACTION_INSERT` + Calendar Events URI + title/description/location/begin/end/all-day extra로 검토한 일정 초안을 전송합니다. Samsung Calendar package를 우선 사용하고 없으면 기본 Calendar insert intent로 fallback합니다. 시간이 없는 payload는 임의 시간을 넣지 않고 안내만 합니다.
+- 테스트/빌드: `.\gradlew.bat assembleDebug test --console=plain` 성공
+- 수동 확인: 실제 Samsung Calendar 설치 기기와 기본 Calendar fallback 환경에서 insert 화면은 추가 QA가 필요합니다.
+- 남은 이슈: Reminder export는 `T-520` 범위입니다.
+- PR: `https://github.com/swisdom784/SmartClipboardAI/compare/feat/T-510-notes-share-draft...feat/T-500-calendar-intent-draft?expand=1`

@@ -22,7 +22,6 @@
 
 ## 현재 Ready 작업
 
-- `T-500-calendar-intent-draft`: Samsung Calendar intent 전송
 - `T-520-reminder-intent-draft`: Samsung Reminder share 전송
 
-`T-510`에서 Samsung Notes 전송 흐름을 완료했습니다. 이제 다음 Ready 작업은 Calendar와 Reminder export입니다. 둘은 병렬 가능하지만, 단일 작업으로 진행한다면 날짜/시간 payload 검증이 필요한 `T-500`을 먼저 처리하는 것을 추천합니다.
+`T-500`에서 Samsung Calendar 전송 흐름을 완료했습니다. 이제 다음 Ready 작업은 `T-520-reminder-intent-draft` 하나입니다.
