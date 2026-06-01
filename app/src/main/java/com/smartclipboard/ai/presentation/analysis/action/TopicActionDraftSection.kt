@@ -37,6 +37,7 @@ fun TopicActionDraftSection(
     state: TopicActionDraftUiState,
     modifier: Modifier = Modifier,
     onEditAction: (Long, String, String) -> Unit = { _, _, _ -> },
+    onExportAction: (TopicActionCardUiState) -> Unit = {},
     onCompleteAction: (Long) -> Unit = {},
     onCompleteAll: () -> Unit = {},
     onCloseKeepingIncomplete: () -> Unit = {}
@@ -82,6 +83,7 @@ fun TopicActionDraftSection(
                             body = card.body
                         )
                     },
+                    onExport = { onExportAction(card) },
                     onComplete = { onCompleteAction(card.id) }
                 )
             }
@@ -142,6 +144,7 @@ private fun EmptyActionDraftRow() {
 private fun TopicActionDraftCard(
     card: TopicActionCardUiState,
     onEdit: () -> Unit,
+    onExport: () -> Unit,
     onComplete: () -> Unit
 ) {
     Surface(
@@ -200,6 +203,11 @@ private fun TopicActionDraftCard(
                 ) {
                     TextButton(onClick = onEdit) {
                         Text("수정")
+                    }
+                    if (card.canExportToNotes) {
+                        TextButton(onClick = onExport) {
+                            Text("노트로 보내기")
+                        }
                     }
                     TextButton(onClick = onComplete) {
                         Text("완료")

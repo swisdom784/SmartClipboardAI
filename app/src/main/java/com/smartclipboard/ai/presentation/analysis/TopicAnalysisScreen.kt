@@ -1,5 +1,6 @@
 package com.smartclipboard.ai.presentation.analysis
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -24,13 +25,17 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.smartclipboard.ai.export.notes.SamsungNotesExportLauncher
+import com.smartclipboard.ai.export.notes.SamsungNotesExportResult
 import com.smartclipboard.ai.presentation.analysis.action.TopicActionDraftSection
+import com.smartclipboard.ai.presentation.analysis.action.TopicActionCardUiState
 import com.smartclipboard.ai.presentation.analysis.action.TopicActionDraftUiState
 import com.smartclipboard.ai.presentation.analysis.action.TopicActionDraftViewModel
 import com.smartclipboard.ai.ui.theme.AppOutline
@@ -47,6 +52,7 @@ fun TopicAnalysisRoute(
     actionViewModel: TopicActionDraftViewModel = hiltViewModel(),
     onClose: () -> Unit = {}
 ) {
+    val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val actionUiState by actionViewModel.uiState.collectAsStateWithLifecycle()
 
@@ -66,6 +72,32 @@ fun TopicAnalysisRoute(
         modifier = modifier,
         onRetry = viewModel::retry,
         onEditAction = actionViewModel::updateActionContent,
+        onExportAction = { card ->
+            when (
+                SamsungNotesExportLauncher.export(
+                    context = context,
+                    title = card.title,
+                    body = card.body
+                )
+            ) {
+                SamsungNotesExportResult.Started -> {
+                    Toast.makeText(context, "Samsung Notes로 보냅니다", Toast.LENGTH_SHORT).show()
+                    actionViewModel.markActionExported(card.id)
+                }
+
+                SamsungNotesExportResult.AppNotFound -> {
+                    Toast.makeText(context, "Samsung Notes를 찾을 수 없어요", Toast.LENGTH_SHORT).show()
+                }
+
+                SamsungNotesExportResult.EmptyContent -> {
+                    Toast.makeText(context, "보낼 내용이 없어요", Toast.LENGTH_SHORT).show()
+                }
+
+                SamsungNotesExportResult.Failed -> {
+                    Toast.makeText(context, "Samsung Notes로 보내지 못했어요", Toast.LENGTH_SHORT).show()
+                }
+            }
+        },
         onCompleteAction = actionViewModel::completeAction,
         onCompleteAll = actionViewModel::completeAll,
         onClose = onClose
@@ -79,6 +111,7 @@ fun TopicAnalysisScreen(
     modifier: Modifier = Modifier,
     onRetry: () -> Unit = {},
     onEditAction: (Long, String, String) -> Unit = { _, _, _ -> },
+    onExportAction: (TopicActionCardUiState) -> Unit = {},
     onCompleteAction: (Long) -> Unit = {},
     onCompleteAll: () -> Unit = {},
     onClose: () -> Unit = {}
@@ -97,6 +130,7 @@ fun TopicAnalysisScreen(
         TopicActionDraftSection(
             state = actionState,
             onEditAction = onEditAction,
+            onExportAction = onExportAction,
             onCompleteAction = onCompleteAction,
             onCompleteAll = onCompleteAll,
             onCloseKeepingIncomplete = onClose

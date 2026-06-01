@@ -271,3 +271,14 @@
 - 수동 확인: 실제 기기에서 분석 완료 후 초안 카드, 수정 dialog, 완료 접힘 애니메이션, 뒤로가기 dialog는 추가 QA가 필요합니다.
 - 남은 이슈: 실제 Samsung Notes/Calendar/Reminder 인텐트 전송은 `T-500`, `T-510`, `T-520` 범위입니다.
 - PR: `https://github.com/swisdom784/SmartClipboardAI/compare/feat/T-400-topic-analysis-draft...feat/T-410-topic-action-draft?expand=1`
+
+### 2026-06-01 / T-510-notes-share-draft / Codex
+
+- Branch: `feat/T-510-notes-share-draft`
+- Status: Samsung Notes share 전송 구현 완료
+- 변경 파일: `app/src/main/java/com/smartclipboard/ai/export/notes/**`, `app/src/main/java/com/smartclipboard/ai/presentation/analysis/**`, `app/src/test/java/com/smartclipboard/ai/export/notes/**`, `app/src/test/java/com/smartclipboard/ai/presentation/analysis/action/**`, 관련 문서
+- 작업 요약: NOTE 카드에 `노트로 보내기` 액션을 추가하고, `ACTION_SEND` + `text/plain` + `Intent.EXTRA_TEXT` + Samsung Notes package 지정으로 검토한 노트 초안을 전송합니다. Samsung Notes 실행이 시작되면 해당 action을 `EXPORTED`로 표시하고 완료 카드처럼 접습니다.
+- 테스트/빌드: `.\gradlew.bat assembleDebug test --console=plain` 성공
+- 수동 확인: 실제 Samsung Notes 설치 기기에서 공유 수신 화면과 미설치 fallback Toast는 추가 QA가 필요합니다.
+- 남은 이슈: Calendar/Reminder export는 `T-500`, `T-520` 범위입니다.
+- PR: `https://github.com/swisdom784/SmartClipboardAI/compare/feat/T-410-topic-action-draft...feat/T-510-notes-share-draft?expand=1`

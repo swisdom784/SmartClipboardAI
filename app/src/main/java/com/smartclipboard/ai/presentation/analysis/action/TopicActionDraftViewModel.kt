@@ -66,6 +66,13 @@ class TopicActionDraftViewModel @Inject constructor(
         }
     }
 
+    fun markActionExported(actionId: Long) {
+        val action = actions.value.firstOrNull { it.id == actionId } ?: return
+        viewModelScope.launch {
+            actionDraftUseCase.markActionExported(action)
+        }
+    }
+
     fun completeAll() {
         val currentTopicId = topicId.value
         if (currentTopicId <= 0L) {

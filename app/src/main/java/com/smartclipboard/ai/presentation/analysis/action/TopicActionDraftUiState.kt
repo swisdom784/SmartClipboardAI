@@ -18,6 +18,7 @@ data class TopicActionCardUiState(
     val title: String,
     val body: String,
     val previewText: String,
+    val canExportToNotes: Boolean,
     val isCollapsed: Boolean,
     val isCompleted: Boolean
 )
@@ -31,7 +32,7 @@ object TopicActionDraftUiStateMapper {
         )
         val cards = sorted.map { action -> action.toCardUiState() }
         val completedTypes = sorted
-            .filter { it.status == TopicActionStatus.COMPLETED }
+            .filter { it.status.isDoneStatus() }
             .map { it.type }
             .toSet()
         val allRequiredCompleted = REQUIRED_TYPES.all { it in completedTypes }
@@ -48,7 +49,7 @@ object TopicActionDraftUiStateMapper {
     }
 
     private fun TopicAction.toCardUiState(): TopicActionCardUiState {
-        val isCompleted = status == TopicActionStatus.COMPLETED
+        val isCompleted = status.isDoneStatus()
         return TopicActionCardUiState(
             id = id,
             type = type,
@@ -57,6 +58,7 @@ object TopicActionDraftUiStateMapper {
             title = title,
             body = body,
             previewText = previewText.compactPreview(),
+            canExportToNotes = type == TopicActionType.NOTE && !isCompleted,
             isCollapsed = isCompleted,
             isCompleted = isCompleted
         )
@@ -91,6 +93,10 @@ object TopicActionDraftUiStateMapper {
             TopicActionStatus.EXPORTED -> "전송됨"
             TopicActionStatus.DISMISSED -> "보류"
         }
+    }
+
+    private fun TopicActionStatus.isDoneStatus(): Boolean {
+        return this == TopicActionStatus.COMPLETED || this == TopicActionStatus.EXPORTED
     }
 
     private fun String.compactPreview(): String {
