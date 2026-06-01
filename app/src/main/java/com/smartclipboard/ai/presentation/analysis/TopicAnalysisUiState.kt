@@ -9,7 +9,8 @@ data class TopicAnalysisUiState(
     val summary: String = "선택한 자료를 분석합니다.",
     val evidence: List<String> = emptyList(),
     val isRunning: Boolean = false,
-    val canRetry: Boolean = false
+    val canRetry: Boolean = false,
+    val isDone: Boolean = false
 )
 
 object TopicAnalysisUiStateMapper {
@@ -37,7 +38,8 @@ object TopicAnalysisUiStateMapper {
                 topicId = topicId,
                 statusLabel = "분석 완료",
                 summary = latest.summary.orEmpty(),
-                evidence = latest.evidence
+                evidence = latest.evidence,
+                isDone = true
             )
             TopicAnalysisStatus.FAILED -> TopicAnalysisUiState(
                 topicId = topicId,

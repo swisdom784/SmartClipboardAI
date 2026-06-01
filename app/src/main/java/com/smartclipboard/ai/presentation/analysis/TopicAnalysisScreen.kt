@@ -30,6 +30,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.smartclipboard.ai.presentation.analysis.action.TopicActionDraftSection
+import com.smartclipboard.ai.presentation.analysis.action.TopicActionDraftUiState
+import com.smartclipboard.ai.presentation.analysis.action.TopicActionDraftViewModel
 import com.smartclipboard.ai.ui.theme.AppOutline
 import com.smartclipboard.ai.ui.theme.AppSecondaryText
 import com.smartclipboard.ai.ui.theme.BlueSoft
@@ -41,18 +44,30 @@ fun TopicAnalysisRoute(
     topicId: Long,
     modifier: Modifier = Modifier,
     viewModel: TopicAnalysisViewModel = hiltViewModel(),
+    actionViewModel: TopicActionDraftViewModel = hiltViewModel(),
     onClose: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val actionUiState by actionViewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(topicId) {
         viewModel.start(topicId)
+        actionViewModel.start(topicId)
+    }
+    LaunchedEffect(topicId, uiState.isDone) {
+        if (uiState.isDone) {
+            actionViewModel.ensureDrafts(topicId)
+        }
     }
 
     TopicAnalysisScreen(
         state = uiState,
+        actionState = actionUiState,
         modifier = modifier,
         onRetry = viewModel::retry,
+        onEditAction = actionViewModel::updateActionContent,
+        onCompleteAction = actionViewModel::completeAction,
+        onCompleteAll = actionViewModel::completeAll,
         onClose = onClose
     )
 }
@@ -60,8 +75,12 @@ fun TopicAnalysisRoute(
 @Composable
 fun TopicAnalysisScreen(
     state: TopicAnalysisUiState,
+    actionState: TopicActionDraftUiState = TopicActionDraftUiState(),
     modifier: Modifier = Modifier,
     onRetry: () -> Unit = {},
+    onEditAction: (Long, String, String) -> Unit = { _, _, _ -> },
+    onCompleteAction: (Long) -> Unit = {},
+    onCompleteAll: () -> Unit = {},
     onClose: () -> Unit = {}
 ) {
     Column(
@@ -75,6 +94,13 @@ fun TopicAnalysisScreen(
         TopicAnalysisStatusCard(state = state)
         TopicAnalysisSummaryCard(state = state)
         TopicAnalysisEvidenceSection(evidence = state.evidence)
+        TopicActionDraftSection(
+            state = actionState,
+            onEditAction = onEditAction,
+            onCompleteAction = onCompleteAction,
+            onCompleteAll = onCompleteAll,
+            onCloseKeepingIncomplete = onClose
+        )
         if (state.canRetry) {
             Button(
                 onClick = onRetry,

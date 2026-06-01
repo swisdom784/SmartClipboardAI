@@ -22,6 +22,8 @@
 
 ## 현재 Ready 작업
 
-- `T-410-topic-action-draft`: TopicAction 초안 생성 및 검토 상태
+- `T-500-calendar-intent-draft`: Samsung Calendar intent 전송
+- `T-510-notes-share-draft`: Samsung Notes share 전송
+- `T-520-reminder-intent-draft`: Samsung Reminder share 전송
 
-`T-400`에서 TopicAnalysis 생성과 분석 화면 흐름을 완료했습니다. 이제 다음 Ready 작업은 Notes/Calendar/Reminder 카드 초안을 만드는 `T-410`입니다.
+`T-410`에서 Notes/Calendar/Reminder 검토 카드 초안을 완료했습니다. 이제 다음 Ready 작업은 각 Samsung 기본 앱으로 보내는 export 흐름입니다. 셋은 병렬 가능하지만, 단일 작업으로 진행한다면 가장 단순한 `T-510`을 먼저 추천합니다.

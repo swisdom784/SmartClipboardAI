@@ -6,11 +6,11 @@
 
 ## 작업 상태
 
-- Status: Not Ready
+- Status: Ready
 - Owner: 미배정
 - Branch: `feat/T-520-reminder-intent-draft`
 - Depends on: `T-410-topic-action-draft`, `T-050-permission-and-manifest-baseline`
-- Blocked by: `T-410` 미완료
+- Blocked by: 없음
 - Ready criteria: Reminder payload와 Samsung Reminder package query가 확정됨
 - Can run in parallel with: `T-500`, `T-510`
 - Cannot run with: `T-050` Manifest 변경 작업
