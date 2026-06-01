@@ -25,6 +25,8 @@ data class TopicSelectableDataItem(
 )
 
 object TopicDataSelectionUiStateMapper {
+    private const val MAX_SELECTABLE_ITEMS = 200
+
     fun map(
         topicId: Long,
         allItems: List<DataItem>,
@@ -39,6 +41,7 @@ object TopicDataSelectionUiStateMapper {
                     .thenByDescending { it.capturedAtMillis }
                     .thenByDescending { it.id }
             )
+            .take(MAX_SELECTABLE_ITEMS)
             .map { item ->
                 item.toSelectableDataItem(
                     isSelected = item.id in normalizedSelectedIds

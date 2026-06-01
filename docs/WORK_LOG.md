@@ -308,10 +308,21 @@
 ### 2026-06-01 / T-900-qa-build-test / Codex
 
 - Branch: `test/T-900-qa-build-test`
-- Status: 자동 검증 통과, 실제 기기 QA blocked
+- Status: 실제 기기 smoke QA 및 대량 자료 OOM fix 완료
 - 변경 파일: `docs/QA_REPORT.md`, `docs/IMPLEMENTATION_PLAN.md`, `docs/WORK_LOG.md`, `docs/tasks/README.md`, `docs/tasks/T-900-qa-build-test.md`
 - 작업 요약: MVP end-to-end 수동 QA 체크리스트와 known issue를 `docs/QA_REPORT.md`에 정리했습니다. Debug APK 산출물, SHA-256, 자동 빌드/테스트 결과, adb 연결 상태를 기록했습니다.
 - 테스트/빌드: `git diff --check` 성공, `.\gradlew.bat assembleDebug test --console=plain` 성공
 - 수동 확인: `adb devices` 결과 연결된 device/emulator가 없어 실제 설치, Share/Tile/MediaStore/SAF/Gemini/Samsung 앱 전송 수동 QA는 미실행
 - 남은 이슈: Android device/emulator 연결, Gemini key 설정, Galaxy 기기 Samsung 앱 handoff 확인 필요
+- PR: 브랜치 push 후 PR URL 제공 예정
+
+### 2026-06-01 / T-900-qa-build-test / Codex
+
+- Branch: `test/T-900-qa-build-test`
+- Status: 완료
+- 변경 파일: `app/src/main/java/com/smartclipboard/ai/presentation/topic/selection/TopicDataSelectionUiState.kt`, `app/src/test/java/com/smartclipboard/ai/presentation/topic/selection/TopicDataSelectionUiStateMapperTest.kt`, `docs/QA_REPORT.md`, `docs/IMPLEMENTATION_PLAN.md`, `docs/WORK_LOG.md`, `docs/tasks/README.md`, `docs/tasks/T-900-qa-build-test.md`
+- 작업 요약: `SM-S911N` 실기기에 APK를 설치하고 Home 실행, Share Target 링크 저장, MediaStore 새 스크린샷 수집, Home Topic 생성, Topic 자료 선택 진입을 smoke test했습니다. 실기기 DB에 약 1.9만 개 자료가 있을 때 Topic 자료 선택 화면이 OOM으로 종료되는 문제를 발견해 selectable item을 200개로 제한하고 회귀 테스트를 추가했습니다.
+- 테스트/빌드: RED 확인 후 `.\gradlew.bat testDebugUnitTest --console=plain` 성공, `.\gradlew.bat assembleDebug --console=plain` 성공. 최종 검증으로 `.\gradlew.bat assembleDebug test --console=plain` 및 `git diff --check`를 실행합니다.
+- 수동 확인: 수정 APK 재설치 후 Topic 자료 선택 화면이 정상 렌더링되고 AndroidRuntime 크래시가 없음을 확인했습니다. Quick Settings Tile은 추가/클릭까지 확인했으나 ADB에서 클립보드 값을 주입하지 못해 실제 텍스트 저장은 손검증으로 남겼습니다.
+- 남은 이슈: Gemini end-to-end, SAF picker, Samsung Notes/Calendar/Reminder handoff, 권한 거부/부분 허용 UX는 `docs/QA_REPORT.md`의 known issue로 기록했습니다.
 - PR: 브랜치 push 후 PR URL 제공 예정

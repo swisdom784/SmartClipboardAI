@@ -63,6 +63,25 @@ class TopicDataSelectionUiStateMapperTest {
         assertEquals("분석에 사용할 자료를 선택하세요.", state.summary.subtitle)
     }
 
+    @Test
+    fun limitsSelectableItemsForLargeLibrariesWhileKeepingSelectedItems() {
+        val state = TopicDataSelectionUiStateMapper.map(
+            topicId = 7L,
+            allItems = (1L..250L).map { id ->
+                dataItem(
+                    id = id,
+                    type = DataItemType.IMAGE,
+                    capturedAtMillis = id
+                )
+            },
+            selectedDataItemIds = setOf(1L)
+        )
+
+        assertEquals(200, state.items.size)
+        assertTrue(state.items.any { it.id == 1L })
+        assertTrue(state.items.any { it.id == 250L })
+    }
+
     private fun dataItem(
         id: Long,
         type: DataItemType,

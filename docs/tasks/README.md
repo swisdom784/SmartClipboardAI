@@ -24,4 +24,4 @@
 
 현재 Ready 작업은 없습니다.
 
-`T-900`은 자동 빌드/테스트와 QA 리포트 작성까지 진행했지만, 연결된 Android device/emulator가 없어 수동 QA를 완료하지 못했습니다. 다음 진행을 위해서는 Android Studio 또는 실기기 연결이 필요합니다.
+MVP 계획의 task는 `T-900`까지 완료됐습니다. 남은 항목은 `docs/QA_REPORT.md`의 known issue이며, 프로젝트 오너가 별도 task로 승격하기 전까지 Codex가 임의로 새 작업을 시작하지 않습니다.
