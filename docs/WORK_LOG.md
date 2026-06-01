@@ -260,3 +260,14 @@
 - 수동 확인: 실제 Gemini key 네트워크 호출과 기기 화면 이동은 추가 QA가 필요합니다. 단위 테스트는 fake Gemini client로 검증했습니다.
 - 남은 이슈: Notes/Calendar/Reminder 카드 초안과 수정/완료 UX는 `T-410-topic-action-draft` 범위입니다.
 - PR: 브랜치 push 후 PR URL 제공 예정
+
+### 2026-06-01 / T-410-topic-action-draft / Codex
+
+- Branch: `feat/T-410-topic-action-draft`
+- Status: TopicAction 초안 생성 및 검토 UX 구현 완료
+- 변경 파일: `app/src/main/java/com/smartclipboard/ai/presentation/analysis/action/**`, `app/src/main/java/com/smartclipboard/ai/presentation/analysis/TopicAnalysisScreen.kt`, `app/src/main/java/com/smartclipboard/ai/presentation/analysis/TopicAnalysisUiState.kt`, `app/src/test/java/com/smartclipboard/ai/presentation/analysis/action/**`, 관련 문서
+- 작업 요약: DONE 상태의 TopicAnalysis를 기준으로 삼성 노트/캘린더/리마인더용 `TopicAction` 초안을 생성하고, 분석 화면에서 수정/완료/즉시 완료/뒤로가기 완료 처리 UX를 제공했습니다. 완료된 카드는 세로 높이를 줄이고 내용 영역을 숨겨 사용자가 완료 상태를 눈으로 확인할 수 있게 했습니다.
+- 테스트/빌드: `.\gradlew.bat assembleDebug test --console=plain` 성공
+- 수동 확인: 실제 기기에서 분석 완료 후 초안 카드, 수정 dialog, 완료 접힘 애니메이션, 뒤로가기 dialog는 추가 QA가 필요합니다.
+- 남은 이슈: 실제 Samsung Notes/Calendar/Reminder 인텐트 전송은 `T-500`, `T-510`, `T-520` 범위입니다.
+- PR: `https://github.com/swisdom784/SmartClipboardAI/compare/feat/T-400-topic-analysis-draft...feat/T-410-topic-action-draft?expand=1`

@@ -168,6 +168,13 @@ Repository 계약:
 - `GeminiTopicAnalysisParser`: `summary`와 `dataItemId` 기반 evidence를 `TopicAnalysis` 입력으로 변환
 - `GeminiTopicAnalysisGenerator`: API key 확인 후 Gemini 호출, fake client로 단위 테스트 가능
 - `TopicAnalysisScreen`: 자료 선택 저장 후 자동으로 분석을 시작하고 실패 시 `다시 분석`을 제공
+
+`T-410` 기준 실행 초안은 외부 앱을 바로 실행하지 않고 `TopicAction` 카드로 먼저 저장/검토합니다.
+
+- `TopicActionDraftUseCase`: 완료된 `TopicAnalysis`에서 Notes/Calendar/Reminder 초안을 생성하고 중복 생성을 피함
+- `TopicActionDraftUiStateMapper`: 카드 preview, 완료 접힘 상태, 전체 완료 여부 계산
+- `TopicActionDraftSection`: 분석 화면 안에서 수정/완료/즉시 완료/뒤로가기 확인 흐름 제공
+- Samsung Notes/Calendar/Reminder 실제 intent 실행은 `T-500`, `T-510`, `T-520`에서 사용자 버튼 액션으로 연결
 - key가 비어 있거나 호출에 실패해도 Home 흐름이 깨지지 않도록 `SKIPPED` 또는 `FAILED` 세션으로 남깁니다.
 
 `T-160` 기준 저장 정리는 MediaStore 원본을 삭제하지 않는 soft-delete 정책입니다.
