@@ -5,6 +5,8 @@ import com.smartclipboard.ai.processing.enrichment.DataItemEnrichmentTrigger
 import com.smartclipboard.ai.processing.enrichment.PendingDataItemEnrichmentTrigger
 import com.smartclipboard.ai.processing.enrichment.RoomDataItemEnrichmentStore
 import com.smartclipboard.ai.processing.gemini.recommendation.BuildConfigGeminiApiKeyProvider
+import com.smartclipboard.ai.processing.gemini.analysis.GeminiTopicAnalysisGenerator
+import com.smartclipboard.ai.processing.gemini.analysis.TopicAnalysisGenerator
 import com.smartclipboard.ai.processing.gemini.recommendation.GeminiApiKeyProvider
 import com.smartclipboard.ai.processing.gemini.recommendation.GeminiTextClient
 import com.smartclipboard.ai.processing.gemini.recommendation.GeminiTopicRecommendationGenerator
@@ -67,6 +69,12 @@ abstract class ProcessingModule {
     abstract fun bindTopicRecommendationGenerator(
         generator: GeminiTopicRecommendationGenerator
     ): TopicRecommendationGenerator
+
+    @Binds
+    @Singleton
+    abstract fun bindTopicAnalysisGenerator(
+        generator: GeminiTopicAnalysisGenerator
+    ): TopicAnalysisGenerator
 
     @Binds
     @Singleton

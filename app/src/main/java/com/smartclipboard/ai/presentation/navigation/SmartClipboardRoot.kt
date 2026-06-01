@@ -23,6 +23,7 @@ import com.smartclipboard.ai.presentation.screens.HomeShellScreen
 import com.smartclipboard.ai.presentation.screens.InboxShellScreen
 import com.smartclipboard.ai.presentation.screens.LogsShellScreen
 import com.smartclipboard.ai.presentation.screens.SettingsShellScreen
+import com.smartclipboard.ai.presentation.screens.TopicAnalysisShellScreen
 import com.smartclipboard.ai.presentation.screens.TopicDataSelectionShellScreen
 
 @Composable
@@ -36,14 +37,18 @@ fun SmartClipboardRoot(
     var selectedTopicId by rememberSaveable {
         mutableStateOf<Long?>(null)
     }
+    var selectedAnalysisTopicId by rememberSaveable {
+        mutableStateOf<Long?>(null)
+    }
     val selectedDestination = TopLevelDestination.fromRoute(selectedDestinationRoute)
-    BackHandler(enabled = selectedTopicId != null) {
+    BackHandler(enabled = selectedTopicId != null || selectedAnalysisTopicId != null) {
         selectedTopicId = null
+        selectedAnalysisTopicId = null
     }
 
     Scaffold(
         bottomBar = {
-            if (selectedTopicId == null) {
+            if (selectedTopicId == null && selectedAnalysisTopicId == null) {
                 SmartClipboardBottomBar(
                     selectedDestination = selectedDestination,
                     onDestinationSelected = { selectedDestinationRoute = it.route }
@@ -52,11 +57,22 @@ fun SmartClipboardRoot(
         }
     ) { contentPadding ->
         val topicId = selectedTopicId
+        val analysisTopicId = selectedAnalysisTopicId
         if (topicId != null) {
             TopicDataSelectionShellScreen(
                 topicId = topicId,
                 modifier = Modifier.padding(contentPadding),
-                onClose = { selectedTopicId = null }
+                onClose = { selectedTopicId = null },
+                onSaved = { savedTopicId ->
+                    selectedTopicId = null
+                    selectedAnalysisTopicId = savedTopicId
+                }
+            )
+        } else if (analysisTopicId != null) {
+            TopicAnalysisShellScreen(
+                topicId = analysisTopicId,
+                modifier = Modifier.padding(contentPadding),
+                onClose = { selectedAnalysisTopicId = null }
             )
         } else {
             TopLevelDestinationContent(

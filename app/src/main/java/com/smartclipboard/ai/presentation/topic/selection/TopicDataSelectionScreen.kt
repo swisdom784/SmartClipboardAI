@@ -49,7 +49,8 @@ fun TopicDataSelectionRoute(
     topicId: Long,
     modifier: Modifier = Modifier,
     viewModel: TopicDataSelectionViewModel = hiltViewModel(),
-    onClose: () -> Unit = {}
+    onClose: () -> Unit = {},
+    onSaved: (Long) -> Unit = { onClose() }
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -58,7 +59,7 @@ fun TopicDataSelectionRoute(
     }
     LaunchedEffect(viewModel) {
         viewModel.selectionSavedEvents.collect {
-            onClose()
+            onSaved(topicId)
         }
     }
 

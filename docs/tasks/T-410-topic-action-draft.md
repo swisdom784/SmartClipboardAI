@@ -6,11 +6,11 @@ TopicAnalysis를 바탕으로 Notes/Calendar/Reminder 카드에 표시할 실행
 
 ## 작업 상태
 
-- Status: Not Ready
+- Status: Ready
 - Owner: 미배정
 - Branch: `feat/T-410-topic-action-draft`
 - Depends on: `T-400-topic-analysis-draft`
-- Blocked by: `T-400` 미완료
+- Blocked by: 없음
 - Ready criteria: TopicAnalysis 저장과 Action payload 모델이 준비됨
 - Can run in parallel with: `T-500`, `T-510`, `T-520`은 payload contract freeze 후 가능
 - Cannot run with: TopicAction model 변경 작업

@@ -511,20 +511,20 @@
 ### T-400-topic-analysis-draft
 
 - 작업명: TopicAnalysis 생성 흐름
-- Status: Ready
-- Owner: 미배정
+- Status: Done
+- Owner: Codex
 - 목적: Topic과 연결 DataItem을 Gemini에 보내 분석 요약과 근거를 생성합니다.
 - 담당 브랜치명: `feat/T-400-topic-analysis-draft`
 - 예상 수정 파일: `processing/gemini/analysis/`, `presentation/analysis/`, tests
 - 선행 task: `T-150-gemini-topic-recommendation`, `T-310-topic-data-selection-flow`
 - Blocked by: 없음
-- Ready criteria: Gemini manager, Topic/DataItem 연결, selection 결과가 준비됨
+- Ready criteria: 완료됨
 - 병렬 진행 가능 여부: 제한적 가능
 - Can run in parallel with: `T-410`은 DTO 계약 합의 후 가능
 - Cannot run with: Gemini manager 계약 변경 작업
 - 충돌 가능성이 있는 파일: TopicAnalysis model, Gemini prompt builder
 - 완료 기준: 분석 draft가 저장되고, 실패/재시도 상태가 기록됨
-- 검증 방법: fake Gemini analysis 테스트, 실제 key 수동 smoke test
+- 검증 방법: `TopicAnalysisUseCaseTest`, `GeminiTopicAnalysisParserTest`, `GeminiTopicAnalysisGeneratorTest`, `TopicAnalysisUiStateMapperTest`, `.\gradlew.bat assembleDebug test`
 - 작업자가 수정해도 되는 파일 범위: analysis generation package와 tests
 - 수정하면 안 되는 파일 범위: 외부 앱 export 구현
 - 관련 task 문서 경로: `docs/tasks/T-400-topic-analysis-draft.md`
@@ -532,13 +532,13 @@
 ### T-410-topic-action-draft
 
 - 작업명: TopicAction 초안 생성 및 검토 상태
-- Status: Not Ready
+- Status: Ready
 - Owner: 미배정
 - 목적: Notes/Calendar/Reminder로 보낼 초안을 사용자가 검토 가능한 카드 데이터로 만듭니다.
 - 담당 브랜치명: `feat/T-410-topic-action-draft`
 - 예상 수정 파일: `domain/model/TopicAction`, `presentation/analysis/action/`, tests
 - 선행 task: `T-400-topic-analysis-draft`
-- Blocked by: `T-400` 미완료
+- Blocked by: 없음
 - Ready criteria: TopicAnalysis 저장과 Action payload 모델이 준비됨
 - 병렬 진행 가능 여부: 제한적 가능
 - Can run in parallel with: `T-500`, `T-510`, `T-520`은 payload contract freeze 후 가능
@@ -640,9 +640,9 @@
 
 ## 지금 가능한 작업
 
-현재 바로 시작 가능한 task는 `T-400`입니다.
+현재 바로 시작 가능한 task는 `T-410`입니다.
 
-`T-010-agents-and-docs-setup`, `T-000-current-code-audit`, `T-020-architecture-baseline`, `T-030-data-model-audit`, `T-050-permission-and-manifest-baseline`, `T-040-navigation-baseline`, `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`, `T-150-gemini-topic-recommendation`, `T-160-storage-quota-cleanup`, `T-170-repository-integration`, `T-200-home-ux-redesign`, `T-210-data-list-filter-selection`, `T-220-save-feedback-bottom-sheet`, `T-230-logs-tab-flow`, `T-240-settings-ux-storage-permission`, `T-300-topic-create-flow`, `T-310-topic-data-selection-flow`는 완료된 상태입니다. 이제 선택된 Topic/DataItem을 Gemini 분석 입력으로 연결할 수 있습니다.
+`T-010-agents-and-docs-setup`, `T-000-current-code-audit`, `T-020-architecture-baseline`, `T-030-data-model-audit`, `T-050-permission-and-manifest-baseline`, `T-040-navigation-baseline`, `T-100-share-target-flow`, `T-110-quick-tile-flow`, `T-120-media-store-batch-query`, `T-130-storage-access-framework-picker`, `T-140-enrichment-ocr-og-pipeline`, `T-150-gemini-topic-recommendation`, `T-160-storage-quota-cleanup`, `T-170-repository-integration`, `T-200-home-ux-redesign`, `T-210-data-list-filter-selection`, `T-220-save-feedback-bottom-sheet`, `T-230-logs-tab-flow`, `T-240-settings-ux-storage-permission`, `T-300-topic-create-flow`, `T-310-topic-data-selection-flow`, `T-400-topic-analysis-draft`는 완료된 상태입니다. 이제 분석 결과를 Notes/Calendar/Reminder 검토 카드 초안으로 연결할 수 있습니다.
 
 ## 아직 시작하면 안 되는 작업 예시
 
@@ -650,4 +650,4 @@
 
 ## 추천 다음 작업
 
-1. `T-400-topic-analysis-draft`
+1. `T-410-topic-action-draft`

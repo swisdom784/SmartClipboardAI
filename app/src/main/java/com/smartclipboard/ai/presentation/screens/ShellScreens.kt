@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import com.smartclipboard.ai.presentation.home.HomeRoute
 import com.smartclipboard.ai.presentation.inbox.InboxRoute
 import com.smartclipboard.ai.presentation.logs.LogsRoute
+import com.smartclipboard.ai.presentation.analysis.TopicAnalysisRoute
 import com.smartclipboard.ai.presentation.settings.SettingsRoute
 import com.smartclipboard.ai.presentation.topic.selection.TopicDataSelectionRoute
 
@@ -67,21 +68,27 @@ fun TopicCreateShellScreen(modifier: Modifier = Modifier) {
 fun TopicDataSelectionShellScreen(
     topicId: Long,
     modifier: Modifier = Modifier,
-    onClose: () -> Unit = {}
+    onClose: () -> Unit = {},
+    onSaved: (Long) -> Unit = { onClose() }
 ) {
     TopicDataSelectionRoute(
         topicId = topicId,
         modifier = modifier,
-        onClose = onClose
+        onClose = onClose,
+        onSaved = onSaved
     )
 }
 
 @Composable
-fun TopicAnalysisShellScreen(modifier: Modifier = Modifier) {
-    ShellScreen(
-        title = "AI 초안",
-        subtitle = "검토 후 실행",
-        modifier = modifier
+fun TopicAnalysisShellScreen(
+    topicId: Long,
+    modifier: Modifier = Modifier,
+    onClose: () -> Unit = {}
+) {
+    TopicAnalysisRoute(
+        topicId = topicId,
+        modifier = modifier,
+        onClose = onClose
     )
 }
 
