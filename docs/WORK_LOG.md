@@ -249,3 +249,14 @@
 - 수동 확인: 실제 기기에서 Home 입력/추천 수락 후 자료 선택 화면 이동과 저장 후 닫힘은 추가 QA가 필요합니다.
 - 남은 이슈: TopicAnalysis 생성과 Gemini 분석 입력 구성은 `T-400-topic-analysis-draft` 범위입니다.
 - PR: 브랜치 push 후 PR URL 제공 예정
+
+### 2026-06-01 / T-400-topic-analysis-draft / Codex
+
+- Branch: `feat/T-400-topic-analysis-draft`
+- Status: TopicAnalysis 생성 및 분석 화면 흐름 구현 완료
+- 변경 파일: `app/src/main/java/com/smartclipboard/ai/processing/gemini/analysis/**`, `app/src/main/java/com/smartclipboard/ai/presentation/analysis/**`, `ProcessingModule`, `SmartClipboardRoot`, `ShellScreens`, `TopicDataSelectionScreen`, 관련 테스트, 관련 문서
+- 작업 요약: 선택된 Topic/DataItem을 Gemini 분석 입력으로 구성하고 `TopicAnalysis`를 `RUNNING/DONE/FAILED` 상태로 저장합니다. Gemini 추천과 같은 API key/client를 재사용하되 분석 전용 prompt/parser/generator로 분리했습니다. 자료 선택 저장 후 분석 화면으로 이동하고, 화면 진입 시 분석을 자동 시작하며 실패 시 `다시 분석`을 제공합니다.
+- 테스트/빌드: TDD RED로 `TopicAnalysisUseCase`, Gemini parser/generator, UI state mapper 부재 실패를 확인한 뒤 구현했습니다. 관련 단위 테스트 성공. PR 전 전체 검증으로 `.\gradlew.bat assembleDebug test`를 실행합니다.
+- 수동 확인: 실제 Gemini key 네트워크 호출과 기기 화면 이동은 추가 QA가 필요합니다. 단위 테스트는 fake Gemini client로 검증했습니다.
+- 남은 이슈: Notes/Calendar/Reminder 카드 초안과 수정/완료 UX는 `T-410-topic-action-draft` 범위입니다.
+- PR: 브랜치 push 후 PR URL 제공 예정

@@ -22,6 +22,6 @@
 
 ## 현재 Ready 작업
 
-- `T-400-topic-analysis-draft`: TopicAnalysis 생성 흐름
+- `T-410-topic-action-draft`: TopicAction 초안 생성 및 검토 상태
 
-`T-310`에서 Topic에 사용할 자료 선택과 저장 흐름을 완료했습니다. 이제 다음 Ready 작업은 선택된 Topic/DataItem을 Gemini 분석 입력으로 연결하는 `T-400`입니다.
+`T-400`에서 TopicAnalysis 생성과 분석 화면 흐름을 완료했습니다. 이제 다음 Ready 작업은 Notes/Calendar/Reminder 카드 초안을 만드는 `T-410`입니다.

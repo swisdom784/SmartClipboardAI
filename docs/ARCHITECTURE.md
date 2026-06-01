@@ -160,6 +160,14 @@ Repository 계약:
 - `GeminiRecommendationPromptBuilder`: 세부 실행 버튼이 아니라 `최근 자료 정리`, `새 자료 다시 보기`, `AI 다시 분석` 같은 흐름형 추천을 요청
 - `HttpGeminiTextClient`: `BuildConfig.GEMINI_API_KEY`로 주입된 key를 사용해 Gemini REST `generateContent` 호출
 - `GeminiRecommendationParser`: 모델 응답 JSON을 `TopicRecommendationCandidate`로 변환
+
+`T-400` 기준 Topic 분석은 추천 흐름과 같은 Gemini client/key provider를 재사용하되, 분석 전용 prompt/parser/generator로 분리합니다.
+
+- `TopicAnalysisUseCase`: Topic과 연결 DataItem을 읽어 분석 실행, `RUNNING/DONE/FAILED` 상태 저장
+- `GeminiTopicAnalysisPromptBuilder`: 선택된 자료만 근거로 한국어 요약과 evidence JSON을 요청
+- `GeminiTopicAnalysisParser`: `summary`와 `dataItemId` 기반 evidence를 `TopicAnalysis` 입력으로 변환
+- `GeminiTopicAnalysisGenerator`: API key 확인 후 Gemini 호출, fake client로 단위 테스트 가능
+- `TopicAnalysisScreen`: 자료 선택 저장 후 자동으로 분석을 시작하고 실패 시 `다시 분석`을 제공
 - key가 비어 있거나 호출에 실패해도 Home 흐름이 깨지지 않도록 `SKIPPED` 또는 `FAILED` 세션으로 남깁니다.
 
 `T-160` 기준 저장 정리는 MediaStore 원본을 삭제하지 않는 soft-delete 정책입니다.
