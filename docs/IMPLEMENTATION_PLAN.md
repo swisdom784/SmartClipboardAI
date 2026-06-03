@@ -643,8 +643,8 @@
 ### T-910-gemini-key-diagnostics
 
 - 작업명: Gemini key 검증과 실패 진단 UX
-- Status: Ready
-- Owner: Unassigned
+- Status: Done
+- Owner: Codex
 - 목적: `local.properties` 또는 BuildConfig에 key가 있어도 invalid/권한 문제일 때 앱이 조용히 실패하지 않고 Settings/Home에서 확인 가능한 상태를 제공한다.
 - 담당 브랜치명: `feat/T-910-gemini-key-diagnostics`
 - 예상 수정 파일: `processing/gemini/**`, `presentation/settings/**`, `presentation/home/**`, tests, docs
@@ -726,17 +726,17 @@
 
 ## 지금 가능한 작업
 
-현재 바로 시작 가능한 task는 `T-910-gemini-key-diagnostics`, `T-930-topic-selection-large-library-ux`입니다.
+현재 바로 시작 가능한 task는 `T-930-topic-selection-large-library-ux`입니다.
 
 MVP 계획에 포함된 task는 `T-900`까지 모두 완료 처리했습니다. 추가 QA에서 Gemini key invalid와 대량 자료 선택 UX 문제가 확인되어 Phase 9 후속 task를 만들었습니다.
 
 ## 아직 시작하면 안 되는 작업 예시
 
-- `T-920-gemini-recommendation-analysis-e2e`: `T-910` 완료와 유효한 Gemini key가 필요함
-- `T-940-device-manual-qa-suite`: `T-910`, `T-930` 완료와 ADB 연결 기기가 필요함
+- `T-920-gemini-recommendation-analysis-e2e`: 유효한 Gemini key가 필요함
+- `T-940-device-manual-qa-suite`: `T-930` 완료와 ADB 연결 기기가 필요함
 - 대규모 새 기능 추가: Phase 9 외 작업은 새 task 문서를 먼저 작성하고 승인받아야 함
 
 ## 추천 다음 작업
 
-1. `T-910-gemini-key-diagnostics`: Gemini key invalid/네트워크 실패를 앱 안에서 진단 가능하게 만듭니다.
-2. `T-930-topic-selection-large-library-ux`: 대량 자료 화면에서 저장/분석 진입이 막히지 않도록 UX를 안정화합니다.
+1. `T-930-topic-selection-large-library-ux`: 대량 자료 화면에서 저장/분석 진입이 막히지 않도록 UX를 안정화합니다.
+2. `T-920-gemini-recommendation-analysis-e2e`: 유효한 Gemini key가 준비된 뒤 실제 추천/분석을 확인합니다.

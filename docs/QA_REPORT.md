@@ -163,11 +163,11 @@
 | --- | --- | --- | --- | --- |
 | QA-001 | High | Fixed | 대량 MediaStore 자료에서 Topic 자료 선택 화면 진입 시 OOM 발생 | `QA-FIX-001`로 수정 및 재검증 |
 | QA-002 | Medium | Open | Quick Settings Tile은 추가/클릭까지 확인했지만 ADB에서 클립보드 값을 자동 주입하지 못함 | 실제 텍스트/링크 복사 후 Tile 클릭 손검증 |
-| QA-003 | High | Open | `local.properties`에 Gemini key 값은 있으나 직접 Gemini smoke test가 `API_KEY_INVALID`로 실패함 | 유효한 key 확인, 앱 내 진단 UX와 실패 표시 추가 |
+| QA-003 | High | Open | `local.properties`에 Gemini key 값은 있으나 직접 Gemini smoke test가 `API_KEY_INVALID`로 실패함. 앱 내 진단 UX는 `T-910`에서 추가됨 | 유효한 key 확인 후 `T-920` Gemini E2E 진행 |
 | QA-004 | Medium | Open | Samsung Notes/Calendar/Reminder handoff는 단위 테스트로 intent spec만 확인됨 | Galaxy 기기에서 실제 앱 전송 확인 |
 | QA-005 | Medium | Open | SAF picker, 권한 거부/부분 허용, Settings preset/custom 저장은 시스템 UI 손검증 필요 | Android Studio/실기기에서 수동 체크 |
 | QA-006 | High | Open | Topic 자료 선택 화면은 OOM은 해결됐지만 대량 자료에서 저장 버튼이 긴 목록 아래에 있어 실제 선택 저장/분석 진입이 어렵다 | sticky action bar, 검색/필터/페이징 UX 개선 |
-| QA-007 | Medium | Open | Home의 Gemini 추천 실패 상태가 사용자에게 노출되지 않고 READY 추천만 표시된다 | 추천 실패/건너뜀 상태를 조용하지만 확인 가능한 카드로 표시 |
+| QA-007 | Medium | Fixed | Home의 Gemini 추천 실패 상태가 사용자에게 노출되지 않고 READY 추천만 표시된다 | `T-910`에서 Home/Settings Gemini 상태 표시 추가 |
 
 ## 2026-06-01 추가 Gemini QA
 
@@ -178,6 +178,20 @@
 - 실기기 재설치/화면 QA: ADB 연결 해제로 중단
 
 메모: key 값은 문서와 로그에 기록하지 않습니다. 현재 상태에서 Gemini 성공 E2E는 진행할 수 없고, 앱은 invalid key를 명확히 진단하거나 사용자에게 복구 가능한 상태로 안내하는 UX가 필요합니다.
+
+## 2026-06-03 T-910 Gemini 진단 UX
+
+- Gemini 실패 원인 분류 추가: missing key, invalid key, network failure, API failure, parse failure
+- `HttpGeminiTextClient`가 HTTP error body 원문을 그대로 예외 메시지로 던지지 않고 안전한 실패 타입으로 변환하도록 수정
+- invalid key 추천 실패 시 `RecommendationSessionStatus.FAILED`와 `Gemini API key를 확인해 주세요` 메시지 저장
+- Home 자동 정리 패널에서 추천 실패/건너뜀 상태를 조용히 확인할 수 있도록 `HomeAiStatus` 추가
+- Settings Gemini 섹션에서 key 설정 여부와 마지막 추천 세션 상태를 표시
+- key 값은 UI, 문서, 로그에 기록하지 않음
+- 자동 빌드/테스트: `.\gradlew.bat assembleDebug test --console=plain` 성공
+- 직접 Gemini endpoint smoke test: 실패, HTTP 400
+- 실기기 설치/실행: `SM-S911N`에 `app-debug.apk` 설치 성공, MainActivity 실행 및 앱 프로세스 유지 확인
+- 실기기 Home 확인: `Gemini API key를 확인해 주세요`, `자료는 저장되어 있고, 다음 실행 때 다시 시도합니다.` 문구 표시 확인
+- 실기기 Settings 확인: `Gemini 연결 확인 필요`, `Gemini API key를 확인해 주세요` 문구 표시 확인
 
 ## Release Readiness
 

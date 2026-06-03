@@ -22,9 +22,8 @@
 
 ## 현재 Ready 작업
 
-현재 Ready 작업은 아래 2개입니다.
+현재 Ready 작업은 아래 1개입니다.
 
-- `T-910-gemini-key-diagnostics`
 - `T-930-topic-selection-large-library-ux`
 
-`T-920-gemini-recommendation-analysis-e2e`는 `T-910` 완료와 유효한 Gemini key가 필요합니다. `T-940-device-manual-qa-suite`는 `T-910`, `T-930` 완료와 ADB 연결 기기가 필요합니다.
+`T-920-gemini-recommendation-analysis-e2e`는 유효한 Gemini key가 필요합니다. `T-940-device-manual-qa-suite`는 `T-930` 완료와 ADB 연결 기기가 필요합니다.

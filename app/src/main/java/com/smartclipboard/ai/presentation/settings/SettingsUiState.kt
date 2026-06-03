@@ -1,5 +1,7 @@
 package com.smartclipboard.ai.presentation.settings
 
+import com.smartclipboard.ai.processing.gemini.recommendation.RecommendationSession
+
 data class SmartClipboardSettings(
     val collectionWindow: CollectionWindowOption = CollectionWindowOption.FOLLOW_LAST_SYNC,
     val customHours: Int = 24,
@@ -24,7 +26,8 @@ data class SettingsUiState(
     val customHours: Int = 24,
     val collectionWindowOptions: List<CollectionWindowOptionItem> = emptyList(),
     val storage: SettingsStorageUi = SettingsStorageUi(),
-    val permission: SettingsPermissionUi = SettingsPermissionUi()
+    val permission: SettingsPermissionUi = SettingsPermissionUi(),
+    val gemini: SettingsGeminiUi = SettingsGeminiUi()
 )
 
 data class CollectionWindowOptionItem(
@@ -53,6 +56,17 @@ data class SettingsPermissionUi(
     val subtitle: String = "",
     val actionLabel: String = "권한 허용",
     val showAction: Boolean = false
+)
+
+data class SettingsGeminiState(
+    val isApiKeyConfigured: Boolean = false,
+    val recommendationSession: RecommendationSession? = null
+)
+
+data class SettingsGeminiUi(
+    val title: String = "Gemini API key 필요",
+    val subtitle: String = "local.properties에 key를 설정하면 AI 추천과 분석을 사용할 수 있습니다.",
+    val needsAttention: Boolean = true
 )
 
 const val DEFAULT_QUOTA_BYTES: Long = 500L * 1024L * 1024L

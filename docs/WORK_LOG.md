@@ -337,3 +337,14 @@
 - 수동 확인: ADB 재설치 단계에서 연결된 device/emulator가 없어 실기기 재검증은 중단했습니다.
 - 남은 이슈: 유효한 Gemini key 확인, ADB 기기 재연결, Gemini 실패 상태의 사용자 표시, 대량 자료 선택 저장 UX, SAF/QS/Samsung handoff 수동 QA
 - PR: 브랜치 push 후 PR URL 제공 예정
+
+### 2026-06-03 / T-910-gemini-key-diagnostics / Codex
+
+- Branch: `feat/T-910-gemini-key-diagnostics`
+- Status: 완료
+- 변경 파일: `app/src/main/java/com/smartclipboard/ai/processing/gemini/recommendation/**`, `app/src/main/java/com/smartclipboard/ai/presentation/home/**`, `app/src/main/java/com/smartclipboard/ai/presentation/settings/**`, 관련 테스트, `docs/QA_REPORT.md`, `docs/IMPLEMENTATION_PLAN.md`, `docs/tasks/README.md`, `docs/tasks/T-910-gemini-key-diagnostics.md`
+- 작업 요약: Gemini HTTP 실패를 missing/invalid/network/API/parse failure로 분류하고, invalid key가 추천 실패 세션과 Home/Settings 상태로 드러나도록 연결했습니다. HTTP error body 원문과 key 값은 UI/문서/예외 메시지에 노출하지 않습니다.
+- 테스트/빌드: RED 확인 후 `.\gradlew.bat testDebugUnitTest --console=plain` 성공, 최종 `.\gradlew.bat assembleDebug test --console=plain` 성공
+- 수동 확인: 직접 Gemini endpoint smoke test는 key 값을 숨긴 상태로 재확인했고 HTTP 400으로 실패했습니다. `SM-S911N`에 APK 설치 후 Home/Settings에서 Gemini key 확인 문구가 표시되고 앱 프로세스가 유지됨을 확인했습니다.
+- 남은 이슈: 현재 key가 유효하지 않으면 Gemini 성공 E2E는 `T-920`에서 진행할 수 없음
+- PR: 브랜치 push 후 PR URL 제공 예정

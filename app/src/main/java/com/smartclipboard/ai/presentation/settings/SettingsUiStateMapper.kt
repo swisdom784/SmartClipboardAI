@@ -1,5 +1,6 @@
 package com.smartclipboard.ai.presentation.settings
 
+import com.smartclipboard.ai.processing.gemini.recommendation.RecommendationSessionStatus
 import com.smartclipboard.ai.storage.StorageUsageSummary
 import kotlin.math.roundToInt
 
@@ -7,7 +8,8 @@ object SettingsUiStateMapper {
     fun map(
         settings: SmartClipboardSettings,
         storageUsage: StorageUsageSummary,
-        permissionState: SettingsPermissionState
+        permissionState: SettingsPermissionState,
+        geminiState: SettingsGeminiState = SettingsGeminiState()
     ): SettingsUiState {
         return SettingsUiState(
             selectedCollectionWindowLabel = settings.collectionWindow.label,
@@ -20,7 +22,8 @@ object SettingsUiStateMapper {
                 )
             },
             storage = storageUsage.toStorageUi(settings.quotaBytes),
-            permission = permissionState.toPermissionUi()
+            permission = permissionState.toPermissionUi(),
+            gemini = geminiState.toGeminiUi()
         )
     }
 
@@ -55,6 +58,42 @@ object SettingsUiStateMapper {
                 title = "권한 필요",
                 subtitle = requiredPermissions.joinToString(", ").ifBlank { "이미지 접근 권한" },
                 showAction = true
+            )
+        }
+    }
+
+    private fun SettingsGeminiState.toGeminiUi(): SettingsGeminiUi {
+        if (!isApiKeyConfigured) {
+            return SettingsGeminiUi(
+                title = "Gemini API key 필요",
+                subtitle = "local.properties에 key를 설정하면 AI 추천과 분석을 사용할 수 있습니다.",
+                needsAttention = true
+            )
+        }
+
+        return when (recommendationSession?.status) {
+            RecommendationSessionStatus.READY -> SettingsGeminiUi(
+                title = "Gemini 준비됨",
+                subtitle = "이번 실행 추천 ${recommendationSession.recommendations.size}개를 검토할 수 있습니다.",
+                needsAttention = false
+            )
+
+            RecommendationSessionStatus.FAILED -> SettingsGeminiUi(
+                title = "Gemini 연결 확인 필요",
+                subtitle = recommendationSession.message ?: "추천과 분석을 준비하지 못했어요.",
+                needsAttention = true
+            )
+
+            RecommendationSessionStatus.SKIPPED -> SettingsGeminiUi(
+                title = "Gemini 대기 중",
+                subtitle = recommendationSession.message ?: "새 자료가 들어오면 다시 확인합니다.",
+                needsAttention = false
+            )
+
+            null -> SettingsGeminiUi(
+                title = "Gemini 준비됨",
+                subtitle = "AI 추천과 분석에 사용할 수 있습니다.",
+                needsAttention = false
             )
         }
     }
