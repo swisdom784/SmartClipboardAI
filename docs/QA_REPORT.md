@@ -171,7 +171,7 @@
 | --- | --- | --- | --- | --- |
 | QA-001 | High | Fixed | 대량 MediaStore 자료에서 Topic 자료 선택 화면 진입 시 OOM 발생 | `QA-FIX-001`로 수정 및 재검증 |
 | QA-002 | Medium | Open | Quick Settings Tile은 추가/클릭까지 확인했지만 ADB에서 클립보드 값을 자동 주입하지 못함 | 실제 텍스트/링크 복사 후 Tile 클릭 손검증 |
-| QA-003 | High | Open | `local.properties`에 Gemini key 값은 있으나 직접 Gemini smoke test가 `API_KEY_INVALID`로 실패함 | 유효한 key 확인, 앱 내 진단 UX와 실패 표시 추가 |
+| QA-003 | High | Fixed | `local.properties`에 Gemini key 값은 있으나 직접 Gemini smoke test가 `API_KEY_INVALID`로 실패함 | 새 key로 direct smoke 및 `T-920` Gemini E2E 통과 |
 | QA-004 | Medium | Open | Samsung Notes/Calendar/Reminder handoff는 단위 테스트로 intent spec만 확인됨 | Galaxy 기기에서 실제 앱 전송 확인 |
 | QA-005 | Medium | Open | SAF picker, 권한 거부/부분 허용, Settings preset/custom 저장은 시스템 UI 손검증 필요 | Android Studio/실기기에서 수동 체크 |
 | QA-006 | High | Fixed | Topic 자료 선택 화면은 OOM은 해결됐지만 대량 자료에서 저장 버튼이 긴 목록 아래에 있어 실제 선택 저장/분석 진입이 어렵다 | `QA-FIX-002`로 하단 고정 저장 바, 필터, 표시 범위 문구 추가 |
@@ -186,6 +186,20 @@
 - 실기기 재설치/화면 QA: ADB 연결 해제로 중단
 
 메모: key 값은 문서와 로그에 기록하지 않습니다. 현재 상태에서 Gemini 성공 E2E는 진행할 수 없고, 앱은 invalid key를 명확히 진단하거나 사용자에게 복구 가능한 상태로 안내하는 UX가 필요합니다.
+
+## 2026-06-03 T-920 Gemini 추천/분석 E2E
+
+- 비용 보호: direct smoke 1회와 앱 E2E에서 필요한 추천/분석 호출만 수행. 불필요한 반복 호출은 하지 않음
+- key 확인: `local.properties`의 `gemini.api.key` 존재 확인, key 값은 기록하지 않음
+- direct Gemini endpoint smoke test: 성공
+- BuildConfig 확인: `BuildConfig.GEMINI_API_KEY`가 local key와 일치함. key 값은 기록하지 않음
+- Debug APK: `.\gradlew.bat assembleDebug --console=plain` 성공 후 `SM-S911N`에 설치 성공
+- Home 추천 생성: `새 추천을 확인할 수 있습니다.`, `AI 추천`, `검토 필요` 표시 확인
+- 추천 수락: AI 추천 카드를 눌러 Topic 자료 선택 화면 진입 확인
+- 자료 선택: `사용된 자료 20개`, `최근 자료 200개 표시 · 전체 19060개`, 하단 `선택 저장` 확인
+- 분석 완료: 선택 저장 후 분석 화면에서 `분석 완료` 확인
+- action draft 생성: Notes/Calendar/Reminder 초안 카드와 전송 버튼 확인
+- DB 직접 조회: 기기 내 `sqlite3`가 없어 `run-as ... sqlite3` 조회 불가. 민감한 원문이 포함될 수 있는 DB pull은 이번 QA에서 수행하지 않음
 
 ## Release Readiness
 

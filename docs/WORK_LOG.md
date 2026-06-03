@@ -348,3 +348,14 @@
 - 수동 확인: `SM-S911N`에 APK 설치 후 Topic 자료 선택 화면에서 `최근 자료 200개 표시 · 전체 19036개`, 하단 고정 `선택 저장`, 이미지 필터 적용 후 `이미지 200개 표시 · 전체 19035개` 확인
 - 남은 이슈: 검색어 기반 검색은 아직 넣지 않았고, 현재 범위는 필터와 최근 200개 표시 정책입니다.
 - PR: 브랜치 push 후 PR URL 제공 예정
+
+### 2026-06-03 / T-920-gemini-recommendation-analysis-e2e / Codex
+
+- Branch: `test/T-920-gemini-recommendation-analysis-e2e`
+- Status: 완료
+- 변경 파일: `docs/QA_REPORT.md`, `docs/WORK_LOG.md`, `docs/tasks/T-920-gemini-recommendation-analysis-e2e.md`
+- 작업 요약: 새 Gemini key로 direct smoke가 성공함을 값 노출 없이 확인하고, `SM-S911N` 실기기에서 Home 추천 생성, AI 추천 수락, 자료 선택 저장, 분석 완료, Notes/Calendar/Reminder action draft 생성을 확인했습니다.
+- 테스트/빌드: `.\gradlew.bat assembleDebug --console=plain` 성공. 문서 커밋 전 최종 검증으로 `.\gradlew.bat assembleDebug test --console=plain` 성공
+- 수동 확인: Home `AI 추천`/`검토 필요`, 자료 선택 `사용된 자료 20개`, 분석 화면 `분석 완료`, Notes/Calendar/Reminder 초안 카드 확인
+- 남은 이슈: 기기 내 `sqlite3`가 없어 DB 상태 직접 조회는 수행하지 않았고, 민감한 DB pull은 하지 않았습니다. Samsung 앱 실제 handoff, SAF picker, QS Tile 실제 클립보드 저장은 `T-940` 범위로 남습니다.
+- PR: 브랜치 push 후 PR URL 제공 예정

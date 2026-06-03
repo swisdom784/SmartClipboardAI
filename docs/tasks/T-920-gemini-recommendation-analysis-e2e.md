@@ -6,11 +6,11 @@
 
 ## 작업 상태
 
-- Status: Not Ready
-- Owner: Unassigned
+- Status: Done
+- Owner: Codex
 - Branch: `test/T-920-gemini-recommendation-analysis-e2e`
 - Depends on: `T-910`
-- Blocked by: `T-910` 미완료, 유효한 Gemini key 필요, ADB 연결 기기 필요
+- Blocked by: 없음
 - Ready criteria: Gemini 진단이 성공 상태를 반환하고 실기기 연결 가능
 - Can run in parallel with: 없음
 - Cannot run with: Gemini diagnostics 또는 Topic selection UX 변경 작업
@@ -39,20 +39,20 @@
 
 ## 체크리스트
 
-- [ ] 코드 읽기
-- [ ] 관련 문서 확인
-- [ ] 선행 task 완료 여부 확인
-- [ ] 유효한 Gemini key 확인
-- [ ] 실기기 ADB 연결 확인
-- [ ] Home 추천 생성 확인
-- [ ] 추천 수락 Topic 생성 확인
-- [ ] 자료 선택 저장 확인
-- [ ] 분석 완료 확인
-- [ ] action draft 생성 확인
-- [ ] 빌드 확인
-- [ ] 테스트/수동 확인
-- [ ] 변경 요약 작성
-- [ ] PR 작성
+- [x] 코드 읽기
+- [x] 관련 문서 확인
+- [x] 선행 task 완료 여부 확인
+- [x] 유효한 Gemini key 확인
+- [x] 실기기 ADB 연결 확인
+- [x] Home 추천 생성 확인
+- [x] 추천 수락 Topic 생성 확인
+- [x] 자료 선택 저장 확인
+- [x] 분석 완료 확인
+- [x] action draft 생성 확인
+- [x] 빌드 확인
+- [x] 테스트/수동 확인
+- [x] 변경 요약 작성
+- [x] PR 작성
 
 ## 완료 기준
 
