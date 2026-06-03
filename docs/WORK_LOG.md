@@ -337,3 +337,14 @@
 - 수동 확인: ADB 재설치 단계에서 연결된 device/emulator가 없어 실기기 재검증은 중단했습니다.
 - 남은 이슈: 유효한 Gemini key 확인, ADB 기기 재연결, Gemini 실패 상태의 사용자 표시, 대량 자료 선택 저장 UX, SAF/QS/Samsung handoff 수동 QA
 - PR: 브랜치 push 후 PR URL 제공 예정
+
+### 2026-06-03 / T-930-topic-selection-large-library-ux / Codex
+
+- Branch: `feat/T-930-topic-selection-large-library-ux`
+- Status: 완료
+- 변경 파일: `app/src/main/java/com/smartclipboard/ai/presentation/topic/selection/**`, `app/src/test/java/com/smartclipboard/ai/presentation/topic/selection/TopicDataSelectionUiStateMapperTest.kt`, `docs/QA_REPORT.md`, `docs/WORK_LOG.md`, `docs/tasks/T-930-topic-selection-large-library-ux.md`
+- 작업 요약: 대량 자료 선택 화면에 필터 pill, 표시 범위 문구, 하단 고정 저장 바를 추가했습니다. 저장 시 현재 표시된 item 목록이 아니라 `selectedDataItemIds`를 사용하도록 바꿔 필터 밖의 기존 선택 자료가 유실되지 않게 했습니다.
+- 테스트/빌드: RED 확인 후 `.\gradlew.bat testDebugUnitTest --console=plain` 성공, `.\gradlew.bat assembleDebug --console=plain` 성공
+- 수동 확인: `SM-S911N`에 APK 설치 후 Topic 자료 선택 화면에서 `최근 자료 200개 표시 · 전체 19036개`, 하단 고정 `선택 저장`, 이미지 필터 적용 후 `이미지 200개 표시 · 전체 19035개` 확인
+- 남은 이슈: 검색어 기반 검색은 아직 넣지 않았고, 현재 범위는 필터와 최근 200개 표시 정책입니다.
+- PR: 브랜치 push 후 PR URL 제공 예정

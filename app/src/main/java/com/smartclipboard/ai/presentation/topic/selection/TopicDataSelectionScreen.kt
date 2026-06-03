@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -67,6 +68,7 @@ fun TopicDataSelectionRoute(
         state = uiState,
         modifier = modifier,
         onToggleItem = viewModel::toggleItem,
+        onFilterSelected = viewModel::selectFilter,
         onSave = viewModel::saveSelection,
         onClose = onClose
     )
@@ -77,31 +79,39 @@ fun TopicDataSelectionScreen(
     state: TopicDataSelectionUiState,
     modifier: Modifier = Modifier,
     onToggleItem: (Long) -> Unit = {},
+    onFilterSelected: (TopicDataSelectionFilter) -> Unit = {},
     onSave: () -> Unit = {},
     onClose: () -> Unit = {}
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(horizontal = 20.dp, vertical = 18.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        TopicDataSelectionHeader(onClose = onClose)
-        TopicDataSelectionSummaryCard(summary = state.summary)
-        TopicSelectableItemsSection(
-            items = state.items,
-            onToggleItem = onToggleItem
-        )
-        Button(
-            onClick = onSave,
-            enabled = !state.isSaving && state.topicId > 0L,
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier.fillMaxWidth()
+    Box(modifier = modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 20.dp, vertical = 18.dp)
+                .padding(bottom = 104.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Text(if (state.isSaving) "저장 중" else "선택 저장")
+            TopicDataSelectionHeader(onClose = onClose)
+            TopicDataSelectionSummaryCard(summary = state.summary)
+            TopicDataSelectionFilterRow(
+                options = state.filterOptions,
+                onFilterSelected = onFilterSelected
+            )
+            TopicSelectableItemsSection(
+                items = state.items,
+                displayLimitText = state.displayLimitText,
+                onToggleItem = onToggleItem
+            )
+            Spacer(modifier = Modifier.height(8.dp))
         }
-        Spacer(modifier = Modifier.height(8.dp))
+        SaveSelectionBar(
+            summary = state.summary,
+            isSaving = state.isSaving,
+            canSave = state.topicId > 0L,
+            onSave = onSave,
+            modifier = Modifier.align(Alignment.BottomCenter)
+        )
     }
 }
 
@@ -158,16 +168,78 @@ private fun TopicDataSelectionSummaryCard(summary: TopicDataSelectionSummary) {
 }
 
 @Composable
+private fun TopicDataSelectionFilterRow(
+    options: List<TopicDataSelectionFilterOption>,
+    onFilterSelected: (TopicDataSelectionFilter) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .horizontalScroll(rememberScrollState()),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        options.forEach { option ->
+            TopicDataSelectionFilterPill(
+                option = option,
+                onClick = { onFilterSelected(option.filter) }
+            )
+        }
+    }
+}
+
+@Composable
+private fun TopicDataSelectionFilterPill(
+    option: TopicDataSelectionFilterOption,
+    onClick: () -> Unit
+) {
+    Text(
+        text = option.label,
+        modifier = Modifier
+            .heightIn(min = 36.dp)
+            .background(
+                color = if (option.isSelected) BlueSoft else MaterialTheme.colorScheme.surface,
+                shape = RoundedCornerShape(8.dp)
+            )
+            .border(
+                width = 1.dp,
+                color = if (option.isSelected) SamsungBlue.copy(alpha = 0.28f) else AppOutline,
+                shape = RoundedCornerShape(8.dp)
+            )
+            .clickable(onClick = onClick)
+            .padding(horizontal = 12.dp, vertical = 9.dp),
+        style = MaterialTheme.typography.labelMedium,
+        color = if (option.isSelected) SamsungBlue else AppSecondaryText,
+        maxLines = 1
+    )
+}
+
+@Composable
 private fun TopicSelectableItemsSection(
     items: List<TopicSelectableDataItem>,
+    displayLimitText: String?,
     onToggleItem: (Long) -> Unit
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        Text(
-            text = "자료",
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.SemiBold
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.Bottom
+        ) {
+            Text(
+                text = "자료",
+                modifier = Modifier.weight(1f),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold
+            )
+            if (displayLimitText != null) {
+                Text(
+                    text = displayLimitText,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = AppSecondaryText,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+        }
         if (items.isEmpty()) {
             EmptyTopicDataSelectionRow()
         } else {
@@ -176,6 +248,52 @@ private fun TopicSelectableItemsSection(
                     item = item,
                     onClick = { onToggleItem(item.id) }
                 )
+            }
+        }
+    }
+}
+
+@Composable
+private fun SaveSelectionBar(
+    summary: TopicDataSelectionSummary,
+    isSaving: Boolean,
+    canSave: Boolean,
+    onSave: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp),
+        color = MaterialTheme.colorScheme.surface,
+        border = BorderStroke(1.dp, AppOutline),
+        modifier = modifier.fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = summary.title,
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Medium,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Text(
+                    text = summary.subtitle,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = AppSecondaryText,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+            Button(
+                onClick = onSave,
+                enabled = !isSaving && canSave,
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Text(if (isSaving) "저장 중" else "선택 저장")
             }
         }
     }

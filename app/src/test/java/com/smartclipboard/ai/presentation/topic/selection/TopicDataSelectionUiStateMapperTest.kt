@@ -82,9 +82,79 @@ class TopicDataSelectionUiStateMapperTest {
         assertTrue(state.items.any { it.id == 250L })
     }
 
+    @Test
+    fun exposesDisplayLimitTextForLargeLibraries() {
+        val state = TopicDataSelectionUiStateMapper.map(
+            topicId = 7L,
+            allItems = (1L..250L).map { id ->
+                dataItem(
+                    id = id,
+                    type = DataItemType.IMAGE,
+                    capturedAtMillis = id
+                )
+            },
+            selectedDataItemIds = emptySet()
+        )
+
+        assertEquals("최근 자료 200개 표시 · 전체 250개", state.displayLimitText)
+    }
+
+    @Test
+    fun filtersSelectableItemsByTypeAndSource() {
+        val imageState = TopicDataSelectionUiStateMapper.map(
+            topicId = 7L,
+            allItems = listOf(
+                dataItem(id = 1L, type = DataItemType.LINK),
+                dataItem(id = 2L, type = DataItemType.SCREENSHOT),
+                dataItem(id = 3L, type = DataItemType.TEXT)
+            ),
+            selectedDataItemIds = emptySet(),
+            selectedFilter = TopicDataSelectionFilter.IMAGE
+        )
+
+        assertEquals(TopicDataSelectionFilter.IMAGE, imageState.selectedFilter)
+        assertEquals(listOf("이미지"), imageState.items.map { it.typeLabel })
+        assertEquals(listOf(2L), imageState.items.map { it.id })
+
+        val sharedState = TopicDataSelectionUiStateMapper.map(
+            topicId = 7L,
+            allItems = listOf(
+                dataItem(id = 4L, type = DataItemType.LINK, source = DataItemSource.SHARE_TARGET),
+                dataItem(id = 5L, type = DataItemType.TEXT, source = DataItemSource.MANUAL)
+            ),
+            selectedDataItemIds = emptySet(),
+            selectedFilter = TopicDataSelectionFilter.SHARED
+        )
+
+        assertEquals(listOf(4L), sharedState.items.map { it.id })
+        assertEquals(
+            listOf("최근", "공유", "이미지", "링크", "텍스트", "파일"),
+            sharedState.filterOptions.map { it.label }
+        )
+    }
+
+    @Test
+    fun keepsSelectedIdsAndSummaryWhenSelectedItemIsOutsideCurrentFilter() {
+        val state = TopicDataSelectionUiStateMapper.map(
+            topicId = 7L,
+            allItems = listOf(
+                dataItem(id = 1L, type = DataItemType.IMAGE),
+                dataItem(id = 2L, type = DataItemType.LINK)
+            ),
+            selectedDataItemIds = setOf(1L),
+            selectedFilter = TopicDataSelectionFilter.LINK
+        )
+
+        assertEquals(setOf(1L), state.selectedDataItemIds)
+        assertEquals("사용된 자료 1개", state.summary.title)
+        assertEquals("이미지 1", state.summary.subtitle)
+        assertEquals(listOf(2L), state.items.map { it.id })
+    }
+
     private fun dataItem(
         id: Long,
         type: DataItemType,
+        source: DataItemSource = DataItemSource.MANUAL,
         capturedAtMillis: Long = id,
         textContent: String? = "item $id",
         displayName: String? = null,
@@ -93,7 +163,7 @@ class TopicDataSelectionUiStateMapperTest {
         return DataItem(
             id = id,
             type = type,
-            source = DataItemSource.MANUAL,
+            source = source,
             textContent = textContent,
             displayName = displayName,
             capturedAtMillis = capturedAtMillis,

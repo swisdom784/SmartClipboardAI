@@ -2,6 +2,7 @@ package com.smartclipboard.ai.presentation.topic.selection
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.smartclipboard.ai.domain.model.DataItem
 import com.smartclipboard.ai.domain.repository.DataRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -26,6 +27,7 @@ class TopicDataSelectionViewModel @Inject constructor(
 ) : ViewModel() {
     private val topicId = MutableStateFlow(0L)
     private val editedSelectedIds = MutableStateFlow<Set<Long>?>(null)
+    private val selectedFilter = MutableStateFlow(TopicDataSelectionFilter.RECENT)
     private val isSaving = MutableStateFlow(false)
     private val _selectionSavedEvents = MutableSharedFlow<Unit>()
 
@@ -40,18 +42,31 @@ class TopicDataSelectionViewModel @Inject constructor(
         }
     }
 
-    val uiState: StateFlow<TopicDataSelectionUiState> = combine(
+    private val selectionInputs = combine(
         topicId,
         repository.observeInboxItems(),
         linkedItems,
-        editedSelectedIds,
-        isSaving
-    ) { currentTopicId, allItems, selectedItems, editedIds, saving ->
-        val selectedIds = editedIds ?: selectedItems.map { it.id }.toSet()
-        TopicDataSelectionUiStateMapper.map(
+        editedSelectedIds
+    ) { currentTopicId, allItems, selectedItems, editedIds ->
+        TopicDataSelectionInputs(
             topicId = currentTopicId,
             allItems = allItems,
+            selectedItems = selectedItems,
+            editedSelectedIds = editedIds
+        )
+    }
+
+    val uiState: StateFlow<TopicDataSelectionUiState> = combine(
+        selectionInputs,
+        selectedFilter,
+        isSaving
+    ) { inputs, filter, saving ->
+        val selectedIds = inputs.editedSelectedIds ?: inputs.selectedItems.map { it.id }.toSet()
+        TopicDataSelectionUiStateMapper.map(
+            topicId = inputs.topicId,
+            allItems = inputs.allItems,
             selectedDataItemIds = selectedIds,
+            selectedFilter = filter,
             isSaving = saving
         )
     }
@@ -68,6 +83,11 @@ class TopicDataSelectionViewModel @Inject constructor(
         }
         this.topicId.value = topicId
         editedSelectedIds.value = null
+        selectedFilter.value = TopicDataSelectionFilter.RECENT
+    }
+
+    fun selectFilter(filter: TopicDataSelectionFilter) {
+        selectedFilter.value = filter
     }
 
     fun toggleItem(itemId: Long) {
@@ -75,7 +95,7 @@ class TopicDataSelectionViewModel @Inject constructor(
             return
         }
         val currentIds = editedSelectedIds.value
-            ?: uiState.value.items.filter { it.isSelected }.map { it.id }.toSet()
+            ?: uiState.value.selectedDataItemIds
         editedSelectedIds.value = if (itemId in currentIds) {
             currentIds - itemId
         } else {
@@ -85,9 +105,7 @@ class TopicDataSelectionViewModel @Inject constructor(
 
     fun saveSelection() {
         val currentTopicId = topicId.value
-        val selectedIds = uiState.value.items
-            .filter { it.isSelected }
-            .map { it.id }
+        val selectedIds = uiState.value.selectedDataItemIds.toList()
 
         viewModelScope.launch {
             isSaving.value = true
@@ -105,3 +123,10 @@ class TopicDataSelectionViewModel @Inject constructor(
         }
     }
 }
+
+private data class TopicDataSelectionInputs(
+    val topicId: Long,
+    val allItems: List<DataItem>,
+    val selectedItems: List<DataItem>,
+    val editedSelectedIds: Set<Long>?
+)

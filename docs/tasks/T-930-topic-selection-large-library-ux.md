@@ -6,8 +6,8 @@
 
 ## 작업 상태
 
-- Status: Ready
-- Owner: Unassigned
+- Status: Done
+- Owner: Codex
 - Branch: `feat/T-930-topic-selection-large-library-ux`
 - Depends on: `T-900`
 - Blocked by: 없음
@@ -39,17 +39,17 @@
 
 ## 체크리스트
 
-- [ ] 코드 읽기
-- [ ] 관련 문서 확인
-- [ ] 선행 task 완료 여부 확인
-- [ ] 대량 자료 UX 실패 테스트 작성
-- [ ] sticky action 또는 접근 가능한 저장 UX 구현
-- [ ] 필터/검색 상태 테스트 작성
-- [ ] 구현
-- [ ] 빌드 확인
-- [ ] 테스트/수동 확인
-- [ ] 변경 요약 작성
-- [ ] PR 작성
+- [x] 코드 읽기
+- [x] 관련 문서 확인
+- [x] 선행 task 완료 여부 확인
+- [x] 대량 자료 UX 실패 테스트 작성
+- [x] sticky action 또는 접근 가능한 저장 UX 구현
+- [x] 필터 상태 테스트 작성
+- [x] 구현
+- [x] 빌드 확인
+- [x] 테스트/수동 확인
+- [x] 변경 요약 작성
+- [x] PR 작성
 
 ## 완료 기준
 

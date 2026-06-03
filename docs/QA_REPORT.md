@@ -157,6 +157,14 @@
 - 회귀 테스트: `TopicDataSelectionUiStateMapperTest.limitsSelectableItemsForLargeLibrariesWhileKeepingSelectedItems`
 - 재검증: 수정 APK 설치 후 동일 Topic 카드 진입 시 자료 선택 화면 정상 렌더링, AndroidRuntime 크래시 없음
 
+### QA-FIX-002: 대량 자료 선택 화면의 저장 버튼 접근성과 표시 기준
+
+- 증상: 1.9만 개 수준의 `data_items`가 있는 기기에서 Topic 자료 선택 화면은 열리지만, 저장 버튼이 긴 목록 아래에만 있어 실제 선택 저장/분석 진입이 어렵고 200개 제한 기준이 화면에 드러나지 않음
+- 수정: 필터 pill(`최근`, `공유`, `이미지`, `링크`, `텍스트`, `파일`), 표시 범위 문구, 하단 고정 `선택 저장` 바를 추가
+- 저장 안정성: 현재 필터 밖에 있는 선택 자료도 `selectedDataItemIds`로 유지해 저장 대상에서 사라지지 않도록 수정
+- 회귀 테스트: `TopicDataSelectionUiStateMapperTest.exposesDisplayLimitTextForLargeLibraries`, `filtersSelectableItemsByTypeAndSource`, `keepsSelectedIdsAndSummaryWhenSelectedItemIsOutsideCurrentFilter`
+- 재검증: `SM-S911N` 실기기에서 Topic 자료 선택 화면 진입 후 `최근 자료 200개 표시 · 전체 19036개`, 하단 고정 `선택 저장` 확인. 이미지 필터 선택 후 `이미지 200개 표시 · 전체 19035개` 확인
+
 ## Known Issues / QA Blockers
 
 | ID | Severity | 상태 | 내용 | 다음 조치 |
@@ -166,7 +174,7 @@
 | QA-003 | High | Open | `local.properties`에 Gemini key 값은 있으나 직접 Gemini smoke test가 `API_KEY_INVALID`로 실패함 | 유효한 key 확인, 앱 내 진단 UX와 실패 표시 추가 |
 | QA-004 | Medium | Open | Samsung Notes/Calendar/Reminder handoff는 단위 테스트로 intent spec만 확인됨 | Galaxy 기기에서 실제 앱 전송 확인 |
 | QA-005 | Medium | Open | SAF picker, 권한 거부/부분 허용, Settings preset/custom 저장은 시스템 UI 손검증 필요 | Android Studio/실기기에서 수동 체크 |
-| QA-006 | High | Open | Topic 자료 선택 화면은 OOM은 해결됐지만 대량 자료에서 저장 버튼이 긴 목록 아래에 있어 실제 선택 저장/분석 진입이 어렵다 | sticky action bar, 검색/필터/페이징 UX 개선 |
+| QA-006 | High | Fixed | Topic 자료 선택 화면은 OOM은 해결됐지만 대량 자료에서 저장 버튼이 긴 목록 아래에 있어 실제 선택 저장/분석 진입이 어렵다 | `QA-FIX-002`로 하단 고정 저장 바, 필터, 표시 범위 문구 추가 |
 | QA-007 | Medium | Open | Home의 Gemini 추천 실패 상태가 사용자에게 노출되지 않고 READY 추천만 표시된다 | 추천 실패/건너뜀 상태를 조용하지만 확인 가능한 카드로 표시 |
 
 ## 2026-06-01 추가 Gemini QA
