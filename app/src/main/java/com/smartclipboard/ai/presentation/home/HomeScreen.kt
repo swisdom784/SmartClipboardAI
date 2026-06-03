@@ -120,8 +120,7 @@ fun HomeScreen(
             }
         )
         AutoStatusPanel(
-            summary = state.collectionSummary,
-            hasReviewableRecommendations = state.hasReviewableRecommendations
+            status = state.aiStatus
         )
         HomeTaskList(
             tasks = state.tasks,
@@ -197,8 +196,7 @@ private fun NewTaskInput(
 
 @Composable
 private fun AutoStatusPanel(
-    summary: HomeCollectionSummary,
-    hasReviewableRecommendations: Boolean
+    status: HomeAiStatus
 ) {
     Surface(
         shape = RoundedCornerShape(8.dp),
@@ -214,17 +212,17 @@ private fun AutoStatusPanel(
                 modifier = Modifier
                     .size(10.dp)
                     .clip(CircleShape)
-                    .background(if (hasReviewableRecommendations) SamsungBlue else AppSecondaryText.copy(alpha = 0.35f))
+                    .background(status.tone.toDotColor())
             )
             Spacer(modifier = Modifier.width(10.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = if (hasReviewableRecommendations) "새 추천을 확인할 수 있습니다." else summary.title,
+                    text = status.title,
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Medium
                 )
                 Text(
-                    text = summary.subtitle,
+                    text = status.subtitle,
                     style = MaterialTheme.typography.bodySmall,
                     color = AppSecondaryText,
                     maxLines = 1,
@@ -232,6 +230,15 @@ private fun AutoStatusPanel(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun HomeAiStatusTone.toDotColor(): Color {
+    return when (this) {
+        HomeAiStatusTone.IDLE -> AppSecondaryText.copy(alpha = 0.35f)
+        HomeAiStatusTone.ACTIVE -> SamsungBlue
+        HomeAiStatusTone.WARNING -> MaterialTheme.colorScheme.error
     }
 }
 

@@ -101,7 +101,7 @@ fun SettingsScreen(
             permission = state.permission,
             onRequestImagePermission = onRequestImagePermission
         )
-        GeminiSection()
+        GeminiSection(gemini = state.gemini)
         Spacer(modifier = Modifier.height(8.dp))
     }
 }
@@ -274,12 +274,25 @@ private fun PermissionSection(
 }
 
 @Composable
-private fun GeminiSection() {
+private fun GeminiSection(gemini: SettingsGeminiUi) {
     SettingsSurface {
-        SectionTitle(
-            title = "Gemini",
-            subtitle = "API 키는 로컬 설정을 사용합니다."
-        )
+        Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            SectionTitle(
+                title = "Gemini",
+                subtitle = gemini.title
+            )
+            Text(
+                text = gemini.subtitle,
+                style = MaterialTheme.typography.bodySmall,
+                color = if (gemini.needsAttention) {
+                    MaterialTheme.colorScheme.error
+                } else {
+                    AppSecondaryText
+                },
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
     }
 }
 

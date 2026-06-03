@@ -80,6 +80,28 @@ class GeminiTopicRecommendationManagerTest {
         assertEquals(session, store.currentSession.value)
     }
 
+    @Test
+    fun `invalid api key stores failed session with diagnostic message`() = runBlocking {
+        val store = InMemoryRecommendationSessionStore()
+        val manager = GeminiTopicRecommendationManager(
+            dataSource = FakeRecommendationDataSource(listOf(dataItem(id = 1L))),
+            generator = ThrowingTopicRecommendationGenerator(
+                GeminiRequestException(
+                    failure = GeminiFailure.InvalidApiKey,
+                    detailMessage = "Gemini API key is invalid"
+                )
+            ),
+            sessionStore = store,
+            nowMillis = { 5_000L }
+        )
+
+        val session = manager.refresh(limit = 10)
+
+        assertEquals(RecommendationSessionStatus.FAILED, session.status)
+        assertEquals("Gemini API key를 확인해 주세요", session.message)
+        assertEquals(session, store.currentSession.value)
+    }
+
     private fun dataItem(id: Long): DataItem {
         return DataItem(
             id = id,

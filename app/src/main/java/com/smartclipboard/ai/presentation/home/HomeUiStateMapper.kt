@@ -19,10 +19,12 @@ object HomeUiStateMapper {
 
         val topicTasks = state.activeTopics.map { topic -> topic.toTaskItem() }
         val materials = state.recentDataItems.map { item -> item.toMaterialItem() }
+        val collectionSummary = state.recentDataItems.toCollectionSummary()
 
         return HomeUiState(
             tasks = recommendationTasks + topicTasks,
-            collectionSummary = state.recentDataItems.toCollectionSummary(),
+            collectionSummary = collectionSummary,
+            aiStatus = state.recommendationSession.toAiStatus(collectionSummary),
             recentMaterials = materials
         )
     }
@@ -32,6 +34,34 @@ object HomeUiStateMapper {
             recommendations
         } else {
             emptyList()
+        }
+    }
+
+    private fun RecommendationSession?.toAiStatus(summary: HomeCollectionSummary): HomeAiStatus {
+        return when (this?.status) {
+            RecommendationSessionStatus.READY -> HomeAiStatus(
+                title = "새 추천을 확인할 수 있습니다.",
+                subtitle = "이번 실행에서 찾은 정리 후보 ${recommendations.size}개",
+                tone = HomeAiStatusTone.ACTIVE
+            )
+
+            RecommendationSessionStatus.FAILED -> HomeAiStatus(
+                title = message ?: "추천을 준비하지 못했어요",
+                subtitle = "자료는 저장되어 있고, 다음 실행 때 다시 시도합니다.",
+                tone = HomeAiStatusTone.WARNING
+            )
+
+            RecommendationSessionStatus.SKIPPED -> HomeAiStatus(
+                title = message ?: summary.title,
+                subtitle = summary.subtitle,
+                tone = HomeAiStatusTone.IDLE
+            )
+
+            null -> HomeAiStatus(
+                title = summary.title,
+                subtitle = summary.subtitle,
+                tone = HomeAiStatusTone.IDLE
+            )
         }
     }
 

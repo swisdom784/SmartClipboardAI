@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.smartclipboard.ai.collection.media.SharedPreferencesMediaSyncCheckpointStore
 import com.smartclipboard.ai.domain.repository.DataRepository
+import com.smartclipboard.ai.processing.gemini.recommendation.GeminiApiKeyProvider
+import com.smartclipboard.ai.processing.gemini.recommendation.RecommendationSessionStore
 import com.smartclipboard.ai.storage.StorageUsageSummary
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -20,7 +22,9 @@ class SettingsViewModel @Inject constructor(
     private val repository: DataRepository,
     private val settingsStore: SettingsPreferencesStore,
     private val checkpointStore: SharedPreferencesMediaSyncCheckpointStore,
-    private val permissionReader: SettingsPermissionReader
+    private val permissionReader: SettingsPermissionReader,
+    private val apiKeyProvider: GeminiApiKeyProvider,
+    private val recommendationSessionStore: RecommendationSessionStore
 ) : ViewModel() {
     private val storageUsage = MutableStateFlow(emptyUsage(settingsStore.current.quotaBytes))
     private val permissionState = MutableStateFlow(permissionReader.readImagePermissionState())
@@ -28,12 +32,17 @@ class SettingsViewModel @Inject constructor(
     val uiState: StateFlow<SettingsUiState> = combine(
         settingsStore.settings,
         storageUsage,
-        permissionState
-    ) { settings, usage, permission ->
+        permissionState,
+        recommendationSessionStore.currentSession
+    ) { settings, usage, permission, recommendationSession ->
         SettingsUiStateMapper.map(
             settings = settings,
             storageUsage = usage,
-            permissionState = permission
+            permissionState = permission,
+            geminiState = SettingsGeminiState(
+                isApiKeyConfigured = apiKeyProvider.apiKey.trim().isNotEmpty(),
+                recommendationSession = recommendationSession
+            )
         )
     }
         .catch { emit(SettingsUiState()) }

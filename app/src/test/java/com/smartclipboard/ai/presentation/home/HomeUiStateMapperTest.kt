@@ -110,6 +110,28 @@ class HomeUiStateMapperTest {
         assertEquals(HomeMaterialType.LINK, state.recentMaterials[2].type)
     }
 
+    @Test
+    fun mapsFailedRecommendationSessionIntoAiStatus() {
+        val state = HomeUiStateMapper.map(
+            HomeRepositoryState(
+                recentDataItems = listOf(item(id = 1L, type = DataItemType.LINK, status = EnrichmentStatus.DONE)),
+                activeTopics = emptyList(),
+                recommendationSession = RecommendationSession(
+                    id = "failed",
+                    status = RecommendationSessionStatus.FAILED,
+                    recommendations = emptyList(),
+                    createdAtMillis = 1L,
+                    message = "Gemini API key를 확인해 주세요"
+                )
+            )
+        )
+
+        assertFalse(state.hasReviewableRecommendations)
+        assertEquals("Gemini API key를 확인해 주세요", state.aiStatus.title)
+        assertEquals("자료는 저장되어 있고, 다음 실행 때 다시 시도합니다.", state.aiStatus.subtitle)
+        assertEquals(HomeAiStatusTone.WARNING, state.aiStatus.tone)
+    }
+
     private fun topic(
         id: Long,
         title: String,
